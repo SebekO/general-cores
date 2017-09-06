@@ -143,7 +143,7 @@ package axi4_pkg is
     function f_axi4_full_to_lite (
     f : t_axi4_full_master_out_32
     )  return t_axi4_lite_master_out_32;
-
+  
   function f_axi4_lite_to_full (
     l : t_axi4_lite_master_in_32
     )  return t_axi4_full_master_in_32;
@@ -162,7 +162,7 @@ package axi4_pkg is
     port (
       clk_sys_i : in std_logic;
       rst_n_i   : in std_logic;
-
+  
       ARVALID : in  std_logic;
       AWVALID : in  std_logic;
       BREADY  : in  std_logic;
@@ -182,14 +182,14 @@ package axi4_pkg is
       BRESP   : out std_logic_vector (1 downto 0);
       RRESP   : out std_logic_vector (1 downto 0);
       RDATA   : out std_logic_vector (31 downto 0);
-
+  
       wb_adr : out std_logic_vector(c_wishbone_address_width-1 downto 0);
       wb_dat_m2s : out std_logic_vector(c_wishbone_data_width-1 downto 0);
       wb_sel : out std_logic_vector(c_wishbone_data_width/8-1 downto 0);
       wb_cyc : out std_logic;
       wb_stb : out std_logic;
       wb_we  : out std_logic;
-
+  
       wb_dat_s2m   : in std_logic_vector(c_wishbone_data_width-1 downto 0);
       wb_err   : in std_logic := '0';
       wb_rty   : in std_logic := '0';
@@ -197,7 +197,7 @@ package axi4_pkg is
       wb_stall : in std_logic
       );
   end component;
-
+  
 end package;
 
 package body axi4_pkg is
@@ -220,7 +220,7 @@ package body axi4_pkg is
     l.WSTRB   := f.WSTRB;
 
     return l;
-
+    
   end f_axi4_full_to_lite;
 
   function f_axi4_lite_to_full (
@@ -241,7 +241,7 @@ package body axi4_pkg is
     f.RDATA   := l.RDATA;
 
     return f;
-
+    
   end f_axi4_lite_to_full;
 
 
