@@ -157,7 +157,7 @@ package axi4_pkg is
       wb_master_o  : out t_wishbone_master_out;
       wb_master_i  : in  t_wishbone_master_in);
   end component xwb_axi4lite_bridge;
-
+  
   component wb_axi4lite_bridge is
     port (
       clk_sys_i : in std_logic;
@@ -198,6 +198,50 @@ package axi4_pkg is
       );
   end component;
   
+  -- AXI4-Full interface, master output ports, 512 bits
+  type t_axi4_full_master_out_512 is record
+    ARVALID : std_logic;
+    AWVALID : std_logic;
+    BREADY  : std_logic;
+    RREADY  : std_logic;
+    WLAST   : std_logic;
+    WVALID  : std_logic;
+    ARID    : std_logic_vector (11 downto 0);
+    AWID    : std_logic_vector (11 downto 0);
+    ARBURST : std_logic_vector (1 downto 0);
+    ARLOCK  : std_logic;
+    ARSIZE  : std_logic_vector (2 downto 0);
+    AWBURST : std_logic_vector (1 downto 0);
+    AWLOCK  : std_logic;
+    AWSIZE  : std_logic_vector (2 downto 0);
+    ARPROT  : std_logic_vector (2 downto 0);
+    AWPROT  : std_logic_vector (2 downto 0);
+    ARADDR  : std_logic_vector (31 downto 0);
+    AWADDR  : std_logic_vector (31 downto 0);
+    WDATA   : std_logic_vector (511 downto 0);
+    ARCACHE : std_logic_vector (3 downto 0);
+    ARLEN   : std_logic_vector (7 downto 0);
+    ARQOS   : std_logic_vector (3 downto 0);
+    AWCACHE : std_logic_vector (3 downto 0);
+    AWLEN   : std_logic_vector (7 downto 0);
+    AWQOS   : std_logic_vector (3 downto 0);
+    WSTRB   : std_logic_vector (31 downto 0);
+  end record;
+
+  -- AXI4-Full interface, master input ports, 512 bits
+  type t_axi4_full_master_in_512 is record
+    ARREADY : std_logic;
+    AWREADY : std_logic;
+    BVALID  : std_logic;
+    RLAST   : std_logic;
+    RVALID  : std_logic;
+    WREADY  : std_logic;
+    BID     : std_logic_vector (11 downto 0);
+    RID     : std_logic_vector (11 downto 0);
+    BRESP   : std_logic_vector (1 downto 0);
+    RRESP   : std_logic_vector (1 downto 0);
+    RDATA   : std_logic_vector (511 downto 0);
+  end record;
 end package;
 
 package body axi4_pkg is
