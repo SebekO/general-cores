@@ -1,12 +1,15 @@
---------------------------------------------------------------------------------
--- CERN BE-CO-HT
--- General Cores Library
--- https://www.ohwr.org/projects/general-cores
---------------------------------------------------------------------------------
---
--- unit name:   xwb_vic
---
--- description: Simple interrupt controller/multiplexer:
+------------------------------------------------------------------------------
+-- Title      : Wishbone Vectored Interrupt Controller
+-- Project    : White Rabbit Switch
+------------------------------------------------------------------------------
+-- Author     : Tomasz Wlostowski
+-- Company    : CERN BE-Co-HT
+-- Created    : 2010-05-18
+-- Last update: 2018-03-08
+-- Platform   : FPGA-generic
+-- Standard   : VHDL'87
+-------------------------------------------------------------------------------
+-- Description: Simple interrupt controller/multiplexer:
 -- - designed to cooperate with wbgen2 peripherals Embedded Interrupt
 --   Controllers (EICs)
 -- - accepts 2 to 32 inputs (configurable using g_num_interrupts)
@@ -40,7 +43,7 @@ library work;
 use work.wishbone_pkg.all;
 
 entity xwb_vic is
-  
+
   generic (
     g_interface_mode      : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity : t_wishbone_address_granularity := WORD;
@@ -51,7 +54,7 @@ entity xwb_vic is
     -- If True, the polarity is fixed and set by g_POLARITY
     g_FIXED_POLARITY : boolean := False;
     g_POLARITY       : std_logic := '1';
-    
+
     g_retry_timeout : integer := 0
     );
 
@@ -99,5 +102,5 @@ begin  -- wrapper
 
   slave_o.err <= '0';
   slave_o.rty <= '0';
-  
+
 end wrapper;

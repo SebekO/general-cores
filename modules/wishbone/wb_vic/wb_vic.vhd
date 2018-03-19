@@ -41,14 +41,14 @@ use work.wishbone_pkg.all;
 use work.genram_pkg.all;
 
 entity wb_vic is
-  
+
   generic (
     g_INTERFACE_MODE      : t_wishbone_interface_mode      := CLASSIC;
     g_ADDRESS_GRANULARITY : t_wishbone_address_granularity := WORD;
 
     -- number of IRQ inputs.
     g_NUM_INTERRUPTS : natural range 2 to 32 := 32;
-    -- initial values for the vector addresses. 
+    -- initial values for the vector addresses.
     g_INIT_VECTORS   : t_wishbone_address_array := cc_dummy_address_array;
 
     -- If True, the polarity is fixed and set by g_POLARITY
@@ -135,7 +135,7 @@ architecture syn of wb_vic is
   signal timeout_count : unsigned(15 downto 0);
 
   signal vector_table : t_wishbone_address_array(0 to 31) := f_resize_addr_array(g_init_vectors, 32);
-  
+
   constant c_valid_irq_mask : std_logic_vector(31 downto 0) :=
     (31 downto g_NUM_INTERRUPTS => '0') & (g_NUM_INTERRUPTS - 1 downto 0 => '1');
 begin  -- syn
@@ -253,11 +253,11 @@ begin  -- syn
       end if;
     end process;
   end generate;
-  
+
   gen_fixed_pol: if g_FIXED_POLARITY generate
     vic_ctl_pol <= g_POLARITY;
   end generate;
-    
+
   p_vic_imr: process (clk_sys_i)
   begin
     if rising_edge(clk_sys_i) then
@@ -284,7 +284,7 @@ begin  -- syn
         irq_master_o <= '0';
         vic_var      <= x"12345678";
         swi_mask     <= (others => '0');
-        
+
       else
         if(vic_ctl_enable = '0') then
           irq_master_o <= not vic_ctl_pol;
@@ -310,14 +310,14 @@ begin  -- syn
                 end loop;
                 state  <= WAIT_MEM;
               else
-                -- no interrupts? de-assert the IRQ line 
+                -- no interrupts? de-assert the IRQ line
                 irq_master_o <= not vic_ctl_pol;
                 vic_var      <= (others => '0');
               end if;
 
             when WAIT_MEM =>
               state <= PROCESS_IRQ;
-              
+
             when PROCESS_IRQ =>
               -- fetch the vector address from vector table and
               -- load it into VIC_VAR register
@@ -349,7 +349,7 @@ begin  -- syn
                 else
                   timeout_count <= timeout_count + 1;
                 end if;
-                  
+
             when WAIT_IDLE =>
               if(vic_ctl_emu_edge = '0') then
                 state <= WAIT_IRQ;

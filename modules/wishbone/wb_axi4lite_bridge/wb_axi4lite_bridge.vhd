@@ -76,7 +76,7 @@ architecture rtl of wb_axi4lite_bridge is
   signal axi_out : t_axi4_lite_master_in_32;
   signal wb_in   : t_wishbone_master_in;
   signal wb_out  : t_wishbone_master_out;
-  
+
 begin
 
   axi_in.ARVALID  <= ARVALID;
@@ -120,6 +120,5 @@ begin
       axi4_slave_o => axi_out,
       wb_master_o  => wb_out,
       wb_master_i  => wb_in);
-  
-end rtl;
 
+end rtl;

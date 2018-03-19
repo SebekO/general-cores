@@ -55,7 +55,7 @@ architecture rtl of sdb_rom is
   constant c_rom_depth      : natural := f_ceil_log2(c_rom_words);
   constant c_rom_lowbits    : natural := f_ceil_log2(c_wishbone_data_width / 8);
   constant c_sdb_name       : string  := f_string_fix_len(g_sdb_name , 19, ' ', false);
-  
+
   -- Index of the MSI entry in SDB
   type t_nat_array is array(g_masters-1 downto 0) of natural;
   function f_master_positions return t_nat_array is
@@ -70,14 +70,14 @@ architecture rtl of sdb_rom is
           assert master < g_masters
           report "Too many msi records found"
           severity failure;
-        
+
           result(master) := rec;
           master := master + 1;
-        
+
         when others => null;
       end case;
     end loop;
-    
+
     if master = 0 then
       result := (others => 0);
     else
@@ -87,10 +87,10 @@ architecture rtl of sdb_rom is
     end if;
     return result;
   end f_master_positions;
-  
+
   constant c_master_positions : t_nat_array := f_master_positions;
   constant c_msi              : boolean     := c_master_positions(0) /= 0;
-  
+
   function f_msi_flag_index(y : std_logic_vector) return std_logic_vector is
     variable offset : unsigned(c_rom_depth-1 downto 0) := (others => '0');
     variable result : std_logic_vector(c_rom_depth-1 downto 0) := (others => '0');
@@ -105,11 +105,11 @@ architecture rtl of sdb_rom is
     end loop;
     return result;
   end f_msi_flag_index;
-  
+
   type t_rom is array(c_rom_words-1 downto 0) of t_wishbone_data;
 
   function f_build_rom
-    return t_rom 
+    return t_rom
   is
     variable res : t_rom := (others => (others => '0'));
     variable sdb_record : t_sdb_record;
@@ -120,7 +120,7 @@ architecture rtl of sdb_rom is
     sdb_record(463 downto 456) := x"01";                                             -- sdb_version
     sdb_record(455 downto 448) := x"00";                                             -- sdb_bus_type = sdb_wishbone
     sdb_record(  7 downto   0) := x"00";                                             -- record_type  = sdb_interconnect
-    
+
     sdb_component.addr_first := (others => '0');
     sdb_component.addr_last  := std_logic_vector(g_bus_end);
     sdb_component.product.vendor_id := x"0000000000000651"; -- GSI
@@ -129,34 +129,34 @@ architecture rtl of sdb_rom is
     sdb_component.product.date      := x"20120511";
     sdb_component.product.name      := c_sdb_name;
     sdb_record(447 downto   8) := f_sdb_embed_component(sdb_component, (others => '0'));
-    
+
     for i in 0 to c_sdb_words-1 loop
-      res(c_sdb_words-1-i) := 
+      res(c_sdb_words-1-i) :=
         sdb_record((i+1)*c_wishbone_data_width-1 downto i*c_wishbone_data_width);
     end loop;
-    
+
     for idx in c_layout'range loop
       sdb_record := c_layout(idx);
-      
+
       -- All local/temporary types => empty record
       if sdb_record(7 downto 4) = x"f" then
         sdb_record(3 downto 0) := x"f";
       end if;
-      
+
       for i in 0 to c_sdb_words-1 loop
-        res((idx+1)*c_sdb_words-1-i) := 
+        res((idx+1)*c_sdb_words-1-i) :=
           sdb_record((i+1)*c_wishbone_data_width-1 downto i*c_wishbone_data_width);
       end loop;
     end loop;
-    
+
     return res;
   end f_build_rom;
-  
+
   signal rom : t_rom := f_build_rom;
 
   signal s_adr : unsigned(c_rom_depth-1 downto 0);
   signal s_sel : unsigned(c_rom_depth-1 downto 0);
-  
+
   signal r_rom  : t_wishbone_data;
   signal r_flag : t_wishbone_data;
   signal r_ack  : std_logic;

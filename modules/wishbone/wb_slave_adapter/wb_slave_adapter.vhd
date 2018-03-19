@@ -109,7 +109,7 @@ architecture rtl of wb_slave_adapter is
   signal master_out : t_wishbone_master_out;
   signal slave_in   : t_wishbone_slave_in;
   signal slave_out  : t_wishbone_slave_out;
-  
+
 begin  -- rtl
 
   gen_slave_use_struct : if (g_slave_use_struct) generate
@@ -131,7 +131,7 @@ begin  -- rtl
   sl_err_o   <= slave_out.err;
   sl_stall_o <= slave_out.stall;
   sl_dat_o   <= slave_out.dat;
-  
+
 
   gen_master_use_struct : if (g_master_use_struct) generate
     master_in <= master_i;
@@ -166,7 +166,7 @@ begin  -- rtl
                         & slave_in.adr(c_wishbone_address_width-1 downto f_num_byte_address_bits);
     end if;
   end process p_gen_address;
-  
+
   P2C : if (g_slave_mode = PIPELINED and g_master_mode = CLASSIC)   generate
     signal master_in_ack_d1 : std_logic := '0';
     signal master_in_err_d1 : std_logic := '0';
@@ -189,7 +189,7 @@ begin  -- rtl
     slave_out.err   <= master_in.err and not master_in_err_d1;
     slave_out.rty   <= master_in.rty and not master_in_rty_d1;
   end generate P2C;
-  
+
   C2P : if (g_slave_mode = CLASSIC   and g_master_mode = PIPELINED) generate
     type t_fsm_state is (IDLE, WAIT4ACK);
     signal fsm_state : t_fsm_state := IDLE;
@@ -222,7 +222,7 @@ begin  -- rtl
       end if;
     end process state_machine;
   end generate C2P;
-  
+
   X2X : if (g_slave_mode = g_master_mode) generate
     master_out.stb  <= slave_in.stb;
     slave_out.stall <= master_in.stall;
@@ -230,7 +230,7 @@ begin  -- rtl
     slave_out.err   <= master_in.err;
     slave_out.rty   <= master_in.rty;
   end generate X2X;
-  
+
   master_out.dat <= slave_in.dat;
   master_out.cyc <= slave_in.cyc;
   master_out.sel <= slave_in.sel;

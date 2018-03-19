@@ -88,7 +88,7 @@ architecture rtl of xwb_gpio_port is
       gpio_oen_o : out   std_logic_vector(g_num_pins-1 downto 0));
   end component;
 begin  -- rtl
-  
+
 
   Wrapped_GPIO : wb_gpio_port
     generic map (
@@ -117,5 +117,5 @@ begin  -- rtl
 
   slave_o.err   <= '0';
   slave_o.rty   <= '0';
-  
+
 end rtl;
