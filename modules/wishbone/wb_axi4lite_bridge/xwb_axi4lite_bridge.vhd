@@ -118,7 +118,7 @@ begin
               wb_master_o.stb <= '0';
               if(wb_master_i.ack = '1') then
                 state <= IDLE;
-                axi4_slave_o.RRESP <= c_AXI4_RESP_EXOKAY;
+                axi4_slave_o.RRESP <= c_AXI4_RESP_OKAY;
                 axi4_slave_o.RDATA <= wb_master_i.dat;
                 axi4_slave_o.RVALID <= '1';
                 axi4_slave_o.RLAST <= '1';
@@ -135,7 +135,8 @@ begin
               wb_master_o.stb <= '0';
               if(wb_master_i.ack = '1') then
                 state <= RESPONSE_WRITE;
-                axi4_slave_o.BRESP <= c_AXI4_RESP_EXOKAY;
+                axi4_slave_o.BVALID <= '1';
+                axi4_slave_o.BRESP <= c_AXI4_RESP_OKAY;
                 wb_master_o.cyc    <= '0';
               else
                 state <= WAIT_ACK_WRITE;
@@ -147,25 +148,27 @@ begin
           when WAIT_ACK_WRITE =>
             if(wb_master_i.ack = '1') then
               state              <= RESPONSE_WRITE;
-              axi4_slave_o.BRESP <= c_AXI4_RESP_EXOKAY;
+              axi4_slave_o.BRESP <= c_AXI4_RESP_OKAY;
+              axi4_slave_o.BVALID <= '1';
               wb_master_o.cyc    <= '0';
             elsif count = c_timeout then
               state              <= RESPONSE_WRITE;
               axi4_slave_o.BRESP <= c_AXI4_RESP_SLVERR;
+              axi4_slave_o.BVALID <= '1';
               wb_master_o.cyc    <= '0';
             end if;
             count <= count + 1;
 
           when WAIT_ACK_READ =>
             if(wb_master_i.ack = '1') then
-              state              <= IDLE;
-              axi4_slave_o.RRESP <= c_AXI4_RESP_EXOKAY;
+              state              <= RESPONSE_READ;
+              axi4_slave_o.RRESP <= c_AXI4_RESP_OKAY;
               axi4_slave_o.RVALID <= '1';
               axi4_slave_o.RLAST <= '1';
               axi4_slave_o.RDATA <= wb_master_i.dat;
               wb_master_o.cyc    <= '0';
             elsif count = c_timeout then
-              state              <= IDLE;
+              state              <= RESPONSE_READ;
               axi4_slave_o.RRESP <= c_AXI4_RESP_SLVERR;
               axi4_slave_o.RVALID <= '1';
               axi4_slave_o.RLAST <= '1';
@@ -177,11 +180,16 @@ begin
             
           when RESPONSE_WRITE =>
             if (axi4_slave_i.BREADY = '1') then
-              axi4_slave_o.BVALID <= '1';
+              axi4_slave_o.BVALID <= '0';
               state               <= IDLE;
             end if;
 
-          when RESPONSE_READ => null;
+          when RESPONSE_READ =>
+            if (axi4_slave_I.RREADY = '1') then
+              axi4_slave_o.RVALID <= '0';
+              state <= IDLE;
+            end if;
+            
             
             
         end case;

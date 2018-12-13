@@ -94,6 +94,7 @@ begin
   axi_in.AWADDR  <= AWADDR;
   axi_in.WDATA   <= WDATA;
   axi_in.WSTRB   <= WSTRB;
+  
   ARREADY         <= axi_out.ARREADY;
   AWREADY         <= axi_out.AWREADY;
   BVALID          <= axi_out.BVALID;

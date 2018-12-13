@@ -46,10 +46,10 @@ package axi4_pkg is
     AWID    : std_logic_vector (11 downto 0);
     WID     : std_logic_vector (11 downto 0);
     ARBURST : std_logic_vector (1 downto 0);
-    ARLOCK  : std_logic_vector (1 downto 0);
+    ARLOCK  : std_logic;
     ARSIZE  : std_logic_vector (2 downto 0);
     AWBURST : std_logic_vector (1 downto 0);
-    AWLOCK  : std_logic_vector (1 downto 0);
+    AWLOCK  : std_logic;
     AWSIZE  : std_logic_vector (2 downto 0);
     ARPROT  : std_logic_vector (2 downto 0);
     AWPROT  : std_logic_vector (2 downto 0);
@@ -145,6 +145,9 @@ package axi4_pkg is
   constant c_AXI4_RESP_SLVERR : std_logic_vector(1 downto 0) := "10";
   constant c_AXI4_RESP_DECERR : std_logic_vector(1 downto 0) := "11";
 
+  constant c_AXI4_LOCK_NORMAL : std_logic := '0';
+  constant c_AXI4_LOCK_EXCLUSIVE : std_logic:= '1';
+  
     function f_axi4_full_to_lite (
     f : t_axi4_full_master_out_32
     )  return t_axi4_lite_master_out_32;
