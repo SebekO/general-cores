@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file
+   path="altclkctrl_181/sim/global_region_altclkctrl_181_cf6o3fq.vhd"
+   type="VHDL"
+   library="global_region_altclkctrl_181" />
+ <file
+   path="sim/global_region.vhd"
+   type="VHDL"
+   hasInlineConfiguration="true" />
+ <topLevel name="global_region" />
+ <deviceFamily name="arria10" />
+</simPackage>
