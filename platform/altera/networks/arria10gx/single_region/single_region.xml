@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy
+ date="2019.02.13.11:03:43"
+ outputDirectory="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/">
+ <perimeter>
+  <parameter
+     name="AUTO_GENERATION_ID"
+     type="Integer"
+     defaultValue="0"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_UNIQUE_ID"
+     type="String"
+     defaultValue=""
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_FAMILY"
+     type="String"
+     defaultValue="Arria 10"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE"
+     type="String"
+     defaultValue="10AX027E3F29E2SG"
+     onHdl="0"
+     affectsHdl="1" />
+  <parameter
+     name="AUTO_DEVICE_SPEEDGRADE"
+     type="String"
+     defaultValue="2"
+     onHdl="0"
+     affectsHdl="1" />
+  <interface name="altclkctrl_input" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="inclk" direction="input" role="inclk" width="1" />
+  </interface>
+  <interface name="altclkctrl_output" kind="conduit" start="0">
+   <property name="associatedClock" value="" />
+   <property name="associatedReset" value="" />
+   <port name="outclk" direction="output" role="outclk" width="1" />
+  </interface>
+ </perimeter>
+ <entity kind="single_region" version="1.0" name="single_region">
+  <parameter name="AUTO_GENERATION_ID" value="1550052223" />
+  <parameter name="AUTO_DEVICE" value="10AX027E3F29E2SG" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="AUTO_UNIQUE_ID" value="" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <generatedFiles>
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/synth/single_region.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/synth/single_region_cfg.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/synth/single_region.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/synth/single_region_cfg.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region.qsys" />
+  </sourceFiles>
+  <childSourceFiles>
+   <file
+       path="/home/alex/workspace/optional/quartus18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
+  </childSourceFiles>
+  <messages>
+   <message level="Info" culprit="single_region">"Generating: single_region"</message>
+   <message level="Info" culprit="single_region">"Generating: single_region_altclkctrl_181_bjorw2i"</message>
+   <message level="Info" culprit="altclkctrl_0">Generating top-level entity single_region_altclkctrl_181_bjorw2i.</message>
+   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /home/alex/workspace/optional/quartus18/quartus/linux64/.</message>
+  </messages>
+ </entity>
+ <entity
+   kind="altclkctrl"
+   version="18.1"
+   name="single_region_altclkctrl_181_bjorw2i">
+  <parameter name="NUMBER_OF_CLOCKS" value="1" />
+  <parameter name="USE_GLITCH_FREE_SWITCH_OVER_IMPLEMENTATION" value="false" />
+  <parameter name="GUI_USE_ENA" value="false" />
+  <parameter name="DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="ENA_REGISTER_MODE" value="1" />
+  <parameter name="CLOCK_TYPE" value="2" />
+  <generatedFiles>
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/altclkctrl_181/synth/single_region_altclkctrl_181_bjorw2i.v"
+       attributes="" />
+  </generatedFiles>
+  <childGeneratedFiles>
+   <file
+       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/altclkctrl_181/synth/single_region_altclkctrl_181_bjorw2i.v"
+       attributes="" />
+  </childGeneratedFiles>
+  <sourceFiles>
+   <file
+       path="/home/alex/workspace/optional/quartus18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
+  </sourceFiles>
+  <childSourceFiles/>
+  <instantiator instantiator="single_region" as="altclkctrl_0" />
+  <messages>
+   <message level="Info" culprit="single_region">"Generating: single_region_altclkctrl_181_bjorw2i"</message>
+   <message level="Info" culprit="altclkctrl_0">Generating top-level entity single_region_altclkctrl_181_bjorw2i.</message>
+   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /home/alex/workspace/optional/quartus18/quartus/linux64/.</message>
+  </messages>
+ </entity>
+</deploy>

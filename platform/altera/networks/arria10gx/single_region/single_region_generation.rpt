@@ -1,0 +1,92 @@
+Info: Starting: Create simulation model
+Info: qsys-generate /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region.qsys --simulation=VERILOG --allow-mixed-language-simulation --output-directory=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region --family="Arria 10" --part=10AX027E3F29E2SG
+Progress: Loading arria10gx/single_region.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 18.1]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: single_region.altclkctrl_0: Targeting device family: Arria 10.
+: single_region.altclkctrl_0: Regional clock network allows a clock signal to reach a quadrant of the chip. Only one clock input is accepted.
+: single_region.altclkctrl_0: The register mode of port 'ena' is unavailable while 'ena' port not added. 
+Info: single_region: "Transforming system: single_region"
+Info: single_region: Running transform generation_view_transform
+Info: single_region: Running transform generation_view_transform took 0.000s
+Info: altclkctrl_0: Running transform generation_view_transform
+Info: altclkctrl_0: Running transform generation_view_transform took 0.000s
+Info: single_region: Running transform merlin_avalon_transform
+Info: single_region: Running transform merlin_avalon_transform took 0.050s
+Info: single_region: "Naming system components in system: single_region"
+Info: single_region: "Processing generation queue"
+Info: single_region: "Generating: single_region"
+Info: single_region: "Generating: single_region_altclkctrl_181_bjorw2i"
+Info: altclkctrl_0: Generating top-level entity single_region_altclkctrl_181_bjorw2i.
+Info: single_region: Done "single_region" with 2 modules, 2 files
+Info: qsys-generate succeeded.
+Info: Finished: Create simulation model
+Info: Starting: Create Modelsim Project.
+Info: sim-script-gen --spd=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/single_region.spd --output-directory=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ --use-relative-paths=true
+Info: Doing: ip-make-simscript --spd=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/single_region.spd --output-directory=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ --use-relative-paths=true
+Info: Generating the following file(s) for MODELSIM simulator in /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ directory:
+Info: 	mentor/msim_setup.tcl
+Info: Generating the following file(s) for VCS simulator in /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ directory:
+Info: 	synopsys/vcs/vcs_setup.sh
+Info: Generating the following file(s) for VCSMX simulator in /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ directory:
+Info: 	synopsys/vcsmx/synopsys_sim.setup
+Info: 	synopsys/vcsmx/vcsmx_setup.sh
+Info: Generating the following file(s) for NCSIM simulator in /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ directory:
+Info: 	cadence/cds.lib
+Info: 	cadence/hdl.var
+Info: 	cadence/ncsim_setup.sh
+Info: 	1 .cds.lib files in cadence/cds_libs/ directory
+Info: Generating the following file(s) for RIVIERA simulator in /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/ directory:
+Info: 	aldec/rivierapro_setup.tcl
+Info: For information on how to simulate your IP, see the explanatory comments in the simulator-specific subdirectories under /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/sim/.
+Info: Regenerate these scripts whenever you make any change to any Quartus-generated IP in your project.
+Info: Finished: Create Modelsim Project.
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region.qsys --block-symbol-file --output-directory=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region --family="Arria 10" --part=10AX027E3F29E2SG
+Progress: Loading arria10gx/single_region.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 18.1]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: single_region.altclkctrl_0: Targeting device family: Arria 10.
+: single_region.altclkctrl_0: Regional clock network allows a clock signal to reach a quadrant of the chip. Only one clock input is accepted.
+: single_region.altclkctrl_0: The register mode of port 'ena' is unavailable while 'ena' port not added. 
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate /home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region.qsys --synthesis=VERILOG --output-directory=/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region --family="Arria 10" --part=10AX027E3F29E2SG
+Progress: Loading arria10gx/single_region.qsys
+Progress: Reading input file
+Progress: Adding altclkctrl_0 [altclkctrl 18.1]
+Progress: Parameterizing module altclkctrl_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+: single_region.altclkctrl_0: Targeting device family: Arria 10.
+: single_region.altclkctrl_0: Regional clock network allows a clock signal to reach a quadrant of the chip. Only one clock input is accepted.
+: single_region.altclkctrl_0: The register mode of port 'ena' is unavailable while 'ena' port not added. 
+Info: single_region: "Transforming system: single_region"
+Info: single_region: Running transform generation_view_transform
+Info: single_region: Running transform generation_view_transform took 0.000s
+Info: altclkctrl_0: Running transform generation_view_transform
+Info: altclkctrl_0: Running transform generation_view_transform took 0.000s
+Info: single_region: Running transform merlin_avalon_transform
+Info: single_region: Running transform merlin_avalon_transform took 0.009s
+Info: single_region: "Naming system components in system: single_region"
+Info: single_region: "Processing generation queue"
+Info: single_region: "Generating: single_region"
+Info: single_region: "Generating: single_region_altclkctrl_181_bjorw2i"
+Info: altclkctrl_0: Generating top-level entity single_region_altclkctrl_181_bjorw2i.
+Info: single_region: Done "single_region" with 2 modules, 3 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis
