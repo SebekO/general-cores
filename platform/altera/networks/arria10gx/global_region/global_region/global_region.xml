@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy
- date="2019.02.13.11:04:10"
- outputDirectory="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/">
+ date="2019.03.06.16:28:11"
+ outputDirectory="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/">
  <perimeter>
   <parameter
      name="AUTO_GENERATION_ID"
@@ -45,40 +45,40 @@
   </interface>
  </perimeter>
  <entity kind="global_region" version="1.0" name="global_region">
-  <parameter name="AUTO_GENERATION_ID" value="1550052250" />
+  <parameter name="AUTO_GENERATION_ID" value="1551886090" />
   <parameter name="AUTO_DEVICE" value="10AX027E3F29E2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_UNIQUE_ID" value="" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/altclkctrl_181/synth/global_region_pkg.vhd"
-       attributes="IS_CONFIGURATION_PACKAGE" />
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/synth/global_region.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/synth/global_region.vhd"
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/synth/global_region_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/altclkctrl_181/synth/global_region_pkg.vhd"
-       attributes="IS_CONFIGURATION_PACKAGE" />
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/synth/global_region.v"
+       attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/synth/global_region.vhd"
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/synth/global_region_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region.qsys" />
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region.qsys" />
   </sourceFiles>
   <childSourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
   </childSourceFiles>
   <messages>
    <message level="Info" culprit="global_region">"Generating: global_region"</message>
    <message level="Info" culprit="global_region">"Generating: global_region_altclkctrl_181_cf6o3fq"</message>
    <message level="Info" culprit="altclkctrl_0">Generating top-level entity global_region_altclkctrl_181_cf6o3fq.</message>
-   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /home/alex/workspace/optional/quartus18/quartus/linux64/.</message>
+   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /opt/quartus/18/quartus/linux64/.</message>
   </messages>
  </entity>
  <entity
@@ -93,24 +93,24 @@
   <parameter name="CLOCK_TYPE" value="1" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/altclkctrl_181/synth/global_region_altclkctrl_181_cf6o3fq.v"
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/altclkctrl_181/synth/global_region_altclkctrl_181_cf6o3fq.v"
        attributes="" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/altclkctrl_181/synth/global_region_altclkctrl_181_cf6o3fq.v"
+       path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/global_region/global_region/altclkctrl_181/synth/global_region_altclkctrl_181_cf6o3fq.v"
        attributes="" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/megafunctions/altclkctrl/altclkctrl_hw.tcl" />
   </sourceFiles>
   <childSourceFiles/>
   <instantiator instantiator="global_region" as="altclkctrl_0" />
   <messages>
    <message level="Info" culprit="global_region">"Generating: global_region_altclkctrl_181_cf6o3fq"</message>
    <message level="Info" culprit="altclkctrl_0">Generating top-level entity global_region_altclkctrl_181_cf6o3fq.</message>
-   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /home/alex/workspace/optional/quartus18/quartus/linux64/.</message>
+   <message level="Debug" culprit="altclkctrl_0">Current quartus bindir: /opt/quartus/18/quartus/linux64/.</message>
   </messages>
  </entity>
 </deploy>

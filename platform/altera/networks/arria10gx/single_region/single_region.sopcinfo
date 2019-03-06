@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<EnsembleReport name="dual_region" kind="dual_region" version="1.0" fabric="QSYS">
+<EnsembleReport name="single_region" kind="single_region" version="1.0" fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2019.02.13.11:03:16 -->
+ <!-- 2019.03.06.16:28:02 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1550052196</value>
+  <value>1551886082</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -83,7 +83,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="CLOCK_TYPE">
    <type>int</type>
-   <value>1</value>
+   <value>2</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
