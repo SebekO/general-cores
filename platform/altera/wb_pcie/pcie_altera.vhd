@@ -551,8 +551,8 @@ architecture rtl of pcie_altera is
       tl_cfg_ctl          : out std_logic_vector(31 downto 0);                    -- tl_cfg_ctl
       tl_cfg_sts          : out std_logic_vector(52 downto 0);                    -- tl_cfg_sts
       cpl_err             : in  std_logic_vector(6 downto 0)  := (others => 'X'); -- cpl_err
-      cpl_pending         : in  std_logic                     := 'X';             -- cpl_pending
-      skp_os              : out std_logic                                         -- skpdetect
+      cpl_pending         : in  std_logic                     := 'X'              -- cpl_pending
+      --skp_os              : out std_logic                                         -- skpdetect
     );
   end component arria10_pcie_hip;
 
@@ -739,8 +739,8 @@ architecture rtl of pcie_altera is
       tl_cfg_ctl          : out std_logic_vector(31 downto 0);                    -- tl_cfg_ctl
       tl_cfg_sts          : out std_logic_vector(52 downto 0);                    -- tl_cfg_sts
       cpl_err             : in  std_logic_vector(6 downto 0)  := (others => 'X'); -- cpl_err
-      cpl_pending         : in  std_logic                     := 'X';             -- cpl_pending
-      skp_os              : out std_logic                                         -- skpdetect
+      cpl_pending         : in  std_logic                     := 'X'              -- cpl_pending
+      --skp_os              : out std_logic                                         -- skpdetect
     );
   end component arria10gx_pcie_hip;
 
@@ -1807,8 +1807,8 @@ begin
         rate0               => open,
         rate1               => open,
         rate2               => open,
-        rate3               => open,
-        skp_os              => open
+        rate3               => open
+        --skp_os              => open
       );
   end generate;
 
