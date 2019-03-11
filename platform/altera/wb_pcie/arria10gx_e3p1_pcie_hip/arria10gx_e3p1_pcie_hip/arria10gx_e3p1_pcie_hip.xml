@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy
- date="2019.02.14.17:04:18"
- outputDirectory="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/">
+ date="2019.03.11.10:17:28"
+ outputDirectory="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/">
  <perimeter>
   <parameter
      name="AUTO_GENERATION_ID"
@@ -24,13 +24,13 @@
   <parameter
      name="AUTO_DEVICE"
      type="String"
-     defaultValue="10AX115S2F45I2SG"
+     defaultValue="10AX115S2F45I1SG"
      onHdl="0"
      affectsHdl="1" />
   <parameter
      name="AUTO_DEVICE_SPEEDGRADE"
      type="String"
-     defaultValue="2"
+     defaultValue="1"
      onHdl="0"
      affectsHdl="1" />
   <parameter
@@ -468,49 +468,58 @@
    version="1.0"
    name="arria10gx_e3p1_pcie_hip">
   <parameter name="AUTO_REFCLK_CLOCK_DOMAIN" value="-1" />
-  <parameter name="AUTO_GENERATION_ID" value="1550160251" />
-  <parameter name="AUTO_DEVICE" value="10AX115S2F45I2SG" />
+  <parameter name="AUTO_GENERATION_ID" value="1552295844" />
+  <parameter name="AUTO_DEVICE" value="10AX115S2F45I1SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_REFCLK_CLOCK_RATE" value="-1" />
   <parameter name="AUTO_UNIQUE_ID" value="" />
   <parameter name="AUTO_REFCLK_RESET_DOMAIN" value="-1" />
-  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="1" />
   <parameter name="AUTO_PLD_CLK_CLOCK_RATE" value="-1" />
   <parameter name="AUTO_PLD_CLK_CLOCK_DOMAIN" value="-1" />
   <parameter name="AUTO_PLD_CLK_RESET_DOMAIN" value="-1" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/synth/arria10gx_e3p1_pcie_hip_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip.qsys" />
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip.qsys" />
   </sourceFiles>
   <childSourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/altera_pcie/altera_pcie_a10_hip/altera_pcie_a10_hip_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/altera_pcie/altera_pcie_a10_hip/altera_pcie_a10_hip_hw.tcl" />
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
   </childSourceFiles>
   <messages>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip"</message>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri"</message>
    <message level="Info" culprit="phy_g1x4">"Generating: phy_g1x4"</message>
    <message level="Info" culprit="fpll_g1g2xn">"Generating: fpll_g1g2xn"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: fpll_g1g2xn"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: altera_xcvr_fpll_a10"</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./twentynm_xcvr_avmm.sv SYSTEM_VERILOG PATH ../../../alt_xcvr_core/nf/twentynm_xcvr_avmm.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./altera_xcvr_fpll_a10.sv SYSTEM_VERILOG PATH ../source/altera_xcvr_fpll_a10.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./a10_avmm_h.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/a10_avmm_h.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_native_avmm_nf.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/alt_xcvr_native_avmm_nf.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_embedded_debug.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_embedded_debug.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_avmm_csr.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_avmm_csr.sv</message>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: phy_g1x4"</message>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci"</message>
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
@@ -535,21 +544,12 @@
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./pcie_mgmt_master.sv SYSTEM_VERILOG PATH ../pcie_dfe_ip/pcie_mgmt_master.sv</message>
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./altera_xcvr_native_pcie_dfe_ip.sv SYSTEM_VERILOG PATH ../pcie_dfe_ip/altera_xcvr_native_pcie_dfe_ip.sv</message>
    <message level="Info" culprit="phy_g1x4">Building configuration data for reconfiguration profile 0</message>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: fpll_g1g2xn"</message>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: altera_xcvr_fpll_a10"</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./twentynm_xcvr_avmm.sv SYSTEM_VERILOG PATH ../../../alt_xcvr_core/nf/twentynm_xcvr_avmm.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./altera_xcvr_fpll_a10.sv SYSTEM_VERILOG PATH ../source/altera_xcvr_fpll_a10.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./a10_avmm_h.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/a10_avmm_h.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_native_avmm_nf.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/alt_xcvr_native_avmm_nf.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_embedded_debug.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_embedded_debug.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_avmm_csr.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_avmm_csr.sv</message>
   </messages>
  </entity>
  <entity
    kind="altera_pcie_a10_hip"
    version="18.1"
-   name="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i">
+   name="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri">
   <parameter name="pf2_bar2_size_hwtcl" value="12" />
   <parameter name="pf7_bar3_present_hwtcl" value="0" />
   <parameter name="slave_address_map_4_hwtcl" value="0" />
@@ -914,7 +914,7 @@
   <parameter name="data_byte_width_integer_txs_hwtcl" value="8" />
   <parameter name="pf4_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
   <parameter name="pf5_virtio_notification_structure_length_hwtcl" value="0" />
-  <parameter name="part_trait_device" value="10AX115S2F45I2SG" />
+  <parameter name="part_trait_device" value="10AX115S2F45I1SG" />
   <parameter name="pf3vf_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
   <parameter name="pf2_vf_count_user_hwtcl" value="0" />
   <parameter name="force_tag_checking_on_hwtcl" value="0" />
@@ -2054,137 +2054,146 @@
   <parameter name="pf_tph_support_hwtcl" value="0" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pipen1b.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pipen1b.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_sc_bitsync.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_sc_bitsync.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_reset_delay_sync.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_reset_delay_sync.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_rs_a10_hip.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_rs_a10_hip.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pllnphy.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pllnphy.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/skp_det_g3.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/skp_det_g3.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_xcvr_functions.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_xcvr_functions.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/alt_pcie_hip_a10.xml"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/alt_pcie_hip_a10.xml"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/build_stp.tcl"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/build_stp.tcl"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_cseb_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_cseb_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_monitor_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_monitor_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_trigger_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_trigger_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_pcsig_drive_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_pcsig_drive_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_gbfifo.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_gbfifo.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_scfifo_ext.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_scfifo_ext.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_scfifo_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_scfifo_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_pci_express.sdc"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_pci_express.sdc"
        attributes="" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pipen1b.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pipen1b.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_sc_bitsync.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_sc_bitsync.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_reset_delay_sync.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_reset_delay_sync.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_rs_a10_hip.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_rs_a10_hip.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pllnphy.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_hip_pllnphy.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/skp_det_g3.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/skp_det_g3.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_xcvr_functions.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_xcvr_functions.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/alt_pcie_hip_a10.xml"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/alt_pcie_hip_a10.xml"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/build_stp.tcl"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/debug/stp/build_stp.tcl"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_cseb_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_cseb_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_monitor_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_monitor_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_trigger_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_trigger_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_pcsig_drive_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_tlp_inspector_pcsig_drive_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_gbfifo.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_gbfifo.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_scfifo_ext.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_a10_scfifo_ext.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_scfifo_a10.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altpcie_scfifo_a10.v"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_pci_express.sdc"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/altera_pci_express.sdc"
        attributes="" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/altera_pcie/altera_pcie_a10_hip/altera_pcie_a10_hip_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/altera_pcie/altera_pcie_a10_hip/altera_pcie_a10_hip_hw.tcl" />
   </sourceFiles>
   <childSourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
   </childSourceFiles>
   <instantiator instantiator="arria10gx_e3p1_pcie_hip" as="pcie_a10_hip_0" />
   <messages>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri"</message>
    <message level="Info" culprit="phy_g1x4">"Generating: phy_g1x4"</message>
    <message level="Info" culprit="fpll_g1g2xn">"Generating: fpll_g1g2xn"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: fpll_g1g2xn"</message>
+   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: altera_xcvr_fpll_a10"</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./twentynm_xcvr_avmm.sv SYSTEM_VERILOG PATH ../../../alt_xcvr_core/nf/twentynm_xcvr_avmm.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./altera_xcvr_fpll_a10.sv SYSTEM_VERILOG PATH ../source/altera_xcvr_fpll_a10.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./a10_avmm_h.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/a10_avmm_h.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_native_avmm_nf.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/alt_xcvr_native_avmm_nf.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_embedded_debug.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_embedded_debug.sv</message>
+   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_avmm_csr.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_avmm_csr.sv</message>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: phy_g1x4"</message>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci"</message>
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
@@ -2209,15 +2218,6 @@
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./pcie_mgmt_master.sv SYSTEM_VERILOG PATH ../pcie_dfe_ip/pcie_mgmt_master.sv</message>
    <message level="Info" culprit="phy_g1x4">add_fileset_file ./altera_xcvr_native_pcie_dfe_ip.sv SYSTEM_VERILOG PATH ../pcie_dfe_ip/altera_xcvr_native_pcie_dfe_ip.sv</message>
    <message level="Info" culprit="phy_g1x4">Building configuration data for reconfiguration profile 0</message>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: fpll_g1g2xn"</message>
-   <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: altera_xcvr_fpll_a10"</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./twentynm_xcvr_avmm.sv SYSTEM_VERILOG PATH ../../../alt_xcvr_core/nf/twentynm_xcvr_avmm.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_resync.sv SYSTEM_VERILOG PATH ../../../../altera_xcvr_generic/ctrl/alt_xcvr_resync.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./altera_xcvr_fpll_a10.sv SYSTEM_VERILOG PATH ../source/altera_xcvr_fpll_a10.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./a10_avmm_h.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/a10_avmm_h.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_native_avmm_nf.sv SYSTEM_VERILOG PATH ../../../altera_xcvr_native_phy/altera_xcvr_native_vi/alt_xcvr_native_avmm_nf.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_embedded_debug.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_embedded_debug.sv</message>
-   <message level="Info" culprit="fpll_g1g2xn">add_fileset_file ./alt_xcvr_pll_avmm_csr.sv SYSTEM_VERILOG PATH ../../altera_xcvr_atx_pll_vi/source/alt_xcvr_pll_avmm_csr.sv</message>
   </messages>
  </entity>
  <entity kind="altera_pcie_a10_hip" version="18.1" name="phy_g1x4">
@@ -4193,27 +4193,27 @@
      value="pipe_if_g3pcs" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/phy_g1x4_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </childGeneratedFiles>
   <sourceFiles/>
   <childSourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
   </childSourceFiles>
   <instantiator
-     instantiator="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i"
+     instantiator="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri"
      as="phy_g1x4" />
   <messages>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: phy_g1x4"</message>
@@ -4933,27 +4933,27 @@
   <parameter name="hssi_cascade_c_counter_coarse_dly" value="0 ps" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn_cfg.v"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_pcie_a10_hip_181/synth/fpll_g1g2xn_cfg.v"
        attributes="CONTAINS_INLINE_CONFIGURATION" />
   </childGeneratedFiles>
   <sourceFiles/>
   <childSourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
   </childSourceFiles>
   <instantiator
-     instantiator="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i"
+     instantiator="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri"
      as="fpll_g1g2xn" />
   <messages>
    <message level="Info" culprit="arria10gx_e3p1_pcie_hip">"Generating: fpll_g1g2xn"</message>
@@ -6943,155 +6943,155 @@
      value="pipe_if_g3pcs" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_resync.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_resync.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_arbiter.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_arbiter.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pcs.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pcs.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pma.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pma.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_avmm.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_avmm.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_native.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_native.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_functions_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_functions_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/a10_avmm_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/a10_avmm_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_pipe_retry.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_pipe_retry.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_avmm_csr.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_avmm_csr.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_prbs_accum.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_prbs_accum.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_odi_accel.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_odi_accel.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_arb.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_arb.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_false_paths.sdc"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_false_paths.sdc"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_params_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_params_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_commands_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_commands_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_functions_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_functions_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_program.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_program.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_cpu.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_cpu.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_master.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_master.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_ip.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_ip.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/plain_files.txt"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/plain_files.txt"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_opt_logic_u3wsxci.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_opt_logic_u3wsxci.sv"
        attributes="" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_resync.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_resync.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_arbiter.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_arbiter.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pcs.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pcs.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pma.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_pma.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_avmm.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_avmm.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_native.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/twentynm_xcvr_native.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_functions_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_functions_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/a10_avmm_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/a10_avmm_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_pipe_retry.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_pipe_retry.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_avmm_csr.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_avmm_csr.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_prbs_accum.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_prbs_accum.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_odi_accel.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_odi_accel.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_arb.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_arb.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_false_paths.sdc"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_a10_false_paths.sdc"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_params_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_params_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_commands_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_commands_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_functions_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_functions_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_program.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_program.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_cpu.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_cpu.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_master.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/pcie_mgmt_master.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_ip.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/altera_xcvr_native_pcie_dfe_ip.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/plain_files.txt"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/plain_files.txt"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181_u3wsxci.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_opt_logic_u3wsxci.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_native_a10_181/synth/alt_xcvr_native_rcfg_opt_logic_u3wsxci.sv"
        attributes="" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_native_phy/altera_xcvr_native_vi/tcl/altera_xcvr_native_a10_hw.tcl" />
   </sourceFiles>
   <childSourceFiles/>
   <instantiator instantiator="phy_g1x4" as="phy_g1x4" />
@@ -7815,59 +7815,59 @@
   <parameter name="hssi_cascade_c_counter_coarse_dly" value="0 ps" />
   <generatedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/twentynm_xcvr_avmm.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/twentynm_xcvr_avmm.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_resync.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_resync.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/altera_xcvr_fpll_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/altera_xcvr_fpll_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/a10_avmm_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/a10_avmm_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_native_avmm_nf.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_native_avmm_nf.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_embedded_debug.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_embedded_debug.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_avmm_csr.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_avmm_csr.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/plain_files.txt"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/plain_files.txt"
        attributes="" />
   </generatedFiles>
   <childGeneratedFiles>
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/twentynm_xcvr_avmm.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/twentynm_xcvr_avmm.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_resync.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_resync.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/altera_xcvr_fpll_a10.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/altera_xcvr_fpll_a10.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/a10_avmm_h.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/a10_avmm_h.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_native_avmm_nf.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_native_avmm_nf.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_embedded_debug.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_embedded_debug.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_avmm_csr.sv"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/alt_xcvr_pll_avmm_csr.sv"
        attributes="" />
    <file
-       path="/home/alex/workspace/projects/r13/bel_projects/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/plain_files.txt"
+       path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/altera_xcvr_fpll_a10_181/synth/plain_files.txt"
        attributes="" />
   </childGeneratedFiles>
   <sourceFiles>
    <file
-       path="/home/alex/workspace/optional/quartus18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
+       path="/opt/quartus/18/ip/altera/alt_xcvr/altera_xcvr_pll/altera_xcvr_fpll_vi/tcl/altera_xcvr_fpll_a10_hw.tcl" />
   </sourceFiles>
   <childSourceFiles/>
   <instantiator instantiator="fpll_g1g2xn" as="fpll_g1g2xn" />

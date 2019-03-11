@@ -223,7 +223,7 @@
    library="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181"
    hasInlineConfiguration="true" />
  <file
-   path="altera_pcie_a10_hip_181/sim/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i.v"
+   path="altera_pcie_a10_hip_181/sim/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri.v"
    type="VERILOG"
    library="arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181" />
  <file

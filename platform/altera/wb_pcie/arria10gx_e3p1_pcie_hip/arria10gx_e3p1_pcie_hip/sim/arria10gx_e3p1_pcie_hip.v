@@ -188,7 +188,7 @@ module arria10gx_e3p1_pcie_hip (
 		input  wire [63:0] tx_st_data           //               .data
 	);
 
-	arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i #(
+	arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri #(
 		.force_tag_checking_on_hwtcl                          (0),
 		.bar0_address_width_mux_hwtcl                         (7),
 		.bar1_address_width_mux_hwtcl                         (24),

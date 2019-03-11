@@ -20,7 +20,7 @@
 // altera message_off  10036 10034 10230 10764
 
 // THis is used in Makefile to check Terp file syntax at make check time
-module arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i # (
+module arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri # (
       parameter interface_type_integer_hwtcl                      = 0,       // 0 --> AST, 1 --> AVMM
       //Virtual Attributes
       parameter func_mode                                         = "enable",

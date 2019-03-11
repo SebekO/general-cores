@@ -5,11 +5,11 @@
  version="1.0"
  fabric="QSYS">
  <!-- Format version 18.1 625 (Future versions may contain additional information.) -->
- <!-- 2019.02.14.17:04:14 -->
+ <!-- 2019.03.11.10:17:26 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1550160251</value>
+  <value>1552295844</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -36,7 +36,7 @@
  </parameter>
  <parameter name="AUTO_DEVICE">
   <type>java.lang.String</type>
-  <value>10AX115S2F45I2SG</value>
+  <value>10AX115S2F45I1SG</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -45,7 +45,7 @@
  </parameter>
  <parameter name="AUTO_DEVICE_SPEEDGRADE">
   <type>java.lang.String</type>
-  <value>2</value>
+  <value>1</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -261,7 +261,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="part_trait_device">
    <type>java.lang.String</type>
-   <value>10AX115S2F45I2SG</value>
+   <value>10AX115S2F45I1SG</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>

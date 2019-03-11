@@ -12,7 +12,7 @@
 # or its authorized distributors. Please refer to the applicable 
 # agreement for further details.
 
-# ACDS 18.1 625 linux 2019.02.13.16:42:20
+# ACDS 18.1 625 linux 2019.03.11.10:11:26
 # ----------------------------------------
 # Auto-generated simulation script rivierapro_setup.tcl
 # ----------------------------------------
@@ -113,7 +113,7 @@ if ![info exists QSYS_SIMDIR] {
 }
 
 if ![info exists QUARTUS_INSTALL_DIR] { 
-  set QUARTUS_INSTALL_DIR "/home/alex/workspace/optional/quartus18/quartus/"
+  set QUARTUS_INSTALL_DIR "/opt/quartus/18/quartus/"
 }
 
 if ![info exists USER_DEFINED_COMPILE_OPTIONS] { 
@@ -237,7 +237,7 @@ alias com {
   eval  vlog  $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS      "$QSYS_SIMDIR/../altera_xcvr_native_a10_181/sim/alt_xcvr_native_rcfg_opt_logic_u3wsxci.sv"                     -l altera_common_sv_packages -work arria10gx_e3p1_pcie_hip_altera_xcvr_native_a10_181
   eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/fpll_g1g2xn.v"                                                                                 -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
   eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/phy_g1x4.v"                                                                                    -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
-  eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_7meze6i.v"                                     -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
+  eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181_lhxuvri.v"                                     -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
   eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/altpcie_a10_hip_pipen1b.v"                                                                     -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
   eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/altpcie_sc_bitsync.v"                                                                          -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
   eval  vlog -v2k5 $USER_DEFINED_VERILOG_COMPILE_OPTIONS $USER_DEFINED_COMPILE_OPTIONS "$QSYS_SIMDIR/../altera_pcie_a10_hip_181/sim/altpcie_reset_delay_sync.v"                                                                    -work arria10gx_e3p1_pcie_hip_altera_pcie_a10_hip_181   
