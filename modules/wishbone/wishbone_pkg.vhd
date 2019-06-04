@@ -227,13 +227,15 @@ package wishbone_pkg is
   function f_sdb_extract_synthesis(sdb_record : t_sdb_record) return t_sdb_synthesis;
 
   -- Automatic crossbar mapping functions
-  function f_sdb_auto_device(device : t_sdb_device; enable : boolean := true; name: string := "") return t_sdb_record;
-  function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true; name: string := "") return t_sdb_record;
-  function f_sdb_auto_msi   (msi    : t_sdb_msi;    enable : boolean := true) return t_sdb_record;
-  function f_sdb_auto_layout(records: t_sdb_record_array)                               return t_sdb_record_array;
-  function f_sdb_auto_layout(slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_sdb_record_array;
-  function f_sdb_auto_sdb   (records: t_sdb_record_array)                               return t_wishbone_address;
-  function f_sdb_auto_sdb   (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_wishbone_address;
+  function f_sdb_auto_device          (device : t_sdb_device; enable : boolean := true) return t_sdb_record;
+  function f_sdb_auto_bridge          (bridge : t_sdb_bridge; enable : boolean := true) return t_sdb_record;
+  function f_sdb_auto_device_with_name(device : t_sdb_device; enable : boolean := true; name: string := "") return t_sdb_record;
+  function f_sdb_auto_bridge_with_name(bridge : t_sdb_bridge; enable : boolean := true; name: string := "") return t_sdb_record;
+  function f_sdb_auto_msi             (msi    : t_sdb_msi;    enable : boolean := true) return t_sdb_record;
+  function f_sdb_auto_layout          (records: t_sdb_record_array)                               return t_sdb_record_array;
+  function f_sdb_auto_layout          (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_sdb_record_array;
+  function f_sdb_auto_sdb             (records: t_sdb_record_array)                               return t_wishbone_address;
+  function f_sdb_auto_sdb             (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_wishbone_address;
 
   -- For internal use by the crossbar
   function f_sdb_bus_end(g_wraparound : boolean; g_layout : t_sdb_record_array; g_sdb_addr : t_wishbone_address; msi : boolean) return unsigned;
@@ -1474,6 +1476,20 @@ package body wishbone_pkg is
     return t_sdb_record
   is
     constant c_zero  : t_wishbone_address := (others => '0');
+    variable v_empty : t_sdb_record := (others => '0');
+  begin
+    v_empty(7 downto 0) := x"f1";
+    if enable then
+      return f_sdb_embed_device(device, c_zero);
+    else
+      return v_empty;
+    end if;
+  end f_sdb_auto_device;
+
+  function f_sdb_auto_device_with_name(device : t_sdb_device; enable : boolean := true; name: string := "")
+    return t_sdb_record
+  is
+    constant c_zero  : t_wishbone_address := (others => '0');
     variable v_device: t_sdb_device := device;
     variable v_empty : t_sdb_record := (others => '0');
   begin
@@ -1485,9 +1501,23 @@ package body wishbone_pkg is
       v_empty := f_sdb_embed_device(v_device, c_zero);
     end if;
     return v_empty;
-  end f_sdb_auto_device;
+  end f_sdb_auto_device_with_name;
 
   function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true)
+    return t_sdb_record
+  is
+    constant c_zero  : t_wishbone_address := (others => '0');
+    variable v_empty : t_sdb_record := (others => '0');
+  begin
+    v_empty(7 downto 0) := x"f2";
+    if enable then
+      return f_sdb_embed_bridge(bridge, c_zero);
+    else
+      return v_empty;
+    end if;
+  end f_sdb_auto_bridge;
+
+  function f_sdb_auto_bridge_with_name(bridge : t_sdb_bridge; enable : boolean := true; name: string := "")
     return t_sdb_record
   is
     constant c_zero  : t_wishbone_address := (others => '0');
@@ -1502,7 +1532,7 @@ package body wishbone_pkg is
       v_empty := f_sdb_embed_bridge(v_bridge, c_zero);
     end if;
     return v_empty;
-  end f_sdb_auto_bridge;
+  end f_sdb_auto_bridge_with_name;
 
   function f_sdb_auto_msi(msi : t_sdb_msi; enable : boolean := true)
     return t_sdb_record
