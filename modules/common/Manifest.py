@@ -24,5 +24,6 @@ files = [	"gencores_pkg.vhd",
                 "gc_sync_register.vhd",
                 "gc_single_reset_gen.vhd",
                 "gc_async_signals_input_stage.vhd",
-                "gc_dec_8b10b.vhd"
+                "gc_dec_8b10b.vhd",
+                "matrix_pkg.vhd"
                 ];
