@@ -227,15 +227,6 @@ package wishbone_pkg is
   function f_sdb_extract_synthesis(sdb_record : t_sdb_record) return t_sdb_synthesis;
 
   -- Automatic crossbar mapping functions
-<<<<<<< HEAD
-  function f_sdb_auto_device(device : t_sdb_device; enable : boolean := true) return t_sdb_record;
-  function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true) return t_sdb_record;
-  function f_sdb_auto_msi   (msi    : t_sdb_msi;    enable : boolean := true) return t_sdb_record;
-  function f_sdb_auto_layout(records: t_sdb_record_array)                               return t_sdb_record_array;
-  function f_sdb_auto_layout(slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_sdb_record_array;
-  function f_sdb_auto_sdb   (records: t_sdb_record_array)                               return t_wishbone_address;
-  function f_sdb_auto_sdb   (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_wishbone_address;
-=======
   function f_sdb_auto_device          (device : t_sdb_device; enable : boolean := true) return t_sdb_record;
   function f_sdb_auto_bridge          (bridge : t_sdb_bridge; enable : boolean := true) return t_sdb_record;
   function f_sdb_auto_device_with_name(device : t_sdb_device; enable : boolean := true; name: string := "") return t_sdb_record;
@@ -245,7 +236,6 @@ package wishbone_pkg is
   function f_sdb_auto_layout          (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_sdb_record_array;
   function f_sdb_auto_sdb             (records: t_sdb_record_array)                               return t_wishbone_address;
   function f_sdb_auto_sdb             (slaves : t_sdb_record_array; masters : t_sdb_record_array) return t_wishbone_address;
->>>>>>> aaa742e15a802c37cd90b013241b3454bf9836cd
 
   -- For internal use by the crossbar
   function f_sdb_bus_end(g_wraparound : boolean; g_layout : t_sdb_record_array; g_sdb_addr : t_wishbone_address; msi : boolean) return unsigned;
