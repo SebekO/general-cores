@@ -87,7 +87,13 @@ architecture rtl of pcie_wb is
                                                                       -- 0xffffffff means "normal mode".
                                                                       -- This value is stored in a register inside the 
                                                                       -- configuration space (bar0) under address 0x4.
+
+
+  signal async_rstn_master_slave : std_logic := '0';
+
 begin
+
+  async_rstn_master_slave <= master_rstn_i and slave_rstn_i;
 
   pcie_phy : pcie_altera 
     generic map(
@@ -95,7 +101,7 @@ begin
     port map(
       clk125_i      => clk125_i,
       cal_clk50_i   => cal_clk50_i,
-      async_rstn    => master_rstn_i and slave_rstn_i,
+      async_rstn    => async_rstn_master_slave,
       
       pcie_refclk_i => pcie_refclk_i,
       pcie_rstn_i   => pcie_rstn_i,
@@ -336,10 +342,10 @@ begin
             when "10000" => -- Master FIFO status & flags
               if int_slave_i.sel(0) = '1' then
                 case int_slave_i.dat(1 downto 0) is
-                  when "00" => null;
-                  when "01" => int_master_i.stall <= '0';
-                  when "10" => int_master_i.ack <= '1';
-                  when "11" => int_master_i.err <= '1';
+                  when "00"   => null;
+                  when "01"   => int_master_i.stall <= '0';
+                  when "10"   => int_master_i.ack <= '1';
+                  when others => int_master_i.err <= '1';
                 end case;
               end if;
             when "10101" => -- Master FIFO data low
