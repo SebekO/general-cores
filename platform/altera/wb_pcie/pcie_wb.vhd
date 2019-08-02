@@ -263,11 +263,11 @@ begin
 		-- control the cycle line during direct access mode	
       if bridge_mode = mode_direct_access then
         if int_slave_i.stb = '1' then 
-          if int_slave_o.stall = '0' then
+          if int_slave_o.stall = '0' and int_slave_o.ack = '0' and int_slave_o.err = '0' and int_slave_o.rty = '0'then
             wb_n_transact <= wb_n_transact + 1;
           end if;
           wb_direct_cyc <= '1';
-        elsif wb_direct_cyc = '1' and int_slave_o.ack = '1' then
+        elsif wb_direct_cyc = '1' and (int_slave_o.ack = '1' or int_slave_o.err = '1' or int_slave_o.rty = '1') then
           wb_n_transact <= wb_n_transact - 1;
           if wb_n_transact = 1 then
             wb_direct_cyc <= '0';
