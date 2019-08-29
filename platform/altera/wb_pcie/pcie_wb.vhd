@@ -68,7 +68,7 @@ architecture rtl of pcie_wb is
   signal ext_slave_o  : t_wishbone_slave_out;
   
   -- control registers
-  signal r_cyc   : std_logic;
+  signal r_cyc   : std_logic := '0';
   signal r_int   : std_logic := '0'; -- interrupt mask, starts=0
   signal r_addr  : std_logic_vector(31 downto 16);
   signal r_error : std_logic_vector(63 downto  0);
@@ -88,6 +88,10 @@ architecture rtl of pcie_wb is
                                                                       -- This value is stored in a register inside the 
                                                                       -- configuration space (bar0) under address 0x4.
 
+  -- timeout for cycle line 
+  signal  r_cyc_timeout_max : unsigned(31 downto 0) := x"0ee6b280"; --:= x"0ee6b280"; -- 2 s
+  signal  r_cyc_timeout     : unsigned(31 downto 0) := r_cyc_timeout_max;  
+  signal  r_cyc_previous    : std_logic := '0';
 
   signal async_rstn_master_slave : std_logic := '0';
 
@@ -209,7 +213,8 @@ begin
   wb_offset_adr <= x"0000" & wb_adr(15 downto 2) & "00";
   wb_direct_adr <= std_logic_vector(unsigned(wb_offset_adr) + unsigned(wb_base_adr));
 
-  int_slave_i.cyc <= r_cyc when bridge_mode = mode_normal else int_slave_i.stb or wb_direct_cyc;
+  int_slave_i.cyc <= r_cyc when bridge_mode = mode_normal else 
+                     int_slave_i.stb or wb_direct_cyc;
   int_slave_i.adr(r_addr'range) <= r_addr when bridge_mode = mode_normal else wb_direct_adr(r_addr'range); 
   int_slave_i.adr(r_addr'right-1 downto 0)  <= wb_adr(r_addr'right-1 downto 0) when bridge_mode = mode_normal else wb_direct_adr(r_addr'right-1 downto 0);
   
@@ -260,7 +265,7 @@ begin
         r_error <= r_error(r_error'length-2 downto 0) & (int_slave_o.err or int_slave_o.rty);
       end if;
 
-		-- control the cycle line during direct access mode	
+      -- control the cycle line during direct access mode	
       if bridge_mode = mode_direct_access then
         if int_slave_i.stb = '1' then 
           if int_slave_o.stall = '0' and int_slave_o.ack = '0' and int_slave_o.err = '0' and int_slave_o.rty = '0'then
@@ -274,7 +279,19 @@ begin
           end if;
         end if;
       end if;
-		
+
+      -- cycle line timeout
+      r_cyc_previous <= r_cyc;
+      if r_cyc = '1' then 
+        if r_cyc_previous = '0' then -- cycle started
+          r_cyc_timeout <= r_cyc_timeout_max;
+        elsif r_cyc_timeout > 0 then -- cycle ongoing
+          r_cyc_timeout <= r_cyc_timeout - 1;
+        elsif not (wb_stb = '1' and int_slave_i.we = '1') then -- timeout reached and no access to r_cyc
+          r_cyc <= '0';
+        end if; 
+      end if;
+
       if wb_bar = "001" then
         wb_ack <= int_slave_o.ack;
         wb_dat <= int_slave_o.dat;
@@ -300,6 +317,8 @@ begin
             wb_dat(r_addr'right-1 downto 0) <= (others => '0');
           when "00111" => -- SDWB address low
             wb_dat <= sdb_addr;
+          when "01000" => -- max cycle timeout
+            wb_dat <= std_logic_vector(r_cyc_timeout_max);
           when "10000" => -- Master FIFO status & flags
             wb_dat(31) <= fifo_full;
             wb_dat(30) <= int_master_o.we;
@@ -318,7 +337,7 @@ begin
         int_master_i.ack <= '0';
         int_master_i.err <= '0';
         
-        -- Is this a write to the register space?
+        -- write to the register space
         if wb_stb = '1' and int_slave_i.we = '1' then
           case wb_adr(6 downto 2) is
             when "00000" => -- Control register high
@@ -339,6 +358,8 @@ begin
               if int_slave_i.sel(2) = '1' then
                 r_addr(24 downto 16) <= int_slave_i.dat(24 downto 16);
               end if;
+            when "01000" => -- max cycle timeout
+              r_cyc_timeout_max <= unsigned(int_slave_i.dat(31 downto 0));
             when "10000" => -- Master FIFO status & flags
               if int_slave_i.sel(0) = '1' then
                 case int_slave_i.dat(1 downto 0) is
