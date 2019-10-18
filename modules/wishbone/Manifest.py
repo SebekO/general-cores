@@ -1,6 +1,7 @@
 
 modules =  { "local" : [
   "wb_async_bridge",
+  "wb_clock_monitor",
   "wb_axi4lite_bridge",
   "wb_onewire_master",
   "wb_i2c_master",
