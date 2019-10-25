@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='us-ascii'?>
-<qsys_generation_info>
-<qsys_file path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/single_region.qsys" />
-<gen_dir path="/home/alex/workspace/a10_dev/bel_projects/ip_cores/general-cores/platform/altera/networks/arria10gx/single_region/single_region/" />
-<user_regen_policy value="Never Regenerate Existing IP" />
-<actual_regen_policy value="Never Regenerate Existing IP" />
-<gen_action value="IP Generation Skipped" />
-<gen_status value="IP Generation Succeeded" />
-</qsys_generation_info>
