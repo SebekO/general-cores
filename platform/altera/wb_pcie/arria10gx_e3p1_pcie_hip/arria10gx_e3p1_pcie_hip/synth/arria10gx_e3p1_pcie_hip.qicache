@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='us-ascii'?>
-<qsys_generation_info>
-<qsys_file path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip.qsys" />
-<gen_dir path="/home/alex/workspace/a10_dev/ip_cores/general-cores/platform/altera/wb_pcie/arria10gx_e3p1_pcie_hip/arria10gx_e3p1_pcie_hip/" />
-<user_regen_policy value="Never Regenerate Existing IP" />
-<actual_regen_policy value="Never Regenerate Existing IP" />
-<gen_action value="IP Generation Skipped" />
-<gen_status value="IP Generation Succeeded" />
-</qsys_generation_info>
