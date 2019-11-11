@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file
+   path="altclkctrl_181/sim/dual_region_altclkctrl_181_cf6o3fq.vhd"
+   type="VHDL"
+   library="dual_region_altclkctrl_181" />
+ <file path="sim/dual_region.vhd" type="VHDL" hasInlineConfiguration="true" />
+ <topLevel name="dual_region" />
+ <deviceFamily name="arria10" />
+</simPackage>

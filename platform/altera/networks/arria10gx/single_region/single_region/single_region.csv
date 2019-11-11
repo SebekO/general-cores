@@ -1,0 +1,18 @@
+# system info single_region on 2019.02.13.11:03:41
+system_info:
+name,value
+DEVICE,10AX027E3F29E2SG
+DEVICE_FAMILY,Arria 10
+GENERATION_ID,1550052220
+#
+#
+# Files generated for single_region on 2019.02.13.11:03:41
+files:
+filepath,kind,attributes,module,is_top
+sim/single_region.v,VERILOG,CONTAINS_INLINE_CONFIGURATION,single_region,true
+altclkctrl_181/sim/single_region_altclkctrl_181_bjorw2i.v,VERILOG,,single_region_altclkctrl_181_bjorw2i,false
+#
+# Map from instance-path to kind of module
+instances:
+instancePath,module
+single_region.altclkctrl_0,single_region_altclkctrl_181_bjorw2i

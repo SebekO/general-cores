@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simPackage>
+ <file
+   path="altera_xcvr_native_a10_181/sim/altera_xcvr_native_a10_functions_h.sv"
+   type="SYSTEM_VERILOG"
+   library="altera_common_sv_packages"
+   systemVerilogPackageName="altera_xcvr_native_a10_functions_h" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/twentynm_xcvr_avmm.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor/twentynm_xcvr_avmm.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/alt_xcvr_resync.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor/alt_xcvr_resync.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/altera_xcvr_fpll_a10.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor/altera_xcvr_fpll_a10.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/a10_avmm_h.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/alt_xcvr_native_avmm_nf.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/alt_xcvr_pll_embedded_debug.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/alt_xcvr_pll_avmm_csr.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor/alt_xcvr_pll_embedded_debug.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor/alt_xcvr_pll_avmm_csr.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/plain_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/mentor_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/cadence_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/synopsys_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_fpll_a10_181/sim/aldec_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_fpll_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_resync.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_arbiter.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/alt_xcvr_resync.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/alt_xcvr_arbiter.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/twentynm_pcs.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/twentynm_pma.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/twentynm_xcvr_avmm.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/twentynm_xcvr_native.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/twentynm_pcs.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/twentynm_pma.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/twentynm_xcvr_avmm.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor/twentynm_xcvr_native.sv"
+   type="SYSTEM_VERILOG_ENCRYPT"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181"
+   simulator="modelsim" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/a10_avmm_h.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_pipe_retry.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_avmm_csr.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_prbs_accum.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_odi_accel.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_rcfg_arb.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/altera_xcvr_native_pcie_dfe_params_h.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/pcie_mgmt_commands_h.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/pcie_mgmt_functions_h.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/pcie_mgmt_program.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/pcie_mgmt_cpu.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/pcie_mgmt_master.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/altera_xcvr_native_pcie_dfe_ip.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/plain_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/mentor_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/cadence_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/synopsys_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/aldec_files.txt"
+   type="OTHER"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181_ow4er4y.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_xcvr_native_a10_181/sim/alt_xcvr_native_rcfg_opt_logic_ow4er4y.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_xcvr_native_a10_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/fpll_g1g2xn.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181"
+   hasInlineConfiguration="true" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/phy_g1x4.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181"
+   hasInlineConfiguration="true" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181_cbyiw3i.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_a10_hip_pipen1b.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_sc_bitsync.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_reset_delay_sync.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_rs_a10_hip.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_a10_hip_pllnphy.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/skp_det_g3.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altera_xcvr_functions.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_monitor_a10_dlhip_sim.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_tlp_inspector_a10.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_tlp_inspector_cseb_a10.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_tlp_inspector_monitor_a10.sv"
+   type="SYSTEM_VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_tlp_inspector_trigger_a10.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_tlp_inspector_pcsig_drive_a10.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_a10_gbfifo.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_scfifo_a10.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="altera_pcie_a10_hip_181/sim/altpcie_a10_scfifo_ext.v"
+   type="VERILOG"
+   library="arria10gx_scu4_pcie_hip_altera_pcie_a10_hip_181" />
+ <file
+   path="sim/arria10gx_scu4_pcie_hip.v"
+   type="VERILOG"
+   hasInlineConfiguration="true" />
+ <topLevel name="arria10gx_scu4_pcie_hip" />
+ <deviceFamily name="arria10" />
+</simPackage>

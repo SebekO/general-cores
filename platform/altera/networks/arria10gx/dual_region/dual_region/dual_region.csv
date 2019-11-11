@@ -1,0 +1,18 @@
+# system info dual_region on 2019.02.13.11:03:14
+system_info:
+name,value
+DEVICE,10AX027E3F29E2SG
+DEVICE_FAMILY,Arria 10
+GENERATION_ID,1550052193
+#
+#
+# Files generated for dual_region on 2019.02.13.11:03:14
+files:
+filepath,kind,attributes,module,is_top
+sim/dual_region.vhd,VHDL,CONTAINS_INLINE_CONFIGURATION,dual_region,true
+altclkctrl_181/sim/dual_region_altclkctrl_181_cf6o3fq.vhd,VHDL,,dual_region_altclkctrl_181_cf6o3fq,false
+#
+# Map from instance-path to kind of module
+instances:
+instancePath,module
+dual_region.altclkctrl_0,dual_region_altclkctrl_181_cf6o3fq
