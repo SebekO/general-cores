@@ -79,8 +79,8 @@ package axi4_pkg is
     AWSIZE  : std_logic_vector (3 downto 0);
     ARPROT  : std_logic_vector (2 downto 0);
     AWPROT  : std_logic_vector (2 downto 0);
-    ARADDR  : std_logic_vector (30 downto 0);
-    AWADDR  : std_logic_vector (30 downto 0);
+    ARADDR  : std_logic_vector (31 downto 0);
+    AWADDR  : std_logic_vector (31 downto 0);
     WDATA   : std_logic_vector (511 downto 0);
     ARCACHE : std_logic_vector (3 downto 0);
     ARLEN   : std_logic_vector (7 downto 0);
@@ -162,6 +162,21 @@ package axi4_pkg is
       RDATA   => (others => '0')
       );
 
+    constant c_axi4_lite_default_master_in_512 : t_axi4_full_master_in_512 :=
+    (
+      AWREADY => '0',
+      ARREADY => '0',
+      BVALID  => '0',
+      RLAST   => '0',
+      RVALID  => '0',
+      WREADY  => '0',
+      BRESP   => "00",
+      RRESP   => "00",
+      RID => x"00",
+      BID => x"00",
+      RDATA   => (others => '0')
+      );
+
 
   constant c_axi4_lite_default_master_out_32 : t_axi4_lite_master_out_32 :=
     (
@@ -177,6 +192,38 @@ package axi4_pkg is
       WSTRB   => (others => '0')
       );
 
+  constant c_axi4_full_default_master_out_512 : t_axi4_full_master_out_512 :=
+    (
+      ARVALID => '0',
+      AWVALID => '0',
+      BREADY  => '0',
+      RREADY  => '0',
+      WLAST   => '0',
+      WVALID  => '0',
+      AWID => (others => '0'),
+      ARID => (others => '0'),
+      WID => (others => '0'),
+      ARCACHE => (others => '0'),
+      ARPROT => (others => '0'),
+      ARLOCK => (others => '0'),
+      ARBURST => (others => '0'),
+      ARSIZE => (others => '0'),
+      ARLEN => (others => '0'),
+      ARQOS => (others => '0'),
+
+      AWCACHE => (others => '0'),
+      AWPROT => (others => '0'),
+      AWLOCK => (others => '0'),
+      AWBURST => (others => '0'),
+      AWSIZE => (others => '0'),
+      AWLEN => (others => '0'),
+      AWQOS => (others => '0'),
+
+      ARADDR  => (others => '0'),
+      AWADDR  => (others => '0'),
+      WDATA   => (others => '0'),
+      WSTRB   => (others => '0')
+      );
 
 
   subtype t_axi4_lite_slave_in_32 is t_axi4_lite_master_out_32;
