@@ -36,4 +36,5 @@ files = [
     "gc_async_counter_diff.vhd",
     "gc_sync_word_wr.vhd",
     "gc_sync_word_rd.vhd",
+    "matrix_pkg.vhd"
 ];
