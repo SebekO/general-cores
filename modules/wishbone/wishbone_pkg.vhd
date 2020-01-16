@@ -267,8 +267,8 @@ package wishbone_pkg is
   function f_sdb_extract_synthesis(sdb_record : t_sdb_record) return t_sdb_synthesis;
 
   -- Automatic crossbar mapping functions
-  function f_sdb_auto_device(device : t_sdb_device; enable : boolean := true; name: string := "") return t_sdb_record;
-  function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true; name: string := "") return t_sdb_record;
+  function f_sdb_auto_device_string(device : t_sdb_device; enable : boolean := true; name: string := "") return t_sdb_record;
+  function f_sdb_auto_bridge_string(bridge : t_sdb_bridge; enable : boolean := true; name: string := "") return t_sdb_record;
   function f_sdb_auto_device(device : t_sdb_device; enable : boolean := true) return t_sdb_record;
   function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true) return t_sdb_record;
   function f_sdb_auto_msi(msi : t_sdb_msi; enable : boolean := true) return t_sdb_record;
@@ -1589,7 +1589,7 @@ package body wishbone_pkg is
     end if;
   end f_sdb_auto_device;
 
-  function f_sdb_auto_device(device : t_sdb_device; enable : boolean := true; name: string := "")
+  function f_sdb_auto_device_string(device : t_sdb_device; enable : boolean := true; name: string := "")
     return t_sdb_record
   is
     constant c_zero  : t_wishbone_address := (others => '0');
@@ -1604,7 +1604,7 @@ package body wishbone_pkg is
       v_empty := f_sdb_embed_device(v_device, c_zero);
     end if;
     return v_empty;
-  end f_sdb_auto_device;
+  end f_sdb_auto_device_string;
 
   function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true)
     return t_sdb_record
@@ -1620,7 +1620,7 @@ package body wishbone_pkg is
     end if;
   end f_sdb_auto_bridge;
 
-  function f_sdb_auto_bridge(bridge : t_sdb_bridge; enable : boolean := true; name: string := "")
+  function f_sdb_auto_bridge_string(bridge : t_sdb_bridge; enable : boolean := true; name: string := "")
     return t_sdb_record
   is
     constant c_zero  : t_wishbone_address := (others => '0');
@@ -1635,7 +1635,7 @@ package body wishbone_pkg is
       v_empty := f_sdb_embed_bridge(v_bridge, c_zero);
     end if;
     return v_empty;
-  end f_sdb_auto_bridge;
+  end f_sdb_auto_bridge_string;
 
   function f_sdb_auto_msi(msi : t_sdb_msi; enable : boolean := true)
     return t_sdb_record
