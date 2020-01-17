@@ -80,7 +80,7 @@ architecture arch of generic_async_fifo_dual_rst is
 
 begin  -- arch
 
-  U_Inferred_FIFO : entity work.inferred_async_fifo_dual_rst
+  U_Inferred_FIFO : inferred_async_fifo_dual_rst
     generic map (
       g_data_width             => g_data_width,
       g_size                   => g_size,
