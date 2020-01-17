@@ -62,7 +62,7 @@ architecture arch of xwb_simple_uart is
 
 begin  -- arch
 
-  U_Wrapped_UART : entity work.wb_simple_uart
+  U_Wrapped_UART : wb_simple_uart
     generic map (
       g_WITH_VIRTUAL_UART   => g_WITH_VIRTUAL_UART,
       g_WITH_PHYSICAL_UART  => g_WITH_PHYSICAL_UART,
