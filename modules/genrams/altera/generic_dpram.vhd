@@ -43,7 +43,8 @@ entity generic_dpram is
     g_with_byte_enable         : boolean := false;
     g_addr_conflict_resolution : string := "dont_care";
     g_init_file                : string := "none";
-    g_dual_clock               : boolean := true);
+    g_dual_clock               : boolean := true;
+    g_fail_if_file_not_found   : boolean := false);
   port(
     rst_n_i : in std_logic := '1';      -- synchronous reset, active LO
 
