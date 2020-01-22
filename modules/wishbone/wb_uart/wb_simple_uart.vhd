@@ -133,7 +133,7 @@ begin  -- arch
       sl_ack_o   => wb_ack_o,
       sl_stall_o => wb_stall_o);
 
-  U_WB_SLAVE : entity work.simple_uart_wb
+  U_WB_SLAVE : simple_uart_wb
     port map (
       rst_n_i    => rst_n_i,
       clk_sys_i  => clk_sys_i,
