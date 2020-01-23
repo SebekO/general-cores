@@ -60,71 +60,9 @@ end xwb_simple_uart;
 
 architecture arch of xwb_simple_uart is
 
-  type t_uart_in_registers is record
-    sr_tx_busy_i                             : std_logic;
-    sr_rx_rdy_i                              : std_logic;
-    rdr_rx_data_i                            : std_logic_vector(7 downto 0);
-    host_tdr_rdy_i                           : std_logic;
-    host_rdr_data_i                          : std_logic_vector(7 downto 0);
-    host_rdr_rdy_i                           : std_logic;
-    host_rdr_count_i                         : std_logic_vector(15 downto 0);
-  end record;
-    
-   type t_uart_out_registers is record
-     bcr_o                                    : std_logic_vector(31 downto 0);
-     bcr_wr_o                                 : std_logic;
-     tdr_tx_data_o                            : std_logic_vector(7 downto 0);
-     tdr_tx_data_wr_o                         : std_logic;
-     host_tdr_data_o                          : std_logic_vector(7 downto 0);
-     host_tdr_data_wr_o                       : std_logic;
-   end record;
-    
-  component wb_simple_uart
-    generic (
-      g_with_virtual_uart   : boolean;
-      g_with_physical_uart  : boolean;
-      g_interface_mode      : t_wishbone_interface_mode;
-      g_address_granularity : t_wishbone_address_granularity;
-      g_vuart_fifo_size     : integer);
-    port (
-      clk_sys_i  : in  std_logic;
-      rst_n_i    : in  std_logic;
-      wb_adr_i   : in  std_logic_vector(4 downto 0);
-      wb_dat_i   : in  std_logic_vector(31 downto 0);
-      wb_dat_o   : out std_logic_vector(31 downto 0);
-      wb_cyc_i   : in  std_logic;
-      wb_sel_i   : in  std_logic_vector(3 downto 0);
-      wb_stb_i   : in  std_logic;
-      wb_we_i    : in  std_logic;
-      wb_ack_o   : out std_logic;
-      wb_stall_o : out std_logic;
-      uart_rxd_i : in  std_logic;
-      uart_txd_o : out std_logic);
-  end component;
- 
-  component simple_uart_wb is
-    port (
-      rst_n_i                                  : in     std_logic;
-      clk_sys_i                                : in     std_logic;
-      wb_adr_i                                 : in     std_logic_vector(2 downto 0);
-      wb_dat_i                                 : in     std_logic_vector(31 downto 0);
-      wb_dat_o                                 : out    std_logic_vector(31 downto 0);
-      wb_cyc_i                                 : in     std_logic;
-      wb_sel_i                                 : in     std_logic_vector(3 downto 0);
-      wb_stb_i                                 : in     std_logic;
-      wb_we_i                                  : in     std_logic;
-      wb_ack_o                                 : out    std_logic;
-      wb_stall_o                               : out    std_logic;
-      rdr_rack_o                               : out    std_logic;
-      host_rack_o                              : out    std_logic;
-      regs_i                                   : in     t_uart_in_registers;
-      regs_o                                   : out    t_uart_out_registers
-    );
-  end component;
- 
 begin  -- arch
 
-  U_Wrapped_UART : wb_simple_uart
+  U_Wrapped_UART : entity work.wb_simple_uart
     generic map (
       g_WITH_VIRTUAL_UART   => g_WITH_VIRTUAL_UART,
       g_WITH_PHYSICAL_UART  => g_WITH_PHYSICAL_UART,
@@ -143,6 +81,7 @@ begin  -- arch
       wb_we_i    => slave_i.we,
       wb_ack_o   => slave_o.ack,
       wb_stall_o => slave_o.stall,
+      int_o      => int_o,
       uart_rxd_i => uart_rxd_i,
       uart_txd_o => uart_txd_o);
 
