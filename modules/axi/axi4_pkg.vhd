@@ -102,6 +102,24 @@ package axi4_pkg is
     RDATA   : std_logic_vector (31 downto 0);
   end record;
 
+  -- AXI4-Stream interface, 32 bits
+  type t_axis_32 is record
+    data  : std_logic_vector(31 DOWNTO 0);
+    last  : std_logic;
+    valid : std_logic;
+    ready : std_logic;
+    keep  : std_logic_vector(3 DOWNTO 0);
+  end record t_axis_32;
+  
+  -- AXI4-Stream interface, 64 bits
+  type t_axis_64 is record
+    data  : std_logic_vector(63 DOWNTO 0);
+    last  : std_logic;
+    valid : std_logic;
+    ready : std_logic;
+    keep  : std_logic_vector(7 DOWNTO 0);
+  end record t_axis_64;
+
   constant c_axi4_lite_default_master_in_32 : t_axi4_lite_master_in_32 :=
     (
       AWREADY => '0',

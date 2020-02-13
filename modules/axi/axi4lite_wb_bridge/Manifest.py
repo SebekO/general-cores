@@ -1,3 +1,3 @@
 files = [
-    "xaxi4lite_wb_bridge.vhd",
+    "wb_axi4lite_bridge.vhd",
 ];
