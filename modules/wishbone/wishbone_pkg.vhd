@@ -449,6 +449,7 @@ package wishbone_pkg is
 
   component xwb_register_link  -- puts a register of delay between crossbars
     generic (
+      g_wb_adapter         : boolean                        := true;
       g_WB_IN_MODE         : t_wishbone_interface_mode      := PIPELINED;
       g_WB_IN_GRANULARITY  : t_wishbone_address_granularity := BYTE;
       g_WB_OUT_MODE        : t_wishbone_interface_mode      := PIPELINED;

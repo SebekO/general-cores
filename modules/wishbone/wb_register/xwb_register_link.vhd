@@ -33,6 +33,7 @@ use work.wishbone_pkg.all;
 
 entity xwb_register_link is
   generic (
+    g_wb_adapter         : boolean := true;
     g_WB_IN_MODE         : t_wishbone_interface_mode      := PIPELINED;
     g_WB_IN_GRANULARITY  : t_wishbone_address_granularity := BYTE;
     g_WB_OUT_MODE        : t_wishbone_interface_mode      := PIPELINED;
@@ -63,38 +64,46 @@ begin
 
   -- xwb_register_link only works with PIPELINED interfaces.
   -- We convert from/to PIPELINED to enforce this.
-  wb_slave_adapter_in: wb_slave_adapter
-    generic map (
-      g_master_use_struct  => TRUE,
-      g_slave_use_struct   => TRUE,
-      g_slave_mode         => g_WB_IN_MODE,
-      g_slave_granularity  => g_WB_IN_GRANULARITY,
-      g_master_mode        => CLASSIC,
-      g_master_granularity => BYTE)
-    port map (
-      clk_sys_i  => clk_sys_i,
-      rst_n_i    => rst_n_i,
-      slave_i    => slave_i,
-      slave_o    => slave_o,
-      master_i   => slave_out,
-      master_o   => slave_in);
+  g_wb_adapter_n : if not g_wb_adapter generate
+    slave_o   <= slave_out;
+    slave_in  <= slave_i;
+    master_o  <= master_out;
+    master_in <= master_i;
+  end generate;
+  g_wb_adapter_y : if g_wb_adapter generate
+    wb_slave_adapter_in: wb_slave_adapter
+      generic map (
+        g_master_use_struct  => TRUE,
+        g_slave_use_struct   => TRUE,
+        g_slave_mode         => g_WB_IN_MODE,
+        g_slave_granularity  => g_WB_IN_GRANULARITY,
+        g_master_mode        => CLASSIC,
+        g_master_granularity => BYTE)
+      port map (
+        clk_sys_i  => clk_sys_i,
+        rst_n_i    => rst_n_i,
+        slave_i    => slave_i,
+        slave_o    => slave_o,
+        master_i   => slave_out,
+        master_o   => slave_in);
 
-  wb_slave_adapter_out: wb_slave_adapter
-    generic map (
-      g_master_use_struct  => TRUE,
-      g_slave_use_struct   => TRUE,
-      g_slave_mode         => CLASSIC,
-      g_slave_granularity  => BYTE,
-      g_master_mode        => g_WB_OUT_MODE,
-      g_master_granularity => g_WB_OUT_GRANULARITY)
-    port map (
-      clk_sys_i  => clk_sys_i,
-      rst_n_i    => rst_n_i,
-      slave_i    => master_out,
-      slave_o    => master_in,
-      master_i   => master_i,
-      master_o   => master_o);
-
+    wb_slave_adapter_out: wb_slave_adapter
+      generic map (
+        g_master_use_struct  => TRUE,
+        g_slave_use_struct   => TRUE,
+        g_slave_mode         => CLASSIC,
+        g_slave_granularity  => BYTE,
+        g_master_mode        => g_WB_OUT_MODE,
+        g_master_granularity => g_WB_OUT_GRANULARITY)
+      port map (
+        clk_sys_i  => clk_sys_i,
+        rst_n_i    => rst_n_i,
+        slave_i    => master_out,
+        slave_o    => master_in,
+        master_i   => master_i,
+        master_o   => master_o);
+  end generate;
+  
   sp : wb_skidpad
   generic map(
     g_adrbits   => c_wishbone_address_width
@@ -115,7 +124,6 @@ begin
     sel_o        => master_out.sel,
     we_o         => master_out.we
   );
-
 
   slave_out.ack   <= r_ack;
   slave_out.err   <= r_err;
