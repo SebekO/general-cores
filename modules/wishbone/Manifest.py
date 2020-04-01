@@ -27,6 +27,7 @@ modules =  { "local" : [
   "wb_metadata",
   "wb_split",
   "wb16_to_wb32",
+  "wb_fine_pulse_gen",
   "wbgen2",
   "wbgenplus",
   ]}
