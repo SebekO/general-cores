@@ -1,36 +1,10 @@
--------------------------------------------------------------------------------
--- Title      : WB-to-AXI4Lite bridge
--- Project    : General Cores
--------------------------------------------------------------------------------
--- File       : wb_axi4lite_bridge.vhd
--- Author     : Pascal Bos
--- Company    : Nikhef
--- Platform   : FPGA-generics
--- Standard   : VHDL '93
--------------------------------------------------------------------------------
--- Description:
---
--- This module is a WB Slave Classic to AXI4-Lite Master bridge.
--------------------------------------------------------------------------------
--- Copyright (c) 2020 CERN
---------------------------------------------------------------------------------
--- Copyright and related rights are licensed under the Solderpad Hardware
--- License, Version 2.0 (the "License"); you may not use this file except
--- in compliance with the License. You may obtain a copy of the License at
--- http://solderpad.org/licenses/SHL-2.0.
--- Unless required by applicable law or agreed to in writing, software,
--- hardware and materials distributed under this License is distributed on an
--- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
--- or implied. See the License for the specific language governing permissions
--- and limitations under the License.
---------------------------------------------------------------------------------
-
-library ieee;
-use ieee.std_logic_1164.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 use ieee.numeric_std.all;
 
-use work.axi4_pkg.all;
+library work;
 use work.wishbone_pkg.all;
+use work.axi4_pkg.all;
 
 entity xwb_axi4lite_bridge is
   port (
@@ -38,7 +12,7 @@ entity xwb_axi4lite_bridge is
     rst_n_i      : in std_logic;
     axi4_slave_i : in  t_axi4_lite_slave_in_32;
     axi4_slave_o : out t_axi4_lite_slave_out_32;
-    wb_master_o  : out t_wishbone_master_out;
+    wb_master_o  : buffer t_wishbone_master_out;
     wb_master_i  : in  t_wishbone_master_in
   );
 end entity xwb_axi4lite_bridge;
@@ -105,7 +79,11 @@ begin
     end if;
   when SR_SEND_ADDR =>
     if wb_master_i.stall = '0' then
-      nxt <= SR_GET_DATA;
+      if wb_master_i.ack = '1' then
+        nxt <= SR_SEND_DATA;
+      else
+        nxt <= SR_GET_DATA;
+      end if;
     else 
       nxt <= SR_SEND_ADDR;
     end if;
@@ -163,8 +141,9 @@ begin
       wb_master_o.dat <= (others => '0');
       wb_master_o.sel <= (others => '0');
     end if;
-    if prs = SR_GET_DATA and wb_master_i.ack = '1' then
+    if (prs = SR_GET_DATA or prs = SR_SEND_ADDR) and wb_master_i.ack = '1' then
       axi4_slave_o.rdata <= wb_master_i.dat;
+      wb_master_o.sel <= (others => '1');
     elsif prs = IDLE then
       axi4_slave_o.rdata <= (others => '0');
     end if;
