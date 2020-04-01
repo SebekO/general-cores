@@ -26,6 +26,7 @@ modules =  { "local" : [
   "wb_ds182x_readout",
   "wb_metadata",
   "wb_split",
+  "wb_fine_pulse_gen",
   "wbgen2",
   "wbgenplus",
   ]}
