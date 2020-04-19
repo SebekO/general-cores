@@ -31,10 +31,12 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 use work.genram_pkg.all;
 use work.wishbone_pkg.all;
 use work.UART_wbgen2_pkg.all;
+
 
 entity wb_simple_uart is
   generic(
@@ -42,7 +44,7 @@ entity wb_simple_uart is
     g_WITH_PHYSICAL_UART  : boolean;
     g_INTERFACE_MODE      : t_wishbone_interface_mode      := CLASSIC;
     g_ADDRESS_GRANULARITY : t_wishbone_address_granularity := WORD;
-    g_VUART_FIFO_SIZE     : integer                        := 1024
+    g_VUART_FIFO_SIZE     : integer                        := 1024;
     g_PRESET_BCR          : integer := 0
     );
   port (
