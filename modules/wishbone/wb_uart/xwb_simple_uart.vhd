@@ -95,4 +95,4 @@ begin  -- arch
 
   desc_o <= (others => '0');
   
-end rtl;
+end arch;
