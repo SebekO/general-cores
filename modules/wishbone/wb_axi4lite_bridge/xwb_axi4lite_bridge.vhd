@@ -171,8 +171,8 @@ begin
 
             
           when RESPONSE_WRITE =>
+            axi4_slave_o.BVALID <= '1';
             if (axi4_slave_i.BREADY = '1') then
-              axi4_slave_o.BVALID <= '1';
               state               <= IDLE;
             end if;
 
