@@ -26,6 +26,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+library work;
+use work.gencores_pkg.all;
+
 package genram_pkg is
 
   function f_log2_size (A       : natural) return natural;
@@ -212,7 +215,8 @@ package genram_pkg is
       g_with_almost_full       : boolean := false;
       g_with_count             : boolean := false;
       g_almost_empty_threshold : integer := 0;
-      g_almost_full_threshold  : integer := 0);
+      g_almost_full_threshold  : integer := 0;
+      g_register_flag_outputs  : boolean := true);
     port (
       rst_n_i        : in  std_logic := '1';
       clk_i          : in  std_logic;
@@ -248,14 +252,10 @@ end genram_pkg;
 
 package body genram_pkg is
 
+  -- kept for backwards compatibility
   function f_log2_size (A : natural) return natural is
   begin
-    for I in 1 to 64 loop               -- Works for up to 64 bits
-      if (2**I >= A) then
-        return(I);
-      end if;
-    end loop;
-    return(63);
+    return f_log2_ceil(A);
   end function f_log2_size;
 
   function f_gen_dummy_vec (val : std_logic; size : natural) return std_logic_vector is

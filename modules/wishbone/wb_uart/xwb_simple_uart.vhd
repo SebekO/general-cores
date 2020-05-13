@@ -36,14 +36,16 @@ library work;
 use work.wishbone_pkg.all;
 
 entity xwb_simple_uart is
-  generic (
+  generic(
     g_WITH_VIRTUAL_UART   : boolean                        := TRUE;
     g_WITH_PHYSICAL_UART  : boolean                        := TRUE;
     g_INTERFACE_MODE      : t_wishbone_interface_mode      := CLASSIC;
     g_ADDRESS_GRANULARITY : t_wishbone_address_granularity := WORD;
-    g_VUART_FIFO_SIZE     : integer                        := 1024);
+    g_VUART_FIFO_SIZE     : integer                        := 1024;
+    g_PRESET_BCR          : integer := 0
+);
 
-  port (
+  port(
     clk_sys_i : in std_logic;
     rst_n_i   : in std_logic;
 
@@ -53,22 +55,25 @@ entity xwb_simple_uart is
     desc_o  : out t_wishbone_device_descriptor;
     int_o   : out std_logic;
 
-    uart_rxd_i : in  std_logic;
-    uart_txd_o : out std_logic);
+    uart_rxd_i: in std_logic;
+    uart_txd_o: out std_logic
+
+    );
 
 end xwb_simple_uart;
 
 architecture arch of xwb_simple_uart is
 
 begin  -- arch
-
+  
   U_Wrapped_UART : entity work.wb_simple_uart
     generic map (
       g_WITH_VIRTUAL_UART   => g_WITH_VIRTUAL_UART,
       g_WITH_PHYSICAL_UART  => g_WITH_PHYSICAL_UART,
       g_INTERFACE_MODE      => g_INTERFACE_MODE,
       g_ADDRESS_GRANULARITY => g_ADDRESS_GRANULARITY,
-      g_VUART_FIFO_SIZE     => g_VUART_FIFO_SIZE)
+      g_VUART_FIFO_SIZE     => g_VUART_FIFO_SIZE,
+      g_PRESET_BCR => g_PRESET_BCR)
     port map (
       clk_sys_i  => clk_sys_i,
       rst_n_i    => rst_n_i,
@@ -89,5 +94,5 @@ begin  -- arch
   slave_o.rty <= '0';
 
   desc_o <= (others => '0');
-
+  
 end arch;

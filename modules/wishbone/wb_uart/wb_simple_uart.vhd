@@ -16,7 +16,7 @@
 -- records, see xwb_simple_uart.
 --
 --------------------------------------------------------------------------------
--- Copyright CERN 2010-2019
+-- Copyright CERN 2010-2018
 --------------------------------------------------------------------------------
 -- Copyright and related rights are licensed under the Solderpad Hardware
 -- License, Version 2.0 (the "License"); you may not use this file except
@@ -31,10 +31,12 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 use work.genram_pkg.all;
 use work.wishbone_pkg.all;
 use work.UART_wbgen2_pkg.all;
+
 
 entity wb_simple_uart is
   generic(
@@ -42,7 +44,8 @@ entity wb_simple_uart is
     g_WITH_PHYSICAL_UART  : boolean;
     g_INTERFACE_MODE      : t_wishbone_interface_mode      := CLASSIC;
     g_ADDRESS_GRANULARITY : t_wishbone_address_granularity := WORD;
-    g_VUART_FIFO_SIZE     : integer                        := 1024
+    g_VUART_FIFO_SIZE     : integer                        := 1024;
+    g_PRESET_BCR          : integer := 0
     );
   port (
 
@@ -59,7 +62,7 @@ entity wb_simple_uart is
     wb_ack_o   : out std_logic;
     wb_stall_o : out std_logic;
 
-    int_o : out std_logic;
+    int_o      : out std_logic;
 
     uart_rxd_i : in  std_logic;
     uart_txd_o : out std_logic
@@ -70,11 +73,11 @@ architecture arch of wb_simple_uart is
 
   constant c_BAUD_ACC_WIDTH : integer := 16;
 
-  signal rx_ready_reg : std_logic;
-  signal rx_ready     : std_logic;
-  signal uart_bcr     : std_logic_vector(31 downto 0);
+  signal rx_ready_reg    : std_logic;
+  signal rx_ready        : std_logic;
+  signal uart_bcr        : std_logic_vector(31 downto 0);
 
-  signal rdr_rack  : std_logic;
+  signal rdr_rack         : std_logic;
   signal host_rack : std_logic;
 
   signal baud_tick  : std_logic;
@@ -95,10 +98,10 @@ architecture arch of wb_simple_uart is
   signal fifo_count : std_logic_vector(f_log2_size(g_VUART_FIFO_SIZE)-1 downto 0);
 
   signal phys_rx_ready, phys_tx_busy : std_logic;
-
+  
   signal phys_rx_data : std_logic_vector(7 downto 0);
-
-
+  
+  
 begin  -- arch
 
   gen_check_generics : if (not g_WITH_PHYSICAL_UART and not g_WITH_VIRTUAL_UART) generate
@@ -161,8 +164,8 @@ begin  -- arch
     begin
       if rising_edge(clk_sys_i) then
         if rst_n_i = '0' then
-          uart_bcr <= (others => '0');
-        elsif regs_out.bcr_wr_o = '1' then
+          uart_bcr <= std_logic_vector(to_unsigned(g_preset_bcr, uart_bcr'length));
+        elsif(regs_out.bcr_wr_o = '1')then
           uart_bcr <= regs_out.bcr_o;
         end if;
       end if;
@@ -199,7 +202,7 @@ begin  -- arch
         rx_data_o    => phys_rx_data);
 
   end generate gen_phys_uart;
-
+  
   gen_vuart : if (g_WITH_VIRTUAL_UART) generate
 
     fifo_wr <= not fifo_full and regs_out.tdr_tx_data_wr_o;
@@ -250,19 +253,19 @@ begin  -- arch
     if rising_edge(clk_sys_i) then
       if rst_n_i = '0' then
         regs_in.sr_rx_rdy_i   <= '0';
-        int_o                 <= '0';
+        int_o <= '0';
         regs_in.rdr_rx_data_i <= (others => '0');
       else
         if rdr_rack = '1' and phys_rx_ready = '0' and regs_out.host_tdr_data_wr_o = '0' then
           regs_in.sr_rx_rdy_i <= '0';
-          int_o               <= '0';
+          int_o <= '0';
         elsif phys_rx_ready = '1' and g_WITH_PHYSICAL_UART then
           regs_in.sr_rx_rdy_i   <= '1';
-          int_o                 <= '1';
+          int_o <= '1';
           regs_in.rdr_rx_data_i <= phys_rx_data;
         elsif regs_out.host_tdr_data_wr_o = '1' and g_WITH_VIRTUAL_UART then
           regs_in.sr_rx_rdy_i   <= '1';
-          int_o                 <= '1';
+          int_o <= '1';
           regs_in.rdr_rx_data_i <= regs_out.host_tdr_data_o;
         end if;
       end if;
@@ -271,5 +274,5 @@ begin  -- arch
 
   regs_in.sr_tx_busy_i   <= phys_tx_busy when (g_WITH_PHYSICAL_UART) else '0';
   regs_in.host_tdr_rdy_i <= not regs_in.sr_rx_rdy_i;
-
+  
 end arch;
