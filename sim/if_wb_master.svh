@@ -298,10 +298,10 @@ class CIWBMasterAccessor extends CWishboneAccessor;
 
 endclass // CIWBMasterAccessor
 
+   CIWBMasterAccessor theAccessor;
+
    function automatic CIWBMasterAccessor get_accessor();
-      automatic CIWBMasterAccessor tmp;
-      tmp  = new;
-      return tmp;
+      return theAccessor;
    endfunction // get_accessor
 
    always@(posedge clk_i)
@@ -321,6 +321,7 @@ endclass // CIWBMasterAccessor
       settings.gen_random_throttling  = 0;
       settings.throttle_prob          = 0.1;
       settings.addr_gran              = WORD;
+      theAccessor = new;
    end
 
    initial forever begin
@@ -331,7 +332,7 @@ endclass // CIWBMasterAccessor
          wb_cycle_t c;
 
          c = request_queue.pop_front();
-
+	 
          case(c.ctype)
            PIPELINED:
              pipelined_cycle(c);
