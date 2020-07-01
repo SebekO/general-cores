@@ -298,12 +298,8 @@ class CIWBMasterAccessor extends CWishboneAccessor;
 
 endclass // CIWBMasterAccessor
 
+  CIWBMasterAccessor theAccessor;
 
-   CIWBMasterAccessor theAccessor;
-
-   initial
-     theAccessor = new;
-   
    function automatic CIWBMasterAccessor get_accessor();
       return theAccessor;
    endfunction // get_accessor
@@ -325,6 +321,7 @@ endclass // CIWBMasterAccessor
       settings.gen_random_throttling  = 0;
       settings.throttle_prob          = 0.1;
       settings.addr_gran              = WORD;
+      theAccessor = new;
    end
 
    initial forever begin
