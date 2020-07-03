@@ -46,9 +46,9 @@ end entity xwb_axi4lite_bridge;
 architecture rtl of xwb_axi4lite_bridge is
   type state_type is (IDLE, SR_SEND_ADDR, SR_GET_DATA, SR_SEND_DATA, SW_GET_DATA, SW_GET_ADDR, SW_SEND, SW_RESP);
   signal prs, nxt : state_type;
-  begin 
+begin 
 
-  --state register for the Moore state machine, also has a timeout counter. 
+--state register for the Moore state machine, also has a timeout counter. 
 state_register : process(clk_sys_i,rst_n_i) is  
   variable count : unsigned(10 downto 0);
 begin
@@ -68,6 +68,7 @@ begin
     end if;
   end if;
 end process state_register;    
+
 
 --next state decoder for the Moore state machine.
 next_state_decoder : process(prs, wb_master_i, axi4_slave_i) is
@@ -105,7 +106,11 @@ begin
     end if;
   when SR_SEND_ADDR =>
     if wb_master_i.stall = '0' then
-      nxt <= SR_GET_DATA;
+      if wb_master_i.ack = '1' then
+        nxt <= SR_SEND_DATA;
+      else
+        nxt <= SR_GET_DATA;
+      end if;
     else 
       nxt <= SR_SEND_ADDR;
     end if;
@@ -163,7 +168,7 @@ begin
       wb_master_o.dat <= (others => '0');
       wb_master_o.sel <= (others => '0');
     end if;
-    if prs = SR_GET_DATA and wb_master_i.ack = '1' then
+    if (prs = SR_SEND_ADDR or prs = SR_GET_DATA) and wb_master_i.ack = '1' then
       axi4_slave_o.rdata <= wb_master_i.dat;
     elsif prs = IDLE then
       axi4_slave_o.rdata <= (others => '0');
