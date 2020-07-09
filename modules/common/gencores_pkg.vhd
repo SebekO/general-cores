@@ -703,13 +703,15 @@ package body gencores_pkg is
   end f_rr_arbitrate;
 
   function f_onehot_decode(x : std_logic_vector; size : integer) return std_logic_vector is
+    variable ret : std_logic_vector(size-1 downto 0);
   begin
+    ret := (others => '0');
     for j in 0 to x'left loop
       if x(j) /= '0' then
-        return std_logic_vector(to_unsigned(j, size));
+        ret := std_logic_vector(to_unsigned(j, size));
       end if;
     end loop;  -- i
-    return std_logic_vector(to_unsigned(0, size));
+    return ret;
   end f_onehot_decode;
 
 
