@@ -137,8 +137,11 @@ architecture rtl of xwb_fine_pulse_gen is
 
   signal pll_locked : std_logic;
 
-  signal rst_serdes : std_logic;
+  signal rst_serdes_in, rst_serdes : std_logic;
+  signal odelay_calib_rdy : std_logic;
 
+  signal pps_p1 : std_logic;
+  
 begin
 
   
@@ -148,9 +151,11 @@ begin
       if rst_n_wr = '0' then
         pps_ext <= '0';
         pps_cnt <= (others => '0');
+        pps_p1 <= '0';
       else
 
         pps_p_d <= pps_p_i;
+        pps_p1 <= not pps_p_d and pps_p_i;
         
         if pps_p_i = '1' and pps_p_d = '0' then
           pps_cnt <= to_unsigned(1, pps_cnt'length);
@@ -170,11 +175,8 @@ begin
     port map (
       rst_n_i   => rst_sys_n_i,
       clk_sys_i => clk_sys_i,
-      clk_ref_i => clk_ref_i,
       slave_i   => slave_i,
       slave_o   => slave_o,
-      clk_odelay_i => clk_odelay,
-      clk_oserdes_i => clk_par,
       regs_i    => regs_in,
       regs_o    => regs_out);
 
@@ -274,14 +276,28 @@ begin
       q_p_o     => ch(5).force_tr);
 
 
-  
-  regs_in.csr_ready_i(0) <= ch(0).ready;
-  regs_in.csr_ready_i(1) <= ch(1).ready;
-  regs_in.csr_ready_i(2) <= ch(2).ready;
-  regs_in.csr_ready_i(3) <= ch(3).ready;
-  regs_in.csr_ready_i(4) <= ch(4).ready;
-  regs_in.csr_ready_i(5) <= ch(5).ready;
 
+  gen_ready_flags : for i in 0 to g_num_channels-1 generate
+  U_Sync : gc_sync_ffs
+    port map (
+      clk_i    => clk_sys_i,
+      rst_n_i  => rst_sys_n_i,
+      data_i   => ch(i).ready,
+      synced_o => regs_in.csr_ready_i(i)
+      );
+  end generate gen_ready_flags;
+
+  rst_serdes_in <= regs_out.odelay_calib_rst_oserdes_o or regs_out.csr_serdes_rst_o;
+
+  U_Sync_Serdes_Reset : gc_sync_ffs
+    port map (
+      clk_i    => clk_ref_i,
+      rst_n_i  => '1',
+      data_i   => rst_serdes_in,
+      synced_o => rst_serdes
+      );
+  
+  
   ch(0).pol <= regs_out.ocr0_pol_o;
   ch(1).pol <= regs_out.ocr1_pol_o;
   ch(2).pol <= regs_out.ocr2_pol_o;
@@ -337,15 +353,12 @@ begin
           ch(i).state <= IDLE;
           ch(i).trig_p <= '0';
           ch(i).delay_load <= '0';
-          ch(i).trig_p <= '0';
-          ch(i).odelay_load <= '0';
-              
         else
 
           if ch(i).trig_sel = '1' then
             ch(i).trig_in <= ext_trigger_p_i;
           else
-            ch(i).trig_in <= pps_p_i;
+            ch(i).trig_in <= pps_p1;
           end if;
 
           ch(i).trig_in_d <= ch(i).trig_in;
@@ -414,7 +427,7 @@ begin
       port map (
         clk_par_i    => clk_par,
         clk_serdes_i => clk_ser,
-        rst_serdes_i => regs_out.csr_serdes_rst_o,
+        rst_serdes_i => rst_serdes,
         rst_sys_n_i  => rst_sys_n_i,
         trig_p_i     => ch(I).trig_p,
         cont_i =>  ch(i).cont,
@@ -431,14 +444,14 @@ begin
     U_Pulse_Gen : entity work.fine_pulse_gen_kintexultrascale
       generic map (
         g_sim_delay_tap_ps => 50,
-        g_ref_clk_freq     => 200.0,
+        g_idelayctrl_ref_clk_freq     => 250.0,
         g_use_odelay => f_to_bool(g_use_odelay(i)) )
       port map (
+        clk_sys_i => clk_sys_i,
         clk_par_i    => clk_par,
         clk_ref_i => clk_ref_i,
         clk_serdes_i => clk_ser,
-        clk_odelay_i => clk_odelay,
-        rst_serdes_i => regs_out.csr_serdes_rst_o,
+        rst_serdes_i => rst_serdes,
         rst_sys_n_i  => rst_sys_n_i,
         trig_p_i     => ch(I).trig_p,
         cont_i => ch(i).cont,
@@ -477,7 +490,7 @@ begin
         clk_par_o    => clk_par,
         clk_ser_o    => clk_ser,
         clk_ser_ext_i => clk_ser_ext_i,
-        clk_odelay_o => clk_odelay,
+--        clk_odelay_o => clk_odelay,
         pll_locked_o => pll_locked);
 
   end generate gen_is_kintex7;
@@ -495,21 +508,24 @@ begin
         clk_par_o    => clk_par,
         clk_ser_o    => clk_ser,
         clk_ser_ext_i => clk_ser_ext_i,
-        clk_odelay_o => clk_odelay,
+--        clk_odelay_o => clk_odelay,
         pll_locked_o => pll_locked,
 
-        
-        
-        odelayctrl_rdy_o => regs_in.odelay_calib_rdy_i,
+        odelayctrl_rdy_o => odelay_calib_rdy,
         odelayctrl_rst_i => regs_out.odelay_calib_rst_idelayctrl_o
-
         );
+
+    U_Sync_Reset : gc_sync_ffs
+    port map (
+      clk_i    => clk_sys_i,
+      rst_n_i  => rst_sys_n_i,
+      data_i   => odelay_calib_rdy,
+      synced_o => regs_in.odelay_calib_rdy_i
+      );
 
   end generate gen_is_kintex_ultrascale;
   
-
   clk_par_o <= clk_par;
-
   regs_in.csr_pll_locked_i <= pll_locked;
   
 end rtl;
