@@ -13,12 +13,22 @@ In [modules/common](modules/common) there are general purpose cores:
 * The package [matrix_pkg](modules/common/matrix_pkg.vhd) declares a 2d
   array of std_logic, and some subprograms to handle it.
 
+* Edge detectors are provided by [gc_posedge](modules/common/gc_posedge.vhd),
+  [gc_negedge](modules/common/gc_negedge.vhd), and
+  [gc_edge_detect](modules/common/gc_edge_detect.vhd).
+
 * For clock-domain crossing or asynchronous signal register, use
-  [gc_sync_ffs](modules/common/gc_sync_ffs.vhd).  It also has an edge
-  detector.
+  [gc_sync](modules/common/gc_sync.vhd).  This is the basic synchronizer.
+  If you also need an edge detector, use
+  [gc_sync_ffs](modules/common/gc_sync_ffs.vhd).
   The other synchronizer [gc_sync_register](modules/common/gc_sync_register.vhd)
   is deprecated.  It can synchronize multiple signals at the same time but
   doesn't ensure coherency between these signals.
+
+  The module [gc_sync_edge](modules/common/gc_sync_edge.vhd) provides a
+  synchronizer with an (positive or negative) edge detector.  The signal
+  edge is always detected on the rising edge of the clock.  This module is
+  simpler than the gc_sync_ffs module.
 
   To pass words from one clock domain to another, you can use the module
   [gc_sync_word_wr](modules/common/gc_sync_word_wr.vhd) for writing data,
@@ -186,6 +196,8 @@ Directory [modules/wishbone](modules/wishbone) contains modules for wishbone.
   - [wb_vic](modules/wishbone/wb_vic) is the vectored interrupt controller.
   - [wb_ds182x_readout](modules/wishbone/wb_ds182x_readout) is a direct
     interface to the digital thermometer.
+  - [wb_xc7_fw_update](modules/wishbone/wb_xc7_fw_update) is an SPI interface
+    to drive the xc7 bitstream spi flash (using the ht-flash tool).
 
 * There are utilities to handle a wishbone bus:
   - [wb_clock_crossing](modules/wishbone/wb_clock_crossing) handle clock domain
@@ -197,6 +209,15 @@ Directory [modules/wishbone](modules/wishbone) contains modules for wishbone.
     AT91SAM9x CPU external bus interface.
   - [wb_axi4lite_bridge](modules/wishbone/wb_axi4lite_bridge) is an axi4lite
     to wishbone bridge
+  - [wb16_to_wb32](modules/wishbone/wb16_to_wb32) is an adapter from a
+    16 data bit wishbone master to a 32 data bit wishbone slave.  It uses
+    an intermediate register.  Refer to the module for how to use it.
+
+* There are modules for axi4 bus
+  - [axi4lite32_axi4full64_bridge](modules/axi/axi4lite32_axi4full64_bridge) is
+    a bridge from axi4full64 to axi4lite32.  It was defined to interface with
+    the Vivado PCI-e bridge and doesn't support all the axi4full features
+    (in particular the burst accesses).
 
 * There a modules to build a bus hierarchy:
   - [wb_bus_fanout](modules/wishbone/wb_bus_fanout) is a simple master to
@@ -210,3 +231,5 @@ Directory [modules/wishbone](modules/wishbone) contains modules for wishbone.
     superseeded by the crossbar.
   - [wb_metadata](modules/wishbone/wb_metadata) is a little helper to
     create metadata for the convention.
+  - [wb_indirect](modules/wishbone/wb_indirect) provides a wishbone
+    master driven by an address and a data registers.
