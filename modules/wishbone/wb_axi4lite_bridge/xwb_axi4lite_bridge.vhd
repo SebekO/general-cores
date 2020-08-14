@@ -11,13 +11,13 @@
 -- Copyright (c) 2017 CERN
 --
 -- Copyright and related rights are licensed under the Solderpad Hardware
--- License, Version 0.51 (the “License”) (which enables you, at your option,
+-- License, Version 0.51 (the "License") (which enables you, at your option,
 -- to treat this file as licensed under the Apache License 2.0); you may not
 -- use this file except in compliance with the License. You may obtain a copy
 -- of the License at http://solderpad.org/licenses/SHL-0.51.
 -- Unless required by applicable law or agreed to in writing, software,
 -- hardware and materials distributed under this License is distributed on an
--- “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 -- or implied. See the License for the specific language governing permissions
 -- and limitations under the License.
 -------------------------------------------------------------------------------
@@ -54,6 +54,8 @@ architecture rtl of xwb_axi4lite_bridge is
   signal state : t_state;
 
   signal count : unsigned(10 downto 0);
+
+  signal axi4_slave_out : t_axi4_lite_slave_out_32;
   
 begin
 
@@ -61,38 +63,43 @@ begin
   begin
     if rising_edge(clk_sys_i) then
       if rst_n_i = '0' then
-        axi4_slave_o    <= c_axi4_lite_default_master_in_32;
+        axi4_slave_out    <= c_axi4_lite_default_master_in_32;
         wb_master_o.cyc <= '0';
         state           <= IDLE;
       else
         case state is
           when IDLE =>
             wb_master_o.cyc      <= '0';
-            axi4_slave_o.ARREADY <= '1';
-            axi4_slave_o.AWREADY <= '1';
-            axi4_slave_o.WREADY  <= '0';
-            axi4_slave_o.BVALID  <= '0';
-            axi4_slave_o.BRESP   <= (others => 'X');
-            axi4_slave_o.RDATA  <= (others => 'X');
-            axi4_slave_o.RRESP  <= (others => 'X');
-            axi4_slave_o.RVALID <= '0';
-            axi4_slave_o.RLAST <= '0';
+            axi4_slave_out.ARREADY <= '1';
+            axi4_slave_out.AWREADY <= '1';
+            axi4_slave_out.WREADY  <= '0';
+            axi4_slave_out.BVALID  <= '0';
+            axi4_slave_out.BRESP   <= (others => 'X');
+            axi4_slave_out.RDATA  <= (others => 'X');
+            axi4_slave_out.RRESP  <= (others => 'X');
+            axi4_slave_out.RVALID <= '0';
+            axi4_slave_out.RLAST <= '0';
             
-            if(axi4_slave_i.AWVALID = '1') then
+            if(axi4_slave_i.AWVALID = '1' and axi4_slave_out.AWREADY = '1') then 
               state           <= ISSUE_WRITE;
+              axi4_slave_out.ARREADY <= '0';
+              axi4_slave_out.AWREADY <= '0';
+              axi4_slave_out.WREADY <= '1';
               wb_master_o.adr <= axi4_slave_i.AWADDR;
-            elsif (axi4_slave_i.ARVALID = '1') then
+            elsif (axi4_slave_i.ARVALID = '1' and axi4_slave_out.ARREADY = '1') then
               state           <= ISSUE_READ;
+              axi4_slave_out.ARREADY <= '0';
+              axi4_slave_out.AWREADY <= '0';
               wb_master_o.adr <= axi4_slave_i.ARADDR;
             end if;
 
           when ISSUE_WRITE =>
-            axi4_slave_o.WREADY <= '1';
 
             wb_master_o.cyc <= '1';
             wb_master_o.we  <= '1';
 
             if(axi4_slave_i.WVALID = '1') then
+              axi4_slave_out.WREADY <= '0';
               wb_master_o.stb <= '1';
               wb_master_o.sel <= axi4_slave_i.WSTRB;
               wb_master_o.dat <= axi4_slave_i.WDATA;
@@ -104,67 +111,72 @@ begin
             wb_master_o.cyc <= '1';
             wb_master_o.stb <= '1';
             wb_master_o.we  <= '0';
-            axi4_slave_o.RVALID <= '0';
-            axi4_slave_o.RLAST <= '0';
+            axi4_slave_out.RVALID <= '0';
+            axi4_slave_out.RLAST <= '0';
             state <= COMPLETE_READ;
 
           when COMPLETE_READ =>
             if(wb_master_i.stall = '0') then
               wb_master_o.stb <= '0';
-              if(wb_master_i.ack = '1') then
-                state <= IDLE;
-                axi4_slave_o.RRESP <= c_AXI4_RESP_EXOKAY;
-                axi4_slave_o.RDATA <= wb_master_i.dat;
-                axi4_slave_o.RVALID <= '1';
-                axi4_slave_o.RLAST <= '1';
-                wb_master_o.cyc    <= '0';
-              else
-                state <= WAIT_ACK_READ;
-                count <= (others => '0');
-              end if;
+            end if;
+            
+            if(wb_master_i.ack = '1') then
+              state <= IDLE;
+              axi4_slave_out.RRESP <= c_AXI4_RESP_OKAY;
+              axi4_slave_out.RDATA <= wb_master_i.dat;
+              axi4_slave_out.RVALID <= '1';
+              axi4_slave_out.RLAST <= '1';
+              wb_master_o.cyc    <= '0';
+            else
+              state <= WAIT_ACK_READ;
+              count <= (others => '0');
             end if;
 
             
           when COMPLETE_WRITE =>
             if(wb_master_i.stall = '0') then
               wb_master_o.stb <= '0';
-              if(wb_master_i.ack = '1') then
-                state <= RESPONSE_WRITE;
-                axi4_slave_o.BRESP <= c_AXI4_RESP_EXOKAY;
-                wb_master_o.cyc    <= '0';
-              else
-                state <= WAIT_ACK_WRITE;
-                count <= (others => '0');
-              end if;
+            end if;
+
+            if(wb_master_i.ack = '1') then
+              state <= RESPONSE_WRITE;
+              axi4_slave_out.BVALID <= '1';
+              axi4_slave_out.BRESP <= c_AXI4_RESP_OKAY;
+              wb_master_o.cyc    <= '0';
+            else
+              state <= WAIT_ACK_WRITE;
+              count <= (others => '0');
             end if;
 
 
           when WAIT_ACK_WRITE =>
             if(wb_master_i.ack = '1') then
               state              <= RESPONSE_WRITE;
-              axi4_slave_o.BRESP <= c_AXI4_RESP_EXOKAY;
+              axi4_slave_out.BVALID <= '1';
+              axi4_slave_out.BRESP <= c_AXI4_RESP_OKAY;
               wb_master_o.cyc    <= '0';
             elsif count = c_timeout then
               state              <= RESPONSE_WRITE;
-              axi4_slave_o.BRESP <= c_AXI4_RESP_SLVERR;
+              axi4_slave_out.BVALID <= '1';
+              axi4_slave_out.BRESP <= c_AXI4_RESP_SLVERR;
               wb_master_o.cyc    <= '0';
             end if;
             count <= count + 1;
 
           when WAIT_ACK_READ =>
             if(wb_master_i.ack = '1') then
-              state              <= IDLE;
-              axi4_slave_o.RRESP <= c_AXI4_RESP_EXOKAY;
-              axi4_slave_o.RVALID <= '1';
-              axi4_slave_o.RLAST <= '1';
-              axi4_slave_o.RDATA <= wb_master_i.dat;
+              state              <= RESPONSE_READ;
+              axi4_slave_out.RRESP <= c_AXI4_RESP_OKAY;
+              axi4_slave_out.RVALID <= '1';
+              axi4_slave_out.RLAST <= '1';
+              axi4_slave_out.RDATA <= wb_master_i.dat;
               wb_master_o.cyc    <= '0';
             elsif count = c_timeout then
-              state              <= IDLE;
-              axi4_slave_o.RRESP <= c_AXI4_RESP_SLVERR;
-              axi4_slave_o.RVALID <= '1';
-              axi4_slave_o.RLAST <= '1';
-              axi4_slave_o.RDATA <= (others => 'X');
+              state              <= RESPONSE_READ;
+              axi4_slave_out.RRESP <= c_AXI4_RESP_SLVERR;
+              axi4_slave_out.RVALID <= '1';
+              axi4_slave_out.RLAST <= '1';
+              axi4_slave_out.RDATA <= (others => 'X');
               wb_master_o.cyc    <= '0';
             end if;
             count <= count + 1;
@@ -172,11 +184,15 @@ begin
             
           when RESPONSE_WRITE =>
             if (axi4_slave_i.BREADY = '1') then
-              axi4_slave_o.BVALID <= '1';
+              axi4_slave_out.BVALID <= '0';
               state               <= IDLE;
             end if;
 
-          when RESPONSE_READ => null;
+          when RESPONSE_READ =>
+            if (axi4_slave_i.RREADY = '1') then
+              axi4_slave_out.RVALID <= '0';
+              state               <= IDLE;
+            end if;
             
             
         end case;
@@ -187,5 +203,8 @@ begin
     end if;
   end process;
 
+  axi4_slave_o <= axi4_slave_out;
+  
+  
 end rtl;
 
