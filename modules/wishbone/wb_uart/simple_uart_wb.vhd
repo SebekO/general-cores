@@ -223,7 +223,7 @@ begin
             rddata_reg(29) <= 'X';
             rddata_reg(30) <= 'X';
             rddata_reg(31) <= 'X';
-            ack_sreg(0) <= '1';
+            ack_sreg(1) <= '1';
             ack_in_progress <= '1';
           when "100" => 
             if (wb_we_i = '1') then
@@ -277,7 +277,7 @@ begin
             rddata_reg(29) <= 'X';
             rddata_reg(30) <= 'X';
             rddata_reg(31) <= 'X';
-            ack_sreg(0) <= '1';
+            ack_sreg(1) <= '1';
             ack_in_progress <= '1';
           when others =>
 -- prevent the slave from hanging the bus on invalid address
