@@ -169,11 +169,11 @@ begin
   cmp_sdb_wb_adapter : wb_slave_adapter
     generic map (
       g_master_use_struct  => TRUE,
-      g_master_mode        => CLASSIC,
-      g_master_granularity => BYTE,
+      g_master_mode        => PIPELINED,
+      g_master_granularity => WORD,
       g_slave_use_struct   => TRUE,
-      g_slave_mode         => g_wb_mode,
-      g_slave_granularity  => BYTE)
+      g_slave_mode         => PIPELINED,
+      g_slave_granularity  => WORD)
     port map (
       clk_sys_i => clk_sys_i,
       rst_n_i   => rst_n_i,
