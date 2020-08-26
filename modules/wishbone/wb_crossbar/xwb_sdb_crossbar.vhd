@@ -29,6 +29,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.wishbone_pkg.all;
 
+use std.textio.all;
+
 entity xwb_sdb_crossbar is
   generic(
     g_verbose     : boolean := true;
@@ -206,6 +208,106 @@ architecture rtl of xwb_sdb_crossbar is
   signal master_i_1 :  t_wishbone_master_in_array(g_num_slaves downto 0);
   signal master_o_1 : t_wishbone_master_out_array(g_num_slaves downto 0);
   signal sdb_sel    : std_logic_vector(g_num_masters-1 downto 0);
+
+
+
+  -- convert an integer Value to a STRING using base 16
+  function to_hexstring(value : std_logic_vector) return string is
+    constant hex : string := "0123456789ABCDEF";
+    constant length : integer := value'length / 4;
+    variable result : string(1 to length);
+    variable index : integer;
+  begin
+    for i in 0 to length-1 loop 
+      index := to_integer( unsigned(value((i+1)*4-1 downto i*4)) );
+      result(length-i) := hex(index+1);
+    end loop;
+    return result;
+  end function;
+
+  function create_filename return string is
+  begin
+    return "sdb_top_" & to_hexstring(g_sdb_addr) & ".h";
+  end function;
+
+  function str(s : string) return string is 
+  begin
+    return s;
+  end function;
+  procedure append_to_file(file f : text ; constant s : string) is 
+    variable lin : line;
+  begin
+    write(lin, s, left, 0); 
+    writeline(f,lin);
+  end procedure;
+  procedure append_to_file_component(file f : text ; constant c : t_sdb_component; constant typ : std_logic_vector(7 downto 0)) is 
+  begin
+    append_to_file(f, "    .sdb_component = {");
+    append_to_file(f, "      .addr_first  = 0x" & to_hexstring(c.addr_first)  & ",");
+    append_to_file(f, "      .addr_last   = 0x" & to_hexstring(c.addr_last )  & ",");
+    append_to_file(f, "      .product = {");
+    append_to_file(f, "        .vendor_id   = 0x" & to_hexstring(c.product.vendor_id)  & ",");
+    append_to_file(f, "        .device_id   = 0x" & to_hexstring(c.product.device_id) & ",");
+    append_to_file(f, "        .version     = 0x" & to_hexstring(c.product.version) & ",");
+    append_to_file(f, "        .date        = 0x" & to_hexstring(c.product.date) & ",");
+    append_to_file(f, "        .name        = """ & c.product.name & """,");
+    append_to_file(f, "        .record_type = 0x" & to_hexstring(typ) & ",");
+    append_to_file(f, "      }");
+    append_to_file(f, "    }");
+  end procedure;
+
+  -- automatic include file generatation
+  impure function write_header_file return string is
+    file C_header : text;
+    variable lin  : line;
+    variable typ  : std_logic_vector(7 downto 0);
+    variable sdb_device : t_sdb_device;
+    variable sdb_bridge : t_sdb_bridge;
+    variable sdb_msi    : t_sdb_msi;
+    variable sdb_msi_flags : std_logic_vector(7 downto 0);
+  begin
+    file_open(C_header, create_filename, write_mode);
+    append_to_file(C_header, "union sdb_record records_0x" & to_hexstring(g_sdb_addr) &"[] = {");
+
+    for i in c_layout'low to c_layout'high loop
+      typ := c_layout(i)(7 downto 0);
+      case typ is
+        when x"01" => -- device
+          sdb_device := f_sdb_extract_device(c_layout(i));
+
+          append_to_file(C_header, "  {.device = {");
+          append_to_file(C_header, "    .abi_class     = 0x" & to_hexstring(sdb_device.abi_class) & ",");
+          append_to_file(C_header, "    .abi_ver_major = 0x" & to_hexstring(sdb_device.abi_ver_major) & ",");
+          append_to_file(C_header, "    .abi_ver_minor = 0x" & to_hexstring(sdb_device.abi_ver_minor) & ",");
+          append_to_file_component(C_header,sdb_device.sdb_component,typ);
+          append_to_file(C_header, "  }},");
+
+        when x"02" => -- bridge
+          sdb_bridge := f_sdb_extract_bridge(c_layout(i));
+
+          append_to_file(C_header, "  {.bridge = {");
+          append_to_file(C_header, "    .sdb_child     = 0x" & to_hexstring(sdb_bridge.sdb_child) & ",");
+          append_to_file_component(C_header,sdb_bridge.sdb_component,typ);
+          append_to_file(C_header, "  }},");
+
+        when x"03" => -- msi
+          sdb_msi := f_sdb_extract_msi(c_layout(i));
+          sdb_msi_flags := "000" & sdb_msi.wbd_endian & sdb_msi.wbd_width;
+
+          append_to_file(C_header, "  {.msi = {");
+          append_to_file(C_header, "    .msi_flags     = 0x" & to_hexstring(sdb_msi_flags) & ",");
+          append_to_file_component(C_header,sdb_msi.sdb_component,typ);
+          append_to_file(C_header, "  }},");
+
+        when others => null;
+      end case;
+    end loop;
+
+    append_to_file(C_header, "};");
+    return create_filename;
+  end function;
+
+  constant filename : string := write_header_file;
 
 begin
 
