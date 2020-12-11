@@ -16,7 +16,8 @@ entity xwb_xc7_fw_update is
 
     flash_cs_n_o         : out  std_logic;
     flash_mosi_o         : out  std_logic;
-    flash_miso_i         : in   std_logic
+    flash_miso_i         : in   std_logic;
+    flash_sck_o : out std_logic
   );
 end xwb_xc7_fw_update;
 
@@ -87,24 +88,6 @@ begin
       spi_mosi_o => flash_mosi_o,
       spi_miso_i => flash_miso_i);
 
-  STARTUPE2_inst : STARTUPE2
-    generic map (
-      PROG_USR => "FALSE",  -- Activate program event security feature. Requires encrypted bitstreams.
-      SIM_CCLK_FREQ => 0.0  -- Set the Configuration Clock Frequency(ns) for simulation.
-    )
-    port map (
-      CFGCLK => open,   -- 1-bit output: Configuration main clock output
-      CFGMCLK => open,  -- 1-bit output: Configuration internal oscillator clock output
-      EOS => open,      -- 1-bit output: Active high output signal indicating the End Of Startup.
-      PREQ => open,     -- 1-bit output: PROGRAM request to fabric output
-      CLK => '0',       -- 1-bit input: User start-up clock input
-      GSR => '0',       -- 1-bit input: Global Set/Reset input (GSR cannot be used for the port name)
-      GTS => '0',       -- 1-bit input: Global 3-state input (GTS cannot be used for the port name)
-      KEYCLEARB => '0', -- 1-bit input: Clear AES Decrypter Key input from Battery-Backed RAM (BBRAM)
-      PACK => '0',      -- 1-bit input: PROGRAM acknowledge input
-      USRCCLKO => flash_sclk,   -- 1-bit input: User CCLK input
-      USRCCLKTS => '0', -- 1-bit input: User CCLK 3-state enable input
-      USRDONEO => '0',  -- 1-bit input: User DONE pin output control
-      USRDONETS => '1'  -- 1-bit input: User DONE 3-state enable output
-    );
+  flash_sck_o <= flash_sclk;
+
 end rtl;
