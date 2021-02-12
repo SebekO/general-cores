@@ -1,0 +1,1 @@
+qsys-generate arria10gx_pex10_pcie_hip
