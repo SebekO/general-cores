@@ -1,0 +1,1 @@
+qsys-generate arria10gx_ftm10_pcie_hip
