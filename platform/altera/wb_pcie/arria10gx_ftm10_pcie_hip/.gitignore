@@ -1,0 +1,7 @@
+*.sopcinfo
+*.xml
+*.rpt
+*.rpt.1
+*.qicache
+*.qip
+arria10gx_ftm10_pcie_hip/
