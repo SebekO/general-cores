@@ -2897,6 +2897,474 @@ begin
       );
   end generate;
 
+  arria10gx_pex10 : if (g_family = "Arria 10 GX PEX10") generate
+    hip : arria10gx_pex10_pcie_hip
+      port map (
+        -- Clocking
+        refclk              => pcie_refclk_i,
+        pld_clk             => core_clk_out,
+        coreclkout_hip      => core_clk,
+        pld_clk_inuse       => open,
+        pld_core_ready      => pll_locked,
+
+        -- PCIe PHY pins
+        rx_in0              => pcie_rx_i(0),
+        rx_in1              => pcie_rx_i(1),
+        rx_in2              => pcie_rx_i(2),
+        rx_in3              => pcie_rx_i(3),
+        tx_out0             => pcie_tx_o(0),
+        tx_out1             => pcie_tx_o(1),
+        tx_out2             => pcie_tx_o(2),
+        tx_out3             => pcie_tx_o(3),
+
+        -- Avalon RX
+        rx_st_mask          => '0',
+        rx_st_ready         => rx_st_ready0,
+        rx_st_bar           => rx_st_bardec0,
+        -- rx_st_be missing
+        rx_st_data          => rx_st_data0,
+        rx_st_sop           => open,
+        rx_st_eop           => open,
+        rx_st_err           => open,
+        rx_st_valid         => rx_st_valid0_zero_vec(0 downto 0),
+
+        -- Errors in RX buffer
+        derr_cor_ext_rcv    => open,
+        derr_cor_ext_rpl    => open,
+        derr_rpl            => open,
+
+        -- Avalon TX
+        tx_st_data          => tx_st_data0,
+        tx_st_eop           => tx_st_eop0_zero_vec(0 downto 0),
+        tx_st_err           => (others => '0'),
+        tx_st_sop           => tx_st_sop0_zero_vec(0 downto 0),
+        tx_st_valid         => tx_st_valid0_zero_vec(0 downto 0),
+        tx_st_ready         => tx_st_ready0,
+        -- tx_fifo_empty missing
+
+        -- Avalon TX credit management
+        tx_cred_data_fc     => open,
+        -- tx_cred_datafcnp missing
+        -- tx_cred_datafcp missing
+        tx_cred_fc_hip_cons => open,
+        -- tx_cred_fchipcons missing
+        tx_cred_fc_infinite => open,
+        tx_cred_hdr_fc      => open,
+        -- tx_cred_hdrfcnp missing
+        -- tx_cred_hdrfcp missing
+        tx_cred_fc_sel      => open,
+
+        -- Report completion error status
+        cpl_err             => (others => '0'),
+        cpl_pending         => '0',
+        -- lmi_addr missing
+        -- lmi_din missing
+        -- lmi_rden missing
+        -- lmi_wren missing
+        -- lmi_ack missing
+        -- lmi_dou missing
+        ko_cpl_spc_header   => open,
+        ko_cpl_spc_data     => open,
+
+        -- PCIe interrupts (for endpoints)
+        app_int_sts         => app_int_sts,
+        app_msi_num         => (others => '0'),
+        app_msi_req         => app_msi_req,
+        app_msi_tc          => (others => '0'),
+        app_int_ack         => open,
+        app_msi_ack         => open,
+        int_status          => open, -- only for root ports
+
+        -- PCIe configuration space
+        hpg_ctrler          => (others => '0'),
+        tl_cfg_add          => tl_cfg_add,
+        tl_cfg_ctl          => tl_cfg_ctl,
+        -- tl_cfg_ctl_wr missing
+        tl_cfg_sts         => open,
+        -- tl_cfg_sts_wr missing
+
+        -- Power management signals
+        pm_auxpwr           => '0',
+        pm_data             => (others => '0'),
+        pm_event            => '0',
+        pme_to_cr           => pme_shift(pme_shift'length-1),
+        pme_to_sr           => pme_shift(0),
+
+        -- Reset and link training
+        npor                => npor,
+        pin_perst           => pcie_rstn_i,
+        l2_exit             => l2_exit,
+        hotrst_exit         => hotrst_exit,
+        dlup_exit           => dlup_exit,
+        -- dl_ltssm missing
+        serdes_pll_locked   => pll_locked,
+        reset_status        => open,
+        ev128ns             => open,
+        ev1us               => open,
+
+        -- Debug signals
+        test_in             => (others => '0'),
+        testin_zero         => open,
+        lane_act            => open,
+        currentspeed        => open,
+
+        -- External PHY (PIPE). Not used; using altera PHY.
+        rxdata0             => (others => '0'),
+        rxdata1             => (others => '0'),
+        rxdata2             => (others => '0'),
+        rxdata3             => (others => '0'),
+        rxdatak0            => (others => '0'),
+        rxdatak1            => (others => '0'),
+        rxdatak2            => (others => '0'),
+        rxdatak3            => (others => '0'),
+        rxelecidle0         => '0',
+        rxelecidle1         => '0',
+        rxelecidle2         => '0',
+        rxelecidle3         => '0',
+        rxstatus0           => (others => '0'),
+        rxstatus1           => (others => '0'),
+        rxstatus2           => (others => '0'),
+        rxstatus3           => (others => '0'),
+        rxvalid0            => '0',
+        rxvalid1            => '0',
+        rxvalid2            => '0',
+        rxvalid3            => '0',
+        rxpolarity0         => open,
+        rxpolarity1         => open,
+        rxpolarity2         => open,
+        rxpolarity3         => open,
+        txcompl0            => open,
+        txcompl1            => open,
+        txcompl2            => open,
+        txcompl3            => open,
+        txdata0             => open,
+        txdata1             => open,
+        txdata2             => open,
+        txdata3             => open,
+        txdatak0            => open,
+        txdatak1            => open,
+        txdatak2            => open,
+        txdatak3            => open,
+        txdetectrx0         => open,
+        txdetectrx1         => open,
+        txdetectrx2         => open,
+        txdetectrx3         => open,
+        txelecidle0         => open,
+        txelecidle1         => open,
+        txelecidle2         => open,
+        txelecidle3         => open,
+        txdeemph0           => open,
+        txdeemph1           => open,
+        txdeemph2           => open,
+        txdeemph3           => open,
+        txswing0            => open,
+        txswing1            => open,
+        txswing2            => open,
+        txswing3            => open,
+        txmargin0           => open,
+        txmargin1           => open,
+        txmargin2           => open,
+        txmargin3           => open,
+        powerdown0          => open,
+        powerdown1          => open,
+        powerdown2          => open,
+        powerdown3          => open,
+        phystatus0          => '0',
+        phystatus1          => '0',
+        phystatus2          => '0',
+        phystatus3          => '0',
+        eidleinfersel0      => open,
+        eidleinfersel1      => open,
+        eidleinfersel2      => open,
+        eidleinfersel3      => open,
+
+        -- Simulation PIPE signals
+        sim_pipe_pclk_in    => '0',
+        simu_mode_pipe      => '0',
+        sim_pipe_rate       => open,
+        sim_ltssmstate      => open,
+
+        -- Misc.
+        dlup                => open,
+        ltssmstate          => open,
+        rx_par_err          => open,
+        tx_par_err          => open,
+        cfg_par_err         => open,
+        clr_st              => open,
+        rxdataskip0         => '0',
+        rxdataskip1         => '0',
+        rxdataskip2         => '0',
+        rxdataskip3         => '0',
+        rxblkst0            => '0',
+        rxblkst1            => '0',
+        rxblkst2            => '0',
+        rxblkst3            => '0',
+        rxsynchd0           => (others => '0'),
+        rxsynchd1           => (others => '0'),
+        rxsynchd2           => (others => '0'),
+        rxsynchd3           => (others => '0'),
+        currentcoeff0       => open,
+        currentcoeff1       => open,
+        currentcoeff2       => open,
+        currentcoeff3       => open,
+        currentrxpreset0    => open,
+        currentrxpreset1    => open,
+        currentrxpreset2    => open,
+        currentrxpreset3    => open,
+        txsynchd0           => open,
+        txsynchd1           => open,
+        txsynchd2           => open,
+        txsynchd3           => open,
+        txblkst0            => open,
+        txblkst1            => open,
+        txblkst2            => open,
+        txblkst3            => open,
+        txdataskip0         => open,
+        txdataskip1         => open,
+        txdataskip2         => open,
+        txdataskip3         => open,
+        rate0               => open,
+        rate1               => open,
+        rate2               => open,
+        rate3               => open
+        --skp_os              => open
+      );
+  end generate;
+
+  arria10gx_ftm10 : if (g_family = "Arria 10 GX FTM10") generate
+    hip : arria10gx_ftm10_pcie_hip
+      port map (
+        -- Clocking
+        refclk              => pcie_refclk_i,
+        pld_clk             => core_clk_out,
+        coreclkout_hip      => core_clk,
+        pld_clk_inuse       => open,
+        pld_core_ready      => pll_locked,
+
+        -- PCIe PHY pins
+        rx_in0              => pcie_rx_i(0),
+        rx_in1              => pcie_rx_i(1),
+        rx_in2              => pcie_rx_i(2),
+        rx_in3              => pcie_rx_i(3),
+        tx_out0             => pcie_tx_o(0),
+        tx_out1             => pcie_tx_o(1),
+        tx_out2             => pcie_tx_o(2),
+        tx_out3             => pcie_tx_o(3),
+
+        -- Avalon RX
+        rx_st_mask          => '0',
+        rx_st_ready         => rx_st_ready0,
+        rx_st_bar           => rx_st_bardec0,
+        -- rx_st_be missing
+        rx_st_data          => rx_st_data0,
+        rx_st_sop           => open,
+        rx_st_eop           => open,
+        rx_st_err           => open,
+        rx_st_valid         => rx_st_valid0_zero_vec(0 downto 0),
+
+        -- Errors in RX buffer
+        derr_cor_ext_rcv    => open,
+        derr_cor_ext_rpl    => open,
+        derr_rpl            => open,
+
+        -- Avalon TX
+        tx_st_data          => tx_st_data0,
+        tx_st_eop           => tx_st_eop0_zero_vec(0 downto 0),
+        tx_st_err           => (others => '0'),
+        tx_st_sop           => tx_st_sop0_zero_vec(0 downto 0),
+        tx_st_valid         => tx_st_valid0_zero_vec(0 downto 0),
+        tx_st_ready         => tx_st_ready0,
+        -- tx_fifo_empty missing
+
+        -- Avalon TX credit management
+        tx_cred_data_fc     => open,
+        -- tx_cred_datafcnp missing
+        -- tx_cred_datafcp missing
+        tx_cred_fc_hip_cons => open,
+        -- tx_cred_fchipcons missing
+        tx_cred_fc_infinite => open,
+        tx_cred_hdr_fc      => open,
+        -- tx_cred_hdrfcnp missing
+        -- tx_cred_hdrfcp missing
+        tx_cred_fc_sel      => open,
+
+        -- Report completion error status
+        cpl_err             => (others => '0'),
+        cpl_pending         => '0',
+        -- lmi_addr missing
+        -- lmi_din missing
+        -- lmi_rden missing
+        -- lmi_wren missing
+        -- lmi_ack missing
+        -- lmi_dou missing
+        ko_cpl_spc_header   => open,
+        ko_cpl_spc_data     => open,
+
+        -- PCIe interrupts (for endpoints)
+        app_int_sts         => app_int_sts,
+        app_msi_num         => (others => '0'),
+        app_msi_req         => app_msi_req,
+        app_msi_tc          => (others => '0'),
+        app_int_ack         => open,
+        app_msi_ack         => open,
+        int_status          => open, -- only for root ports
+
+        -- PCIe configuration space
+        hpg_ctrler          => (others => '0'),
+        tl_cfg_add          => tl_cfg_add,
+        tl_cfg_ctl          => tl_cfg_ctl,
+        -- tl_cfg_ctl_wr missing
+        tl_cfg_sts         => open,
+        -- tl_cfg_sts_wr missing
+
+        -- Power management signals
+        pm_auxpwr           => '0',
+        pm_data             => (others => '0'),
+        pm_event            => '0',
+        pme_to_cr           => pme_shift(pme_shift'length-1),
+        pme_to_sr           => pme_shift(0),
+
+        -- Reset and link training
+        npor                => npor,
+        pin_perst           => pcie_rstn_i,
+        l2_exit             => l2_exit,
+        hotrst_exit         => hotrst_exit,
+        dlup_exit           => dlup_exit,
+        -- dl_ltssm missing
+        serdes_pll_locked   => pll_locked,
+        reset_status        => open,
+        ev128ns             => open,
+        ev1us               => open,
+
+        -- Debug signals
+        test_in             => (others => '0'),
+        testin_zero         => open,
+        lane_act            => open,
+        currentspeed        => open,
+
+        -- External PHY (PIPE). Not used; using altera PHY.
+        rxdata0             => (others => '0'),
+        rxdata1             => (others => '0'),
+        rxdata2             => (others => '0'),
+        rxdata3             => (others => '0'),
+        rxdatak0            => (others => '0'),
+        rxdatak1            => (others => '0'),
+        rxdatak2            => (others => '0'),
+        rxdatak3            => (others => '0'),
+        rxelecidle0         => '0',
+        rxelecidle1         => '0',
+        rxelecidle2         => '0',
+        rxelecidle3         => '0',
+        rxstatus0           => (others => '0'),
+        rxstatus1           => (others => '0'),
+        rxstatus2           => (others => '0'),
+        rxstatus3           => (others => '0'),
+        rxvalid0            => '0',
+        rxvalid1            => '0',
+        rxvalid2            => '0',
+        rxvalid3            => '0',
+        rxpolarity0         => open,
+        rxpolarity1         => open,
+        rxpolarity2         => open,
+        rxpolarity3         => open,
+        txcompl0            => open,
+        txcompl1            => open,
+        txcompl2            => open,
+        txcompl3            => open,
+        txdata0             => open,
+        txdata1             => open,
+        txdata2             => open,
+        txdata3             => open,
+        txdatak0            => open,
+        txdatak1            => open,
+        txdatak2            => open,
+        txdatak3            => open,
+        txdetectrx0         => open,
+        txdetectrx1         => open,
+        txdetectrx2         => open,
+        txdetectrx3         => open,
+        txelecidle0         => open,
+        txelecidle1         => open,
+        txelecidle2         => open,
+        txelecidle3         => open,
+        txdeemph0           => open,
+        txdeemph1           => open,
+        txdeemph2           => open,
+        txdeemph3           => open,
+        txswing0            => open,
+        txswing1            => open,
+        txswing2            => open,
+        txswing3            => open,
+        txmargin0           => open,
+        txmargin1           => open,
+        txmargin2           => open,
+        txmargin3           => open,
+        powerdown0          => open,
+        powerdown1          => open,
+        powerdown2          => open,
+        powerdown3          => open,
+        phystatus0          => '0',
+        phystatus1          => '0',
+        phystatus2          => '0',
+        phystatus3          => '0',
+        eidleinfersel0      => open,
+        eidleinfersel1      => open,
+        eidleinfersel2      => open,
+        eidleinfersel3      => open,
+
+        -- Simulation PIPE signals
+        sim_pipe_pclk_in    => '0',
+        simu_mode_pipe      => '0',
+        sim_pipe_rate       => open,
+        sim_ltssmstate      => open,
+
+        -- Misc.
+        dlup                => open,
+        ltssmstate          => open,
+        rx_par_err          => open,
+        tx_par_err          => open,
+        cfg_par_err         => open,
+        clr_st              => open,
+        rxdataskip0         => '0',
+        rxdataskip1         => '0',
+        rxdataskip2         => '0',
+        rxdataskip3         => '0',
+        rxblkst0            => '0',
+        rxblkst1            => '0',
+        rxblkst2            => '0',
+        rxblkst3            => '0',
+        rxsynchd0           => (others => '0'),
+        rxsynchd1           => (others => '0'),
+        rxsynchd2           => (others => '0'),
+        rxsynchd3           => (others => '0'),
+        currentcoeff0       => open,
+        currentcoeff1       => open,
+        currentcoeff2       => open,
+        currentcoeff3       => open,
+        currentrxpreset0    => open,
+        currentrxpreset1    => open,
+        currentrxpreset2    => open,
+        currentrxpreset3    => open,
+        txsynchd0           => open,
+        txsynchd1           => open,
+        txsynchd2           => open,
+        txsynchd3           => open,
+        txblkst0            => open,
+        txblkst1            => open,
+        txblkst2            => open,
+        txblkst3            => open,
+        txdataskip0         => open,
+        txdataskip1         => open,
+        txdataskip2         => open,
+        txdataskip3         => open,
+        rate0               => open,
+        rate1               => open,
+        rate2               => open,
+        rate3               => open
+        --skp_os              => open
+      );
+  end generate;
+
   coreclk : single_region
     port map(
       inclk  => core_clk,
