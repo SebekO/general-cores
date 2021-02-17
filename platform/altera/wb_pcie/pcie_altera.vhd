@@ -1552,15 +1552,17 @@ architecture rtl of pcie_altera is
 
   signal tx_st_sop0, tx_st_eop0, tx_st_ready0, tx_st_valid0 : std_logic;
 
-  constant c_is_arria10sx      : boolean := g_family = "Arria 10 SX";
-  constant c_is_arria10gx      : boolean := g_family = "Arria 10 GX";
-  constant c_is_arria10gx_e3p1 : boolean := g_family = "Arria 10 GX E3P1";
-  constant c_is_arria10gx_scu4 : boolean := g_family = "Arria 10 GX SCU4";
-  constant c_is_arria10        : boolean := c_is_arria10gx or c_is_arria10sx or c_is_arria10gx_e3p1 or c_is_arria10gx_scu4;
-  signal rx_st_valid0_zero_vec : std_logic_vector(0 downto 0);
-  signal tx_st_eop0_zero_vec   : std_logic_vector(0 downto 0);
-  signal tx_st_sop0_zero_vec   : std_logic_vector(0 downto 0);
-  signal tx_st_valid0_zero_vec : std_logic_vector(0 downto 0);
+  constant c_is_arria10sx       : boolean := g_family = "Arria 10 SX";
+  constant c_is_arria10gx       : boolean := g_family = "Arria 10 GX";
+  constant c_is_arria10gx_e3p1  : boolean := g_family = "Arria 10 GX E3P1";
+  constant c_is_arria10gx_scu4  : boolean := g_family = "Arria 10 GX SCU4";
+  constant c_is_arria10gx_pex10 : boolean := g_family = "Arria 10 GX PEX10";
+  constant c_is_arria10gx_ftm10 : boolean := g_family = "Arria 10 GX FTM10";
+  constant c_is_arria10         : boolean := c_is_arria10gx or c_is_arria10sx or c_is_arria10gx_e3p1 or c_is_arria10gx_scu4 or c_is_arria10gx_pex10 or c_is_arria10gx_ftm10;
+  signal rx_st_valid0_zero_vec  : std_logic_vector(0 downto 0);
+  signal tx_st_eop0_zero_vec    : std_logic_vector(0 downto 0);
+  signal tx_st_sop0_zero_vec    : std_logic_vector(0 downto 0);
+  signal tx_st_valid0_zero_vec  : std_logic_vector(0 downto 0);
 
   signal tx_st_data0 : std_logic_vector(63 downto 0);
 
