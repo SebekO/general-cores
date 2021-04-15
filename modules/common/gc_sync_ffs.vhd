@@ -7,7 +7,7 @@
 -- unit name:   gc_sync_ffs
 --
 -- description: Synchronizer chain and edge detector.
---   All the registers in the chain are cleared at reset.
+--   All the registers in the chain are set to configurable state at reset
 --
 --------------------------------------------------------------------------------
 -- Copyright CERN 2010-2020
@@ -29,7 +29,9 @@ use ieee.std_logic_1164.all;
 entity gc_sync_ffs is
   generic(
     -- valid values are "positive" and "negative"
-    g_SYNC_EDGE : string := "positive");
+    g_SYNC_EDGE       : string := "positive";
+    -- expected input state at reset, helpful to prevent glitches at startup
+    g_INPUT_STATE_RST : std_logic := '0');
   port(
     clk_i    : in  std_logic;   -- clock from the destination clock domain
     rst_n_i  : in  std_logic;   -- async reset
@@ -47,7 +49,8 @@ begin
 
   cmp_gc_sync : entity work.gc_sync
     generic map (
-      g_SYNC_EDGE => g_SYNC_EDGE)
+      g_SYNC_EDGE => g_SYNC_EDGE,
+      g_STATE_RST => g_INPUT_STATE_RST)
     port map (
       clk_i     => clk_i,
       rst_n_a_i => rst_n_i,
@@ -56,9 +59,10 @@ begin
 
   cmp_gc_posedge : entity work.gc_edge_detect
     generic map (
-      g_ASYNC_RST  => TRUE,
-      g_PULSE_EDGE => "positive",
-      g_CLOCK_EDGE => g_SYNC_EDGE)
+      g_ASYNC_RST       => TRUE,
+      g_PULSE_EDGE      => "positive",
+      g_CLOCK_EDGE      => g_SYNC_EDGE,
+      g_INPUT_STATE_RST => g_INPUT_STATE_RST)
     port map (
       clk_i   => clk_i,
       rst_n_i => rst_n_i,
@@ -67,9 +71,10 @@ begin
 
   cmp_gc_negedge : entity work.gc_edge_detect
     generic map (
-      g_ASYNC_RST  => TRUE,
-      g_PULSE_EDGE => "negative",
-      g_CLOCK_EDGE => g_SYNC_EDGE)
+      g_ASYNC_RST       => TRUE,
+      g_PULSE_EDGE      => "negative",
+      g_CLOCK_EDGE      => g_SYNC_EDGE,
+      g_INPUT_STATE_RST => g_INPUT_STATE_RST)
     port map (
       clk_i   => clk_i,
       rst_n_i => rst_n_i,

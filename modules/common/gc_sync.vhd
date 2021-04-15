@@ -28,7 +28,9 @@ use ieee.std_logic_1164.all;
 entity gc_sync is
   generic(
     -- valid values are "positive" and "negative"
-    g_SYNC_EDGE : string := "positive");
+    g_SYNC_EDGE : string := "positive";
+    -- output state at reset
+    g_STATE_RST : std_logic := '0');
   port (
     clk_i     : in  std_logic;
     rst_n_a_i : in  std_logic;
@@ -78,8 +80,8 @@ begin
     process(clk_i, rst_n_a_i)
     begin
       if rst_n_a_i = '0' then
-        sync1 <= '0';
-        sync0 <= '0';
+        sync1 <= g_STATE_RST;
+        sync0 <= g_STATE_RST;
       elsif rising_edge(clk_i) then
         sync0 <= gc_sync_ffs_in;
         sync1 <= sync0;
@@ -91,8 +93,8 @@ begin
     process(clk_i, rst_n_a_i)
     begin
       if rst_n_a_i = '0' then
-        sync1 <= '0';
-        sync0 <= '0';
+        sync1 <= g_STATE_RST;
+        sync0 <= g_STATE_RST;
       elsif falling_edge(clk_i) then
         sync0 <= gc_sync_ffs_in;
         sync1 <= sync0;

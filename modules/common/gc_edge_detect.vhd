@@ -27,13 +27,15 @@ use ieee.std_logic_1164.all;
 
 entity gc_edge_detect is
   generic(
-    g_ASYNC_RST  : boolean := FALSE;
+    g_ASYNC_RST       : boolean := FALSE;
     -- Positive/negative edge detection for pulse_o output.
     -- Valid values are "positive" and "negative".
-    g_PULSE_EDGE : string  := "positive";
+    g_PULSE_EDGE      : string  := "positive";
     -- Clock edge sensitivity of edge detection flip-flop.
     -- Valid values are "positive" and "negative".
-    g_CLOCK_EDGE : string  := "positive");
+    g_CLOCK_EDGE      : string  := "positive";
+    -- Expected input state at reset
+    g_INPUT_STATE_RST : std_logic := '0');
   port(
     clk_i   : in  std_logic;   -- clock
     rst_n_i : in  std_logic;   -- reset
@@ -64,7 +66,7 @@ begin
       process (clk_i, rst_n_i)
       begin
         if rst_n_i = '0' then
-          dff <= '0';
+          dff <= g_INPUT_STATE_RST;
         elsif rising_edge (clk_i) then
           dff <= data_i;
         end if;
@@ -75,7 +77,7 @@ begin
       process (clk_i, rst_n_i)
       begin
         if rst_n_i = '0' then
-          dff <= '0';
+          dff <= g_INPUT_STATE_RST;
         elsif falling_edge (clk_i) then
           dff <= data_i;
         end if;
@@ -91,7 +93,7 @@ begin
       begin
         if rising_edge (clk_i) then
           if rst_n_i = '0' then
-            dff <= '0';
+            dff <= g_INPUT_STATE_RST;
           else
             dff <= data_i;
           end if;
@@ -104,7 +106,7 @@ begin
       begin
         if falling_edge (clk_i) then
           if rst_n_i = '0' then
-            dff <= '0';
+            dff <= g_INPUT_STATE_RST;
           else
             dff <= data_i;
           end if;

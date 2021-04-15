@@ -238,7 +238,8 @@ package gencores_pkg is
   ------------------------------------------------------------------------------
   component gc_sync_ffs
     generic (
-      g_SYNC_EDGE : string := "positive");
+      g_SYNC_EDGE       : string := "positive";
+      g_INPUT_STATE_RST : std_logic := '0');
     port (
       clk_i    : in  std_logic;
       rst_n_i  : in  std_logic;
@@ -250,7 +251,8 @@ package gencores_pkg is
 
   component gc_sync is
     generic (
-      g_SYNC_EDGE : string := "positive");
+      g_SYNC_EDGE : string := "positive";
+      g_STATE_RST : std_logic := '0');
     port (
       clk_i     : in  std_logic;
       rst_n_a_i : in  std_logic;
@@ -263,9 +265,10 @@ package gencores_pkg is
   ------------------------------------------------------------------------------
   component gc_edge_detect is
     generic (
-      g_ASYNC_RST  : boolean := FALSE;
-      g_PULSE_EDGE : string  := "positive";
-      g_CLOCK_EDGE : string  := "positive");
+      g_ASYNC_RST       : boolean := FALSE;
+      g_PULSE_EDGE      : string  := "positive";
+      g_CLOCK_EDGE      : string  := "positive";
+      g_INPUT_STATE_RST : std_logic := '0');
     port (
       clk_i   : in  std_logic;
       rst_n_i : in  std_logic;
@@ -275,8 +278,9 @@ package gencores_pkg is
 
   component gc_negedge is
     generic (
-      g_ASYNC_RST  : boolean := FALSE;
-      g_CLOCK_EDGE : string  := "positive");
+      g_ASYNC_RST       : boolean := FALSE;
+      g_CLOCK_EDGE      : string  := "positive";
+      g_INPUT_STATE_RST : std_logic := '0');
     port (
       clk_i   : in  std_logic;
       rst_n_i : in  std_logic;
@@ -286,8 +290,9 @@ package gencores_pkg is
 
   component gc_posedge is
     generic (
-      g_ASYNC_RST  : boolean := FALSE;
-      g_CLOCK_EDGE : string  := "positive");
+      g_ASYNC_RST       : boolean := FALSE;
+      g_CLOCK_EDGE      : string  := "positive";
+      g_INPUT_STATE_RST : std_logic := '0');
     port (
       clk_i   : in  std_logic;
       rst_n_i : in  std_logic;
@@ -670,17 +675,18 @@ package gencores_pkg is
 
   component gc_async_signals_input_stage is
     generic (
-      g_signal_num                 : integer;
-      g_extended_pulse_width       : integer;
-      g_dglitch_filter_len         : integer);
+      g_signal_num           : integer;
+      g_extended_pulse_width : integer;
+      g_dglitch_filter_len   : integer;
+      g_input_state_rst      : std_logic := '0');
     port (
-      clk_i                        : in std_logic;
-      rst_n_i                      : in std_logic;
-      signals_a_i                  : in  std_logic_vector(g_signal_num-1 downto 0);
-      config_active_i              : in  std_logic_vector(g_signal_num-1 downto 0);
-      signals_o                    : out std_logic_vector(g_signal_num-1 downto 0);
-      signals_p1_o                 : out std_logic_vector(g_signal_num-1 downto 0);
-      signals_pN_o                 : out std_logic_vector(g_signal_num-1 downto 0));
+      clk_i           : in std_logic;
+      rst_n_i         : in std_logic;
+      signals_a_i     : in  std_logic_vector(g_signal_num-1 downto 0);
+      config_active_i : in  std_logic_vector(g_signal_num-1 downto 0);
+      signals_o       : out std_logic_vector(g_signal_num-1 downto 0);
+      signals_p1_o    : out std_logic_vector(g_signal_num-1 downto 0);
+      signals_pN_o    : out std_logic_vector(g_signal_num-1 downto 0));
   end component;
 
 

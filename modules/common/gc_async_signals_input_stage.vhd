@@ -56,41 +56,44 @@ use work.gencores_pkg.all;
 entity gc_async_signals_input_stage is
   generic (
     -- number of input signals to be synchronised
-    g_signal_num                 : integer := 2;
+    g_signal_num           : integer := 2;
 
     -- number of clock cycles (N) for the extended output pulse signal
-    g_extended_pulse_width       : integer := 0;
+    g_extended_pulse_width : integer := 0;
 
     -- number of cycles that filter out glitches
-    g_dglitch_filter_len         : integer := 2
+    g_dglitch_filter_len   : integer := 2;
+
+    -- expected input state at reset, helpful to prevent glitches at startup
+    g_input_state_rst      : std_logic := '0'
   );
   port (
-    clk_i                        : in std_logic;
-    rst_n_i                      : in std_logic;
+    clk_i           : in std_logic;
+    rst_n_i         : in std_logic;
 
     -- input asynchronous signals
-    signals_a_i                  : in  std_logic_vector(g_signal_num-1 downto 0);
+    signals_a_i     : in  std_logic_vector(g_signal_num-1 downto 0);
 
     --- Configuration of each input signal
     --- '0': active LOW:  deglitcher works for '0s' and pulses are produced on falling edge
     --- '1': active HIGH: deglitcher works for '1s' and pulses are produced on rising edge
-    config_active_i              : in  std_logic_vector(g_signal_num-1 downto 0);
+    config_active_i : in  std_logic_vector(g_signal_num-1 downto 0);
 
     -- synchronised and deglitched signal
-    signals_o                    : out std_logic_vector(g_signal_num-1 downto 0);
+    signals_o       : out std_logic_vector(g_signal_num-1 downto 0);
 
     -- single-clock pulse on rising or falling edge of the input signal (depends on the config)
-    signals_p1_o                 : out std_logic_vector(g_signal_num-1 downto 0);
+    signals_p1_o    : out std_logic_vector(g_signal_num-1 downto 0);
 
     -- N-cycle pulse on rising or falling edge of the input signal (depends on the config)
     -- N=g_extended_pulse_width
-    signals_pN_o                 : out std_logic_vector(g_signal_num-1 downto 0)
+    signals_pN_o    : out std_logic_vector(g_signal_num-1 downto 0)
   );
 end entity gc_async_signals_input_stage;
 
 architecture behav of gc_async_signals_input_stage is
 
-  
+
   signal signals_synched         : std_logic_vector(g_signal_num-1 downto 0);
   signal signals_high_or_low     : std_logic_vector(g_signal_num-1 downto 0);
   signal signals_deglitched      : std_logic_vector(g_signal_num-1 downto 0);
@@ -106,6 +109,8 @@ begin
     -- 1 stage: synchronzie with clock domain
     -----------------------------------------------------------------------------------------
     cmp_sync_with_clk : gc_sync_ffs
+      generic map (
+        g_INPUT_STATE_RST => g_INPUT_STATE_RST)
       port map (
         clk_i          => clk_i,
         rst_n_i        => rst_n_i,
@@ -176,5 +181,5 @@ begin
   signals_o            <= signals_deglitched;
   signals_p1_o         <= signals_pulse_p1;
   signals_pN_o         <= signals_pulse_pN;
-  
+
 end architecture behav;

@@ -30,7 +30,9 @@ entity gc_negedge is
     g_ASYNC_RST : boolean := FALSE;
     -- Clock edge sensitivity of edge detection flip-flop.
     -- Valid values are "positive" and "negative".
-    g_CLOCK_EDGE : string  := "positive");
+    g_CLOCK_EDGE : string  := "positive";
+    -- Expected input state at reset
+    g_INPUT_STATE_RST : std_logic := '0');
   port(
     clk_i   : in  std_logic;   -- clock
     rst_n_i : in  std_logic;   -- reset
@@ -44,9 +46,10 @@ begin
 
   inst_gc_edge_detect : entity work.gc_edge_detect
     generic map (
-      g_ASYNC_RST  => g_ASYNC_RST,
-      g_PULSE_EDGE => "negative",
-      g_CLOCK_EDGE => g_CLOCK_EDGE)
+      g_ASYNC_RST       => g_ASYNC_RST,
+      g_PULSE_EDGE      => "negative",
+      g_CLOCK_EDGE      => g_CLOCK_EDGE,
+      g_INPUT_STATE_RST => g_INPUT_STATE_RST)
     port map (
       clk_i   => clk_i,
       rst_n_i => rst_n_i,
