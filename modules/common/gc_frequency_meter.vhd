@@ -101,18 +101,18 @@ begin
 
   end generate gen_internal_timebase;
 
-  gen_external_timebase : if g_WITH_INTERNAL_TIMEBASE = FALSE generate
-
-    U_Sync_Gate : gc_pulse_synchronizer
-      port map (
-        clk_in_i  => clk_sys_i,
-        clk_out_i => clk_in_i,
-        rst_n_i   => '1',
-        d_ready_o => freq_valid_o,
-        d_p_i     => pps_p1_i,
-        q_p_o     => gate_pulse_synced);
-
-  end generate gen_external_timebase;
+--  gen_external_timebase : if g_WITH_INTERNAL_TIMEBASE = FALSE generate
+--
+--    U_Sync_Gate : gc_pulse_synchronizer
+--      port map (
+--        clk_in_i  => clk_sys_i,
+--        clk_out_i => clk_in_i,
+--        rst_n_i   => '1',
+--        d_ready_o => freq_valid_o,
+--        d_p_i     => pps_p1_i,
+--        q_p_o     => gate_pulse_synced);
+--
+--  end generate gen_external_timebase;
 
   p_freq_counter : process (clk_in_i)
   begin
