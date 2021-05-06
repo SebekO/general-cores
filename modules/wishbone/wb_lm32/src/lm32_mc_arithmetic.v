@@ -26,7 +26,7 @@
 //                  : No Change
 // =============================================================================
 
-`include "lm32_include.v"
+`include "lm32_include.vh"
            
 `define LM32_MC_STATE_RNG         2:0
 `define LM32_MC_STATE_IDLE        3'b000

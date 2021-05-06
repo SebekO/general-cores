@@ -26,7 +26,7 @@
 //                  : No Change
 // =============================================================================
 
-`include "lm32_include.v"
+`include "lm32_include.vh"
 
 `ifdef CFG_JTAG_ENABLED
 

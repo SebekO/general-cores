@@ -33,7 +33,7 @@
 // No change
 // =============================================================================
 					  
-`include "lm32_include.v"
+`include "lm32_include.vh"
 
 `ifdef CFG_ICACHE_ENABLED
 

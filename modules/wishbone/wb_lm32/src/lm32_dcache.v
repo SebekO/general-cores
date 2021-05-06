@@ -28,7 +28,7 @@
 //                  : invoking lm32_ram.v
 // =============================================================================
 								 
-`include "lm32_include.v"
+`include "lm32_include.vh"
 
 `ifdef CFG_DCACHE_ENABLED
 
