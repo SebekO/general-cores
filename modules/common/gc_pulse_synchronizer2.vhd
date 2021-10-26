@@ -33,10 +33,10 @@ entity gc_pulse_synchronizer2 is
   port (
     -- pulse input clock
     clk_in_i    : in  std_logic;
-    rst_in_n_i  : in  std_logic;
+    rst_in_n_i  : in  std_logic := '0';
     -- pulse output clock
     clk_out_i   : in  std_logic;
-    rst_out_n_i : in  std_logic;
+    rst_out_n_i : in  std_logic := '0';
     -- pulse input ready (clk_in_i domain). When HI, a pulse
     -- coming to d_p_i will be correctly transferred to q_p_o.
     d_ready_o   : out std_logic;
@@ -67,7 +67,6 @@ begin  -- rtl
   cmp_in2out_sync : gc_sync
     port map (
       clk_i     => clk_out_i,
-      rst_n_a_i => rst_out_n_i,
       d_i       => in_ext,
       q_o       => out_ext);
 
@@ -75,14 +74,12 @@ begin  -- rtl
   cmp_pulse_out : gc_edge_detect
     port map (
       clk_i   => clk_out_i,
-      rst_n_i => rst_out_n_i,
       data_i  => out_ext,
       pulse_o => q_p_o);
 
   cmp_out2in_sync : gc_sync
     port map (
       clk_i     => clk_in_i,
-      rst_n_a_i => rst_in_n_i,
       d_i       => out_ext,
       q_o       => out_feedback);
 

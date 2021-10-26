@@ -19,5 +19,9 @@ if(target == "altera"):
 	files.extend(["platform/generic/lm32_multiplier.v", "platform/altera/jtag_tap.v"]);
 elif (target == "xilinx" and syn_device[0:4].upper()=="XC6S"): # Spartan6
 	files.extend(["platform/spartan6/lm32_multiplier.v", "platform/spartan6/jtag_tap.v"])
+elif (target == "xilinx" and syn_device[0:4].upper()=="XC7K"): # Kintex7
+	files.extend(["platform/kintex7/lm32_multiplier.v", "platform/kintex7/jtag_tap.v"])
+elif (target == "xilinx" and syn_device[0:4].upper()=="XC7Z"): # Zynq
+	files.extend(["platform/kintex7/lm32_multiplier.v", "platform/kintex7/jtag_tap.v"])
 else:
 	files.extend(["platform/generic/lm32_multiplier.v", "platform/generic/jtag_tap.v"]);

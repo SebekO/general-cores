@@ -36,7 +36,7 @@ entity gc_pulse_synchronizer is
     -- pulse output clock
     clk_out_i : in  std_logic;
     -- system reset (clk_in_i domain)
-    rst_n_i   : in  std_logic;
+    rst_n_i   : in  std_logic := '0';
     -- pulse input ready (clk_in_i domain). When HI, a pulse
     -- coming to d_p_i will be correctly transferred to q_p_o.
     d_ready_o : out std_logic;

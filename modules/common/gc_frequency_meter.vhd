@@ -94,7 +94,7 @@ begin
       port map (
         clk_in_i  => clk_sys_i,
         clk_out_i => clk_in_i,
-        rst_n_i   => '1',
+        rst_n_i   => '0',
         d_ready_o => freq_valid_o,
         d_p_i     => gate_pulse,
         q_p_o     => gate_pulse_synced);
@@ -107,7 +107,7 @@ begin
       port map (
         clk_in_i  => clk_sys_i,
         clk_out_i => clk_in_i,
-        rst_n_i   => '1',
+        rst_n_i   => '0',
         d_ready_o => freq_valid_o,
         d_p_i     => pps_p1_i,
         q_p_o     => gate_pulse_synced);

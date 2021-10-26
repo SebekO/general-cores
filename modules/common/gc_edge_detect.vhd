@@ -36,14 +36,14 @@ entity gc_edge_detect is
     g_CLOCK_EDGE : string  := "positive");
   port(
     clk_i   : in  std_logic;   -- clock
-    rst_n_i : in  std_logic;   -- reset
+    rst_n_i : in  std_logic := '0';   -- reset
     data_i  : in  std_logic;   -- input
     pulse_o : out std_logic);  -- positive edge detect output
 end entity gc_edge_detect;
 
 architecture arch of gc_edge_detect is
 
-  signal dff : std_logic;
+  signal dff : std_logic := '0';
 
 begin
 
@@ -58,43 +58,13 @@ begin
     pulse_o <= not data_i and dff;
   end generate gen_neg_pulse;
 
-  gen_async_rst : if g_ASYNC_RST = TRUE generate
-
-    sync_posedge : if g_CLOCK_EDGE = "positive" generate
-      process (clk_i, rst_n_i)
-      begin
-        if rst_n_i = '0' then
-          dff <= '0';
-        elsif rising_edge (clk_i) then
-          dff <= data_i;
-        end if;
-      end process;
-    end generate sync_posedge;
-
-    sync_negedge : if g_CLOCK_EDGE = "negative" generate
-      process (clk_i, rst_n_i)
-      begin
-        if rst_n_i = '0' then
-          dff <= '0';
-        elsif falling_edge (clk_i) then
-          dff <= data_i;
-        end if;
-      end process;
-    end generate sync_negedge;
-
-  end generate gen_async_rst;
-
   gen_sync_rst : if g_ASYNC_RST = FALSE generate
 
     sync_posedge : if g_CLOCK_EDGE = "positive" generate
       process (clk_i)
       begin
         if rising_edge (clk_i) then
-          if rst_n_i = '0' then
-            dff <= '0';
-          else
-            dff <= data_i;
-          end if;
+          dff <= data_i;
         end if;
       end process;
     end generate sync_posedge;
@@ -103,11 +73,7 @@ begin
       process (clk_i)
       begin
         if falling_edge (clk_i) then
-          if rst_n_i = '0' then
-            dff <= '0';
-          else
-            dff <= data_i;
-          end if;
+          dff <= data_i;
         end if;
       end process;
     end generate sync_negedge;

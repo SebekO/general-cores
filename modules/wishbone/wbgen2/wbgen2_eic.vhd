@@ -156,73 +156,76 @@ begin  -- syn
   irq_mode(31) <= g_irq1f_mode;
 
 
-  process(clk_i, rst_n_i)
+  process(clk_i)
   begin
-    if(rst_n_i = '0') then
-      irq_i_d0    <= (others => '0');
-      irq_i_d1    <= (others => '0');
-      irq_i_d1    <= (others => '0');
-      irq_pending <= (others => '0');
-      irq_mask    <= (others => '0');
-      
-    elsif rising_edge(clk_i) then
+    if rising_edge(clk_i) then
 
-      for i in 0 to g_num_interrupts-1 loop
-        
-        irq_i_d0(i) <= irq_i(i);
-        irq_i_d1(i) <= irq_i_d0(i);
-        irq_i_d2(i) <= irq_i_d1(i);
+      if(rst_n_i = '0') then
+        irq_i_d0    <= (others => '0');
+        irq_i_d1    <= (others => '0');
+        irq_i_d1    <= (others => '0');
+        irq_pending <= (others => '0');
+        irq_mask    <= (others => '0');
+      else
 
-
-        if((reg_isr_i(i) = '1' and reg_isr_wr_stb_i = '1') or irq_mask(i) = '0') then
-          irq_pending(i) <= '0';
-          irq_i_d0(i) <= '0';
-          irq_i_d1(i) <= '0';
-          irq_i_d2(i) <= '0';
-        
-        else
+        for i in 0 to g_num_interrupts-1 loop
           
-          case irq_mode(i) is
-            when c_IRQ_MODE_LEVEL_0      => irq_pending(i) <= not irq_i_d2(i);
-            when c_IRQ_MODE_LEVEL_1      => irq_pending(i) <= irq_i_d2(i);
-            when c_IRQ_MODE_RISING_EDGE  => irq_pending(i) <= irq_pending(i) or ((not irq_i_d2(i)) and irq_i_d1(i));
-            when c_IRQ_MODE_FALLING_EDGE => irq_pending(i) <= irq_pending(i) or ((not irq_i_d1(i)) and irq_i_d2(i));
-            when others                  => null;
-          end case;
+          irq_i_d0(i) <= irq_i(i);
+          irq_i_d1(i) <= irq_i_d0(i);
+          irq_i_d2(i) <= irq_i_d1(i);
+  
+  
+          if((reg_isr_i(i) = '1' and reg_isr_wr_stb_i = '1') or irq_mask(i) = '0') then
+            irq_pending(i) <= '0';
+            irq_i_d0(i) <= '0';
+            irq_i_d1(i) <= '0';
+            irq_i_d2(i) <= '0';
+          
+          else
+            
+            case irq_mode(i) is
+              when c_IRQ_MODE_LEVEL_0      => irq_pending(i) <= not irq_i_d2(i);
+              when c_IRQ_MODE_LEVEL_1      => irq_pending(i) <= irq_i_d2(i);
+              when c_IRQ_MODE_RISING_EDGE  => irq_pending(i) <= irq_pending(i) or ((not irq_i_d2(i)) and irq_i_d1(i));
+              when c_IRQ_MODE_FALLING_EDGE => irq_pending(i) <= irq_pending(i) or ((not irq_i_d1(i)) and irq_i_d2(i));
+              when others                  => null;
+            end case;
+          end if;
+        end loop;  -- i
+  
+        if(reg_ier_wr_stb_i = '1') then
+          for i in 0 to g_num_interrupts-1 loop
+            if(reg_ier_i(i) = '1') then
+              irq_mask(i) <= '1';
+            end if;
+          end loop;
         end if;
-      end loop;  -- i
-
-      if(reg_ier_wr_stb_i = '1') then
-        for i in 0 to g_num_interrupts-1 loop
-          if(reg_ier_i(i) = '1') then
-            irq_mask(i) <= '1';
-          end if;
-        end loop;
-      end if;
-
-      if(reg_idr_wr_stb_i = '1') then
-        for i in 0 to g_num_interrupts-1 loop
-          if(reg_idr_i(i) = '1') then
-            irq_mask(i) <= '0';
-          end if;
-        end loop;
+  
+        if(reg_idr_wr_stb_i = '1') then
+          for i in 0 to g_num_interrupts-1 loop
+            if(reg_idr_i(i) = '1') then
+              irq_mask(i) <= '0';
+            end if;
+          end loop;
+        end if;
       end if;
     end if;
   end process;
 
   -- generation of wb_irq_o
 
-  process(clk_i, rst_n_i)
+  process(clk_i)
   begin
-    if(rst_n_i = '0') then
-      wb_irq_o <= '0';
-    elsif rising_edge(clk_i) then
-      if(irq_pending = std_logic_vector(to_unsigned(0, g_num_interrupts))) then
+    if rising_edge(clk_i) then
+      if(rst_n_i = '0') then
         wb_irq_o <= '0';
       else
-        wb_irq_o <= '1';
+        if(irq_pending = std_logic_vector(to_unsigned(0, g_num_interrupts))) then
+          wb_irq_o <= '0';
+        else
+          wb_irq_o <= '1';
+        end if;
       end if;
-      
     end if;
   end process;
 

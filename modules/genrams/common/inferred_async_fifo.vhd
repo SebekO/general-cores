@@ -121,12 +121,12 @@ architecture syn of inferred_async_fifo is
 
   signal rcb, wcb : t_counter_block := (others =>(others => '0'));
 
-  signal full_int, empty_int               : std_logic;
-  signal almost_full_int, almost_empty_int : std_logic;
-  signal going_full                        : std_logic;
+  signal full_int, empty_int               : std_logic := '0';
+  signal almost_full_int, almost_empty_int : std_logic := '0';
+  signal going_full                        : std_logic := '0';
 
-  signal wr_count, rd_count : t_counter;
-  signal rd_int, we_int     : std_logic;
+  signal wr_count, rd_count : t_counter := (others => '0');
+  signal rd_int, we_int     : std_logic := '0';
 
   signal wr_empty_x : std_logic := '0';
   signal rd_full_x  : std_logic := '0';
@@ -166,12 +166,9 @@ begin  -- syn
   wcb.bin_next  <= std_logic_vector(unsigned(wcb.bin) + 1);
   wcb.gray_next <= f_gray_encode(wcb.bin_next);
 
-  p_write_ptr : process(clk_wr_i, rst_n_i)
+  p_write_ptr : process(clk_wr_i)
   begin
-    if rst_n_i = '0' then
-      wcb.bin  <= (others => '0');
-      wcb.gray <= (others => '0');
-    elsif rising_edge(clk_wr_i) then
+    if rising_edge(clk_wr_i) then
       if(we_int = '1') then
         wcb.bin  <= wcb.bin_next;
         wcb.gray <= wcb.gray_next;
@@ -182,12 +179,9 @@ begin  -- syn
   rcb.bin_next  <= std_logic_vector(unsigned(rcb.bin) + 1);
   rcb.gray_next <= f_gray_encode(rcb.bin_next);
 
-  p_read_ptr : process(clk_rd_i, rst_n_i)
+  p_read_ptr : process(clk_rd_i)
   begin
-    if rst_n_i = '0' then
-      rcb.bin  <= (others => '0');
-      rcb.gray <= (others => '0');
-    elsif rising_edge(clk_rd_i) then
+    if rising_edge(clk_rd_i) then
       if(rd_int = '1') then
         rcb.bin  <= rcb.bin_next;
         rcb.gray <= rcb.gray_next;
@@ -216,11 +210,9 @@ begin  -- syn
   wcb.bin_x <= f_gray_decode(wcb.gray_x, 1);
   rcb.bin_x <= f_gray_decode(rcb.gray_x, 1);
 
-  p_gen_empty : process(clk_rd_i, rst_n_i)
+  p_gen_empty : process(clk_rd_i)
   begin
-    if rst_n_i = '0' then
-      empty_int <= '1';
-    elsif rising_edge (clk_rd_i) then
+    if rising_edge (clk_rd_i) then
       if(rcb.gray = wcb.gray_x or (rd_int = '1' and (wcb.gray_x = rcb.gray_next))) then
         empty_int <= '1';
       else
@@ -268,11 +260,9 @@ begin  -- syn
     end if;
   end process p_gen_going_full;
 
-  p_register_full : process(clk_wr_i, rst_n_i)
+  p_register_full : process(clk_wr_i)
   begin
-    if rst_n_i = '0' then
-      full_int <= '0';
-    elsif rising_edge (clk_wr_i) then
+    if rising_edge (clk_wr_i) then
       full_int <= going_full;
     end if;
   end process p_register_full;
@@ -280,11 +270,9 @@ begin  -- syn
   wr_full_o <= full_int;
   rd_full_o <= rd_full_x;
 
-  p_reg_almost_full : process(clk_wr_i, rst_n_i)
+  p_reg_almost_full : process(clk_wr_i)
   begin
-    if rst_n_i = '0' then
-      almost_full_int <= '0';
-    elsif rising_edge(clk_wr_i) then
+    if rising_edge(clk_wr_i) then
       wr_count <= std_logic_vector(unsigned(wcb.bin) - unsigned(rcb.bin_x));
       if (unsigned(wr_count) >= g_almost_full_threshold) then
         almost_full_int <= '1';
@@ -308,11 +296,9 @@ begin  -- syn
   wr_almost_full_o <= almost_full_int;
   rd_almost_full_o <= almost_full_x;
 
-  p_reg_almost_empty : process(clk_rd_i, rst_n_i)
+  p_reg_almost_empty : process(clk_rd_i)
   begin
-    if rst_n_i = '0' then
-      almost_empty_int <= '1';
-    elsif rising_edge(clk_rd_i) then
+    if rising_edge(clk_rd_i) then
       rd_count               <= std_logic_vector(unsigned(wcb.bin_x) - unsigned(rcb.bin));
       if (unsigned(rd_count) <= g_almost_empty_threshold) then
         almost_empty_int <= '1';

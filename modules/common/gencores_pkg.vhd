@@ -253,7 +253,6 @@ package gencores_pkg is
       g_SYNC_EDGE : string := "positive");
     port (
       clk_i     : in  std_logic;
-      rst_n_a_i : in  std_logic;
       d_i       : in  std_logic;
       q_o       : out std_logic);
   end component gc_sync;
@@ -268,7 +267,6 @@ package gencores_pkg is
       g_CLOCK_EDGE : string  := "positive");
     port (
       clk_i   : in  std_logic;
-      rst_n_i : in  std_logic;
       data_i  : in  std_logic;
       pulse_o : out std_logic);
   end component gc_edge_detect;

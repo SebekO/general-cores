@@ -31,7 +31,6 @@ entity gc_sync is
     g_SYNC_EDGE : string := "positive");
   port (
     clk_i     : in  std_logic;
-    rst_n_a_i : in  std_logic;
     d_i       : in  std_logic;
     q_o       : out std_logic);
 end gc_sync;
@@ -41,65 +40,36 @@ end gc_sync;
 
 architecture arch of gc_sync is
 
-  --  Use an intermediate signal with a particular name and a keep attribute
-  --  so that it can be referenced in the constraints in order to ignore
-  --  timing (TIG) on that signal.
-  signal gc_sync_ffs_in : std_logic;
+  signal sync_0ff, sync_1ff : std_logic := '0';
 
-  signal sync0, sync1 : std_logic;
-
-  attribute rloc          : string;
-  attribute rloc of sync0 : signal is "X0Y0";
-  attribute rloc of sync1 : signal is "X0Y0";
-
-  attribute shreg_extract          : string;
-  attribute shreg_extract of sync0 : signal is "no";
-  attribute shreg_extract of sync1 : signal is "no";
-
-  attribute keep                   : string;
-  attribute keep of gc_sync_ffs_in : signal is "true";
-  attribute keep of sync0          : signal is "true";
-  attribute keep of sync1          : signal is "true";
-
-  attribute keep_hierarchy         : string;
-  attribute keep_hierarchy of arch : architecture is "true";
-
-  attribute async_reg          : string;
-  attribute async_reg of sync0 : signal is "true";
-  attribute async_reg of sync1 : signal is "true";
+  attribute async_reg             : string;
+  attribute async_reg of sync_0ff : signal is "true";
+  attribute async_reg of sync_1ff : signal is "true";
 
 begin
 
   assert g_SYNC_EDGE = "positive" or g_SYNC_EDGE = "negative" severity failure;
 
-  gc_sync_ffs_in <= d_i;
-
   sync_posedge : if (g_SYNC_EDGE = "positive") generate
-    process(clk_i, rst_n_a_i)
+    process(clk_i)
     begin
-      if rst_n_a_i = '0' then
-        sync1 <= '0';
-        sync0 <= '0';
-      elsif rising_edge(clk_i) then
-        sync0 <= gc_sync_ffs_in;
-        sync1 <= sync0;
+      if rising_edge(clk_i) then
+        sync_0ff <= d_i;
+        sync_1ff <= sync_0ff;
       end if;
     end process;
   end generate sync_posedge;
 
   sync_negedge : if(g_SYNC_EDGE = "negative") generate
-    process(clk_i, rst_n_a_i)
+    process(clk_i)
     begin
-      if rst_n_a_i = '0' then
-        sync1 <= '0';
-        sync0 <= '0';
-      elsif falling_edge(clk_i) then
-        sync0 <= gc_sync_ffs_in;
-        sync1 <= sync0;
+      if falling_edge(clk_i) then
+        sync_0ff <= d_i;
+        sync_1ff <= sync_0ff;
       end if;
     end process;
   end generate sync_negedge;
 
-  q_o <= sync1;
+  q_o <= sync_1ff;
 
 end arch;

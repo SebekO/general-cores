@@ -125,7 +125,6 @@ architecture rtl of gc_crc_gen is
   signal   crca       : fb_array;
   signal   da, ma     : dmsb_array;
   signal   crc        : std_logic_vector(msb downto 0);
-  signal   arst, srst : std_logic;
 
 
   signal data_i2           : std_logic_vector(g_data_width-1 downto 0);
@@ -193,30 +192,19 @@ begin
                              ((da(i) xor ma(i)) and p(msb downto 1));
   end generate FB;
 
--- Reset signal
-  SR : if g_sync_reset = 1 generate
-    srst <= rst_i;
-    arst <= '0';
-  end generate SR;
-  AR : if g_sync_reset = 0 generate
-    srst <= '0';
-    arst <= rst_i;
-  end generate AR;
 
-
-  CRCP : process (clk_i, arst)
+  CRCP : process (clk_i)
   begin
-    if arst = '1' then                  -- async. reset
-      crc     <= g_init_value;
-    elsif rising_edge(clk_i) then
-      if srst = '1' then                -- sync. reset
+    if rising_edge(clk_i) then
+      if rst_i = '1' then                -- sync. reset
         crc <= g_init_value;
-      elsif en_i = '1' then
-        
-        if(half_i = '1' and g_dual_width = 1) then
-          crc <= crca(g_half_width);
-        else
-          crc <= crca(g_data_width);
+      else
+        if en_i = '1' then
+          if(half_i = '1' and g_dual_width = 1) then
+            crc <= crca(g_half_width);
+          else
+            crc <= crca(g_data_width);
+          end if;
         end if;
       end if;
     end if;
@@ -248,13 +236,10 @@ begin
 
   gen_reg_match_output : if(g_registered_match_output) generate
     
-    match_gen : process (clk_i, arst)
+    match_gen : process (clk_i)
     begin
-      if arst = '1' then                -- async. reset
-        match_o <= '0';
-        en_d0   <= '0';
-      elsif rising_edge(clk_i) then
-        if srst = '1' then              -- sync. reset
+      if rising_edge(clk_i) then
+        if rst_i = '1' then              -- sync. reset
           match_o <= '0';
           en_d0   <= '0';
         else

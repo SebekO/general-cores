@@ -6,7 +6,7 @@
 -- Author     : Tomasz Wlostowski
 -- Company    : CERN
 -- Created    : 2009-09-01
--- Last update: 2020-03-30
+-- Last update: 2021-05-31
 -- Platform   : FPGA-generic
 -- Standard   : VHDL '93
 -------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ entity gc_extend_pulse is
     );
   port (
     clk_i      : in  std_logic;
-    rst_n_i    : in  std_logic;
+    rst_n_i    : in  std_logic := '0';
     -- input pulse (synchronou to clk_i)
     pulse_i    : in  std_logic;
     -- extended output pulse
@@ -59,17 +59,14 @@ end gc_extend_pulse;
 
 architecture rtl of gc_extend_pulse is
 
-  signal cntr : unsigned(f_log2_ceil(g_width)-1 downto 0);
-  signal extended_int : std_logic;
+  signal cntr : unsigned(f_log2_ceil(g_width)-1 downto 0) := (others => '0');
+  signal extended_int : std_logic := '0';
   
 begin  -- rtl
 
-  extend : process (clk_i, rst_n_i)
+  extend : process (clk_i)
   begin  -- process extend
-    if rst_n_i = '0' then                   -- asynchronous reset (active low)
-      extended_int <= '0';
-      cntr       <= (others => '0');
-    elsif clk_i'event and clk_i = '1' then  -- rising clock edge
+    if clk_i'event and clk_i = '1' then  -- rising clock edge
       if(pulse_i = '1') then
         extended_int <= '1';
         cntr       <= to_unsigned(g_width - 2, cntr'length);

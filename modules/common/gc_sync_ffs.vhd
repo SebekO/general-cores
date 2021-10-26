@@ -32,7 +32,7 @@ entity gc_sync_ffs is
     g_SYNC_EDGE : string := "positive");
   port(
     clk_i    : in  std_logic;   -- clock from the destination clock domain
-    rst_n_i  : in  std_logic;   -- async reset
+    rst_n_i  : in  std_logic := '0';   -- async reset
     data_i   : in  std_logic;   -- async input
     synced_o : out std_logic;   -- synchronized output
     npulse_o : out std_logic;   -- negative edge detect output
@@ -41,7 +41,7 @@ end entity gc_sync_ffs;
 
 architecture arch of gc_sync_ffs is
 
-  signal sync, npulse, ppulse : std_logic;
+  signal sync, npulse, ppulse : std_logic := '0';
 
 begin
 
@@ -50,40 +50,31 @@ begin
       g_SYNC_EDGE => g_SYNC_EDGE)
     port map (
       clk_i     => clk_i,
-      rst_n_a_i => rst_n_i,
       d_i       => data_i,
       q_o       => sync);
 
   cmp_gc_posedge : entity work.gc_edge_detect
     generic map (
-      g_ASYNC_RST  => TRUE,
       g_PULSE_EDGE => "positive",
       g_CLOCK_EDGE => g_SYNC_EDGE)
     port map (
       clk_i   => clk_i,
-      rst_n_i => rst_n_i,
       data_i  => sync,
       pulse_o => ppulse);
 
   cmp_gc_negedge : entity work.gc_edge_detect
     generic map (
-      g_ASYNC_RST  => TRUE,
       g_PULSE_EDGE => "negative",
       g_CLOCK_EDGE => g_SYNC_EDGE)
     port map (
       clk_i   => clk_i,
-      rst_n_i => rst_n_i,
       data_i  => sync,
       pulse_o => npulse);
 
   sync_posedge : if (g_SYNC_EDGE = "positive") generate
-    process(clk_i, rst_n_i)
+    process(clk_i)
     begin
-      if(rst_n_i = '0') then
-        synced_o <= '0';
-        npulse_o <= '0';
-        ppulse_o <= '0';
-      elsif rising_edge(clk_i) then
+      if rising_edge(clk_i) then
         synced_o <= sync;
         npulse_o <= npulse;
         ppulse_o <= ppulse;
@@ -92,13 +83,9 @@ begin
   end generate sync_posedge;
 
   sync_negedge : if(g_SYNC_EDGE = "negative") generate
-    process(clk_i, rst_n_i)
+    process(clk_i)
     begin
-      if(rst_n_i = '0') then
-        synced_o <= '0';
-        npulse_o <= '0';
-        ppulse_o <= '0';
-      elsif falling_edge(clk_i) then
+      if falling_edge(clk_i) then
         synced_o <= sync;
         npulse_o <= npulse;
         ppulse_o <= ppulse;
