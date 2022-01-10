@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-2.0-or-later
+// SPDX-License-Identifier: GPL-2.0
 /*
  * Copyright (C) 2019 CERN (www.cern.ch)
  * Author: Federico Vaga <federico.vaga@cern.ch>
@@ -416,8 +416,9 @@ static int spi_ocores_sw_xfer_finish(struct spi_ocores *sp)
 	sp->cur_tx_buf = NULL;
 	sp->cur_rx_buf = NULL;
 	sp->cur_len = 0;
+	sp->master->cur_msg->actual_length += sp->cur_xfer->len;
 
-	return 0;
+        return 0;
 }
 
 /**
@@ -467,9 +468,11 @@ static int spi_ocores_sw_xfer_next_init(struct spi_ocores *sp)
 
 	ctrl = sp->ctrl_base;
 	if (sp->master->cur_msg->spi->mode & SPI_CPHA) {
-		ctrl |= SPI_OCORES_CTRL_Tx_NEG;
 		ctrl |= SPI_OCORES_CTRL_Rx_NEG;
 	}
+	else
+		ctrl |= SPI_OCORES_CTRL_Tx_NEG;	
+
 	if (sp->master->cur_msg->spi->mode & SPI_LSB_FIRST)
 		ctrl |= SPI_OCORES_CTRL_LSB;
 	ctrl |= nbits;
@@ -478,6 +481,12 @@ static int spi_ocores_sw_xfer_next_init(struct spi_ocores *sp)
 	else
 		hz = sp->master->cur_msg->spi->max_speed_hz;
 	divider = (sp->clock_hz / (hz * 2)) - 1;
+
+	if (WARN_ON(divider == 0)) {
+		dev_warn(&sp->master->dev, "divider value is 0\n");
+		divider =1;
+	}
+
 	spi_ocores_hw_xfer_config(sp, ctrl, divider);
 
 
@@ -596,7 +605,7 @@ static int spi_ocores_process(struct spi_ocores *sp)
 			spi_ocores_finalize_current_message(sp);
 	}
 
-	return 0;
+	return err;
 }
 
 /**
