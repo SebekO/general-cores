@@ -136,6 +136,9 @@ architecture syn of inferred_async_fifo is
 
   signal q_int : std_logic_vector(g_data_width-1 downto 0) := (others => '0');
 
+  attribute keep : string;
+  attribute keep of rst_n_i : signal is "true";
+  
 begin  -- syn
 
   rd_int <= rd_i and not empty_int;
