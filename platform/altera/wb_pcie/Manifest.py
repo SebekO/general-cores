@@ -8,6 +8,7 @@ def __helper():
     "pcie_wb_pkg.vhd"]
   if syn_device[:1] == "5":         files.extend(["arria5_pcie.qip"])
   if syn_device[:9] == "10ax027e3": files.extend(["arria10gx_scu4_pcie_hip/arria10gx_scu4_pcie_hip.qsys"])
+  if syn_device[:9] == "10ax048e3": files.extend(["arria10gx_ftm4_pcie_hip/arria10gx_ftm4_pcie_hip.qsys"])
   if syn_device[:9] == "10ax027h2": files.extend(["arria10gx_pex10_pcie_hip/arria10gx_pex10_pcie_hip.qsys"])
   if syn_device[:9] == "10ax066h2": files.extend(["arria10gx_ftm10_pcie_hip/arria10gx_ftm10_pcie_hip.qsys"])
   if syn_device[:4] == "10as":      files.extend(["arria10_pcie_hip/arria10_pcie_hip.qsys"])
