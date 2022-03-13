@@ -107,9 +107,9 @@ architecture arch of inferred_async_fifo_dual_rst is
   end record;
 
   type t_mem_type is array (0 to g_size-1) of std_logic_vector(g_data_width-1 downto 0);
-  signal mem : t_mem_type := (others => (others => '0'));
+  signal mem : t_mem_type; -- := (others => (others => '0'));
 
-  signal rcb, wcb : t_counter_block := (others =>(others => '0'));
+  signal rcb, wcb : t_counter_block; -- := (others =>(others => '0'));
 
   signal full_int, empty_int               : std_logic;
   signal almost_full_int, almost_empty_int : std_logic;
