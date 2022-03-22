@@ -91,7 +91,7 @@ architecture syn of generic_dpram_sameclock is
   begin
     -- If no file was given, there is nothing to convert, just return
     if (g_init_file = "" or g_init_file = "none") then
-      tmp := (others=>(others=>'0'));
+      --tmp := (others=>(others=>'0'));
       return tmp;
     end if;
 
