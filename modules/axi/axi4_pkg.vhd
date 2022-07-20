@@ -242,6 +242,36 @@ package axi4_pkg is
     RRESP   : std_logic_vector (1 downto 0);
     RDATA   : std_logic_vector (511 downto 0);
   end record;
+
+  constant cc_axi4_full_default_master_out_512 : t_axi4_full_master_out_512 := (
+    ARVALID => '0',
+    AWVALID => '0',
+    BREADY  => '0',
+    RREADY  => '0',
+    WLAST   => '0',
+    WVALID  => '0',
+    ARID    => (others => '0'),
+    AWID    => (others => '0'),
+    ARBURST => (others => '0'),
+    ARLOCK  => '0',
+    ARSIZE   => (others => '0'),
+    AWBURST => (others => '0'),
+    AWLOCK  => '0',
+    AWSIZE  => (others => '0'),
+    ARPROT  => (others => '0'),
+    AWPROT  => (others => '0'),
+    ARADDR  => (others => '0'),
+    AWADDR  => (others => '0'),
+    WDATA   => (others => '0'),
+    ARCACHE => (others => '0'),
+    ARLEN   => (others => '0'),
+    ARQOS   => (others => '0'),
+    AWCACHE => (others => '0'),
+    AWLEN   => (others => '0'),
+    AWQOS   => (others => '0'),
+    WSTRB   => (others => '0')
+    );
+  
 end package;
 
 package body axi4_pkg is
