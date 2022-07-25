@@ -50,7 +50,8 @@ entity inferred_async_fifo_dual_rst is
     g_with_wr_almost_full    : boolean := FALSE;
     g_with_wr_count          : boolean := FALSE;
     g_almost_empty_threshold : integer;
-    g_almost_full_threshold  : integer);
+    g_almost_full_threshold  : integer;
+    g_memory_implementation_hint : string := "auto");
   port (
     -- write port
     rst_wr_n_i        : in  std_logic := '1';
@@ -109,6 +110,9 @@ architecture arch of inferred_async_fifo_dual_rst is
   type t_mem_type is array (0 to g_size-1) of std_logic_vector(g_data_width-1 downto 0);
   signal mem : t_mem_type; -- := (others => (others => '0'));
 
+  attribute ram_type : string;
+  attribute ram_type of mem : signal is g_memory_implementation_hint;
+  
   signal rcb, wcb : t_counter_block; -- := (others =>(others => '0'));
 
   signal full_int, empty_int               : std_logic;
