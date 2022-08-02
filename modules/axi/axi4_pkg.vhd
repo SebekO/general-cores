@@ -140,6 +140,10 @@ package axi4_pkg is
   constant c_AXI4_RESP_SLVERR : std_logic_vector(1 downto 0) := "10";
   constant c_AXI4_RESP_DECERR : std_logic_vector(1 downto 0) := "11";
 
+  constant c_AXI4_BURST_FIXED : std_logic_vector(1 downto 0) := "00";
+  constant c_AXI4_BURST_INCR : std_logic_vector(1 downto 0) := "01";
+  constant c_AXI4_BURST_WRAP : std_logic_vector(1 downto 0) := "10";  
+  
   function f_axi4_full_to_lite (
     f : t_axi4_full_master_out_32
     )  return t_axi4_lite_master_out_32;
@@ -271,6 +275,20 @@ package axi4_pkg is
     AWQOS   => (others => '0'),
     WSTRB   => (others => '0')
     );
+
+  constant cc_axi4_full_default_master_in_512 : t_axi4_full_master_in_512 := (
+    ARREADY => '0',
+    AWREADY => '0',
+    BVALID => '0',
+    RLAST => '0',
+    RVALID => '0',
+    WREADY => '0',
+    BID => x"000",
+    RID => x"000",
+    BRESP => "00",
+    RRESP => "00",
+    RDATA => (others => '0' ) );
+    
   
 end package;
 
