@@ -1,7 +1,7 @@
 `ifndef __VHD_WISHBONE_MASTER_INCLUDED
  `define __VHD_WISHBONE_MASTER_INCLUDED
 
-`include "simdrv_defs.svh"
+`include "gencores_sim_defs.svh"
 `include "if_wb_master.svh"
 
 import wishbone_pkg::*;

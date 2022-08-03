@@ -7,10 +7,10 @@
 // Standard       : Verilog 2001
 //
 
-`ifndef __IF_WB_DEFS_SV
-`define __IF_WB_DEFS_SV
+`ifndef __IF_WB_DEFS_SVH
+`define __IF_WB_DEFS_SVH
 
-`include "simdrv_defs.sv"
+`include "gencores_sim_defs.svh"
 
 typedef enum 
 {

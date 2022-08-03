@@ -10,7 +10,7 @@
 `ifndef __IF_WB_TYPES_SVH
 `define __IF_WB_TYPES_SVH
 
-`include "simdrv_defs.svh"
+`include "gencores_sim_defs.svh"
 
 typedef enum 
 {
