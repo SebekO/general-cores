@@ -22,7 +22,7 @@
 // and limitations under the License.
 //------------------------------------------------------------------------------
 
-`include "simdrv_defs.svh"
+`include "gencores_sim_defs.svh"
 `include "if_wishbone_types.svh"
 `include "if_wishbone_accessor.svh"
 
