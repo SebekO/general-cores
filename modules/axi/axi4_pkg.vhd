@@ -202,7 +202,7 @@ package axi4_pkg is
       );
   end component;
 
-  -- AXI4-Full interface, master output ports, 512 bits
+  -- AXI4-Full interface, master output ports, 512 bits data / 64 bit address
   type t_axi4_full_master_out_512 is record
     ARVALID : std_logic;
     AWVALID : std_logic;
@@ -220,8 +220,8 @@ package axi4_pkg is
     AWSIZE  : std_logic_vector (2 downto 0);
     ARPROT  : std_logic_vector (2 downto 0);
     AWPROT  : std_logic_vector (2 downto 0);
-    ARADDR  : std_logic_vector (31 downto 0);
-    AWADDR  : std_logic_vector (31 downto 0);
+    ARADDR  : std_logic_vector (63 downto 0);
+    AWADDR  : std_logic_vector (63 downto 0);
     WDATA   : std_logic_vector (511 downto 0);
     ARCACHE : std_logic_vector (3 downto 0);
     ARLEN   : std_logic_vector (7 downto 0);
