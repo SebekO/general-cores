@@ -83,6 +83,8 @@ package axi4_pkg is
     RREADY  : std_logic;
     WLAST   : std_logic;
     WVALID  : std_logic;
+    ARPROT : std_logic_vector(2 downto 0);
+    AWPROT : std_logic_vector(2 downto 0);
     ARADDR  : std_logic_vector (31 downto 0);
     AWADDR  : std_logic_vector (31 downto 0);
     WDATA   : std_logic_vector (31 downto 0);
@@ -124,6 +126,8 @@ package axi4_pkg is
       RREADY  => '0',
       WLAST   => '0',
       WVALID  => '0',
+      ARPROT => (others => '0'),
+      AWPROT => (others => '0'),
       ARADDR  => (others => '0'),
       AWADDR  => (others => '0'),
       WDATA   => (others => '0'),
@@ -229,7 +233,7 @@ package axi4_pkg is
     AWCACHE : std_logic_vector (3 downto 0);
     AWLEN   : std_logic_vector (7 downto 0);
     AWQOS   : std_logic_vector (3 downto 0);
-    WSTRB   : std_logic_vector (31 downto 0);
+    WSTRB   : std_logic_vector (63 downto 0);
   end record;
 
   -- AXI4-Full interface, master input ports, 512 bits
