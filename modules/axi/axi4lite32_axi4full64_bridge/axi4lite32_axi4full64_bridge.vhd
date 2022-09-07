@@ -1,4 +1,4 @@
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 -- Title      : AXI4Full64 to AXI4Lite32 bridge
 -- Project    : General Cores
 -------------------------------------------------------------------------------
@@ -27,8 +27,8 @@ use ieee.numeric_std.all;
 
 entity axi4lite32_axi4full64_bridge is
   port (
-    clk_i   : in std_logic;
-    rst_n_i : in std_logic;
+    clk_i     : in std_logic;
+    rst_n_i   : in std_logic;
 
     --  AXI4-Full slave
     s_awaddr  : in  STD_LOGIC_VECTOR (31 downto 0);
@@ -99,15 +99,15 @@ architecture behav of axi4lite32_axi4full64_bridge is
   signal wstate : t_wr_state;
   signal rstate : t_rd_state;
 
-  signal waddr : std_logic_vector(31 downto 0);
-  signal wlen : std_logic_vector(7 downto 0);
-  signal wsize : std_logic_vector(2 downto 0);
+  signal waddr  : std_logic_vector(31 downto 0);
+  signal wlen   : std_logic_vector(7 downto 0);
+  signal wsize  : std_logic_vector(2 downto 0);
   signal wdata  : std_logic_vector(63 downto 0);
-  signal wstrb : std_logic_vector(7 downto 0);
+  signal wstrb  : std_logic_vector(7 downto 0);
 
-  signal raddr : std_logic_vector(31 downto 0);
-  signal rlen : std_logic_vector(7 downto 0);
-  signal rsize : std_logic_vector(2 downto 0);
+  signal raddr  : std_logic_vector(31 downto 0);
+  signal rlen   : std_logic_vector(7 downto 0);
+  signal rsize  : std_logic_vector(2 downto 0);
   signal rdata  : std_logic_vector(63 downto 0);
 begin
   --  Write part.
@@ -240,7 +240,6 @@ begin
         rstate <= RD_IDLE;
         s_arready <= '1';
         s_rvalid <= '0';
-        s_rlast <= '0';
         m_arvalid <= '0';
         m_rready <= '0';
         raddr <= (others => 'X');
@@ -290,17 +289,13 @@ begin
                 --  To master.
                 rstate <= RD_SLAVE;
                 s_rresp <= RSP_OKAY;
-                if rlen = x"00" then
-                  s_rlast <= '1';
-                else
-                  s_rlast <= '0';
-                end if;
+                m_rready <= '0'; 
                 s_rvalid <= '1';
               else
                 --  Next transfer.
                 raddr (2) <= '1';
-                m_arvalid <= '1';
-                m_rready <= '1';
+                m_arvalid <= '1'; 
+                m_rready <= '1';  
               end if;
             end if;
 
@@ -317,8 +312,8 @@ begin
                 --  TODO: adjust address.
 
                 --  New beat.
-                m_arvalid <= '1';
-                m_rready <= '1';
+                m_arvalid <= '1'; 
+                m_rready <= '1'; 
                 rstate <= RD_READ;
               end if;
             end if;
@@ -326,4 +321,7 @@ begin
       end if;
     end if;
   end process;
+
+  s_rlast <= '1' when (rlen=x"00" and s_rready='1') else '0';
+
 end behav;

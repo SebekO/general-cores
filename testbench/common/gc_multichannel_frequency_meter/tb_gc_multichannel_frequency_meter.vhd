@@ -248,7 +248,7 @@ begin
   assert (g_CHANNELS > 1)
     report "Invalid number of channels" severity failure;
 
-  -- Check if output is the expected, for TRUE it is OK
+  -- Check if output is the expected
   check_output : process(tb_clk_sys_i)
   begin
     if (rising_edge(tb_clk_sys_i) and tb_rst_n_i = '1') then

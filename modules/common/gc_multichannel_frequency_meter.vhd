@@ -42,7 +42,7 @@ entity gc_multichannel_frequency_meter is
     clk_in_i      : in  std_logic_vector(g_CHANNELS -1 downto 0);
     rst_n_i       : in  std_logic;
     pps_p1_i      : in  std_logic;
-    channel_sel_i : in  std_logic_vector(3 downto 0);
+    channel_sel_i : in  std_logic_vector(f_log2_ceil(g_CHANNELS)-1 downto 0); 
     freq_o        : out std_logic_vector(g_COUNTER_BITS-1 downto 0);
     freq_valid_o  : out std_logic
     );
@@ -65,6 +65,7 @@ architecture arch of gc_multichannel_frequency_meter is
   type t_channel_state_array is array(0 to g_CHANNELS-1) of t_channel_state;
 
   signal ch : t_channel_state_array;
+  signal idx : integer range 0 to g_CHANNELS+1;
 
 begin
 
@@ -121,17 +122,18 @@ begin
           ch(i).cntr <= (others => '0');
         else
           ch(i).cntr <= ch(i).cntr + 1;
+          ch(i).freq_valid <= '0';
         end if;
       end if;
     end process p_freq_counter;
 
   end generate gen_channels;
 
+  idx <= to_integer(unsigned(channel_sel_i));
+  
   p_freq_output : process(clk_sys_i)
-    variable idx : integer range 0 to g_CHANNELS-1;
   begin
     if rising_edge(clk_sys_i) then
-      idx          := to_integer(unsigned(channel_sel_i));
       freq_o       <= std_logic_vector(ch(idx).freq);
       freq_valid_o <= ch(idx).freq_valid;
     end if;

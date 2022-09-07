@@ -183,7 +183,6 @@ begin  -- behavioral
         pi_state        <= PI_CHECK_MODE;
         dac_val_stb_p_o <= '0';
         dac_val_int <= std_logic_vector(to_unsigned(g_output_bias, dac_val_int'length));
-        freq_mode       <= '1';
 
       else
           case pi_state is
@@ -205,10 +204,10 @@ begin  -- behavioral
                 dac_val_stb_p_o <= '0';                 
                 pi_state <= PI_WAIT_SAMPLE;
               else
-          dac_val_stb_p_o <= '1';
-          dac_val_int <= std_logic_vector(to_unsigned(g_output_bias, dac_val_int'length));
+                dac_val_stb_p_o <= '1';
+                dac_val_int <= std_logic_vector(to_unsigned(g_output_bias, dac_val_int'length));
                 pi_state <= PI_DISABLED;
-          freq_mode <= '1';
+                freq_mode <= '1';
               end if;
 
 -------------------------------------------------------------------------------

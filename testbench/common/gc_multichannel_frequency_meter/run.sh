@@ -11,7 +11,7 @@ echo "*When g_WITH_INTERNAL_TIMEBASE = TRUE*"
 echo "======================================"
 
 echo "clk_sys_freq = 500, sync_out = TRUE, counter_bits=32"
-ghdl -r --std=08 -frelaxed-rules $TB -gg_seed=$RANDOM -gg_WITH_INTERNAL_TIMEBASE=TRUE -gg_CLK_SYS_FREQ=500 -gg_CHANNELS=2 -gg_COUNTER_BITS=32
+ghdl -r --std=08 -frelaxed-rules $TB -gg_seed=$RANDOM -gg_WITH_INTERNAL_TIMEBASE=TRUE -gg_CLK_SYS_FREQ=500 -gg_CHANNELS=2 -gg_COUNTER_BITS=32 
 echo "******************************************************************************"
 
 echo "clk_sys_freq = 1000, sync_out = FALSE, counter_bits=32"
