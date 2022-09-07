@@ -8,6 +8,9 @@ entity tb_wb_indirect is
 end tb_wb_indirect;
 
 architecture arch of tb_wb_indirect is
+  
+  constant C_CLK_PERIOD : time := 8 ns;
+  
   signal rst_n         : std_logic;
   signal clk           : std_logic;
   signal wb_in         : t_wishbone_slave_in;
@@ -19,21 +22,23 @@ architecture arch of tb_wb_indirect is
   signal last_data : std_logic_vector (31 downto 0);
   --  For end of test.
   signal done : boolean := False;
+
 begin
+
   --  Clock.
   process
   begin
-    clk <= '0';
-    wait for 4 ns;
     clk <= '1';
-    wait for 4 ns;
+    wait for C_CLK_PERIOD/2;
+    clk <= '0';
+    wait for C_CLK_PERIOD/2;
     if done then
       report "end of test";
       wait;
     end if;
   end process;
 
-  rst_n <= '0', '1' after 8 ns;
+  rst_n <= '0', '1' after 2*C_CLK_PERIOD;
 
   --  Test process.
   process
@@ -49,22 +54,34 @@ begin
     write32_pl (clk, wb_in, wb_out, x"0000_0000", x"0000_2300");
 
     wait until rising_edge (clk);
-
     --  Read data.
     read32_pl (clk, wb_in, wb_out, x"0000_0004", data);
-    assert data = x"0000_2300";
+    assert data = x"0000_2300" 
+        report "wrong data"
+        severity failure;
 
     wait until rising_edge (clk);
 
     write32_pl (clk, wb_in, wb_out, x"0000_0004", x"1234_5678");
-    assert last_addr = x"0000_2304";
-    assert last_data = x"1234_5678";
+    assert last_addr = x"0000_2304"
+        report "wrong last address"
+        severity failure;
+
+    assert last_data = x"1234_5678"
+        report "wrong last data"
+        severity failure;
 
     read32_pl (clk, wb_in, wb_out, x"0000_0004", data);
-    assert data = x"0000_2308";
-    assert last_data = x"1234_5678";
+    assert data = x"0000_2308"
+        report "wrong last read data"
+        severity failure;
+
+    assert last_data = x"1234_5678"
+        report "wrong last read address"
+        severity failure;
 
     done <= true;
+    report "Test PASS with no failures!";
     wait;
   end process;
 

@@ -1,0 +1,5 @@
+Testbench for a simple Wishbone Register. It is using OSVVM methodology with all the  input signals in the stimulus to be get random values in each clock cycle. The simulation time, can be changed in the `stim` process, by changing the value of `NOW`. There are two test cases, one for CLASSIC and one for PIPELINED wishbone method. They test the functionality of this core, through FSM coverage and assertions.
+
+FSM coverage: In the RTL core, there is a FSM which describes the behavior of the core. This testbench, covers all the possible changes of the states and also investigate if there are illigal transitions through the states. The goal is to reach 100% and all states covered at least once. The checking is done in every clock cycle, so when the state remains the some for some clock cycles is also covered.
+
+Self-Checking: Various assertions are being implemented to verify the specifications of the core for the two different modes. There is also one general assertion to check if there is a mismatch between slave's output and master's input. 

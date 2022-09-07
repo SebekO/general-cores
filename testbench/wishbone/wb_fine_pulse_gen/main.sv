@@ -32,13 +32,13 @@ class IBusDevice;
    endfunction // new
    
    virtual task write32( uint32_t addr, uint32_t val );
-      m_acc.write(m_base +addr, val);
+      m_acc.write(m_base + addr, val);
    endtask // write
    
    virtual task read32( uint32_t addr, output uint32_t val );
       uint64_t val64;
       
-      m_acc.read(m_base +addr, val64);
+      m_acc.read(m_base + addr, val64);
       val = val64;
       
    endtask // write
@@ -79,7 +79,7 @@ class FinePulseGenDriver extends IBusDevice;
       write32( `ADDR_FPG_ODELAY_CALIB, 0 );
       #100ns;
 
-      while(1)
+    while(1)
 	begin
 	   read32( `ADDR_FPG_ODELAY_CALIB, rv );
 	   $display("odelay = %x", rv);
@@ -279,7 +279,7 @@ module main;
       
       drv = new( acc, 0 );      
 
-      drv.calibrate();
+//      drv.calibrate();
       
       
 

@@ -1,6 +1,9 @@
 action = "simulation"
+sim_tool = "modelsim"
 target = "xilinx"
+top_module = "main"
 fetchto="../../../ip_cores"
+include_dirs=["../../../sim"]
 
 modules = { "local" :  "../../../" };
 

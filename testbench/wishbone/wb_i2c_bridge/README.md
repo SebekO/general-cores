@@ -1,0 +1,4 @@
+This is a testbench to verify some of the functionalites of the wishbone I2C bridge. In this test there are 2 bridges (slave) and one i2c_master_byte_ctrl (master). An i2c_bus_model is used to connect the master and the slaves. In addition, the main implementation of the test is based on an Finite State Machine which is controlled by a stimuli process at the end of the test. The purpose of this FSM is to control the signals of the master, to implement the I2C protocol (as it is defined together with ELMA SNMP Specification).
+
+The OSVVM methodology is used in this test in order to have fsm coverage. Since the input signals are not randomized, it is not expected to reach the *ERR* state which means that there is an error. There are some other states that are not covered, like the *WR* and *WR_ACK* and this is happening because it tests the reading process. 
+

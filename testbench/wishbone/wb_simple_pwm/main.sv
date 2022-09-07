@@ -3,7 +3,7 @@
 `include "simdrv_defs.svh"
 `include "if_wb_master.svh"
 
-`include "regs/spwm_regs.vh"
+//`include "regs/spwm_regs.vh" //KB: doesn't exist
 
 module main;
 

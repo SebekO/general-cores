@@ -1,0 +1,5 @@
+Testbench for a simple wishbone spliter. The spliter is basicaly a crossbar with 1 master and 2 slaves. It is using OSVVM methodology with all the  input signals in the stimulus to be get random values in each clock cycle. The simulation time, can be changed in the `stim` process, by changing the value of `NOW`. There is only one test case and actually, test the functionality of this bridge core, through FSM coverage and assertions.
+
+FSM coverage: In the RTL core, there is a simple FSM where it describes the behavior of this crossbar. It goes from IDLE to CONN state and backwards. This testbench, covers all the possible changes of the states and also investigate if there are illigal transitions through the states. The goal is to reach 100% and all states covered at least once. The checking is done in every clock cycle, so when the state remains the some for some clock cycles is also covered.
+
+Self-Checking: Assertions are used in order to verify the functionality of the core. One assertion checks the number of the slaves to be up to 2. The other assertions, verify that there is no mismatch in the values of the slave and master from Testbench and RTL.
