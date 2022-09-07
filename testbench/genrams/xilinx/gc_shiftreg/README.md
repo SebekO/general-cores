@@ -1,0 +1,3 @@
+Testbench for a generic shift register. The methodology that is using is OSVVM with random input signals in every clock cycle. Different test cases can be produced, if the value of the generic `g_size` changed. Here, two test cases are examined when g_size = 64 and 128 bits. 
+
+Test process: In every clock cycle, random values are given to enable, data and address. Then the testbench generates the output. The self-checking process is that there is an assertion used to compare in every clock that the output of the RTL code and the testbench is the same. Another assertion, checks that the value of g_size is bigger than 32 bits and is derivative of 64.

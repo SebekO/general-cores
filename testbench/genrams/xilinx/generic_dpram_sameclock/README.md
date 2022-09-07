@@ -1,0 +1,12 @@
+This is a testbench to test and verify, the behavior of the generic_dpram_sameclock. Since, it depends on the generic values, how the user can use this core, there are 7 different test cases tested. The generic that remain constant are:
+  - `g_data_width`               : 32 bits
+  - `g_size`                     : 32 bits
+  - `g_init_file`                : ""
+  - `g_fail_if_file_not_found`   : true
+
+So, the only generics that change are: 
+  - `g_with_byte_enable`  : true/false
+  - `g_addr_conflict_resolution` : "read_first" / "write_first" / "don't care" / "no_change"
+
+One stimulus exist since there is only one clock domain. OSVVM methodology is being used and randomized seed for the inputs. The testbench receives only random input and later (through assertions) it compares the output of the testbench with the one from RTL depending on the test case that is being tested. Two assertions exist, one for each RAM port. 
+
