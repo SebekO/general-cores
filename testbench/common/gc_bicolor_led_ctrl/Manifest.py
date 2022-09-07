@@ -1,5 +1,6 @@
 action   = "simulation"
-sim_tool = "modelsim"
+sim_tool = "ghdl"
+ghdl_opt = "--std=08 -frelaxed-rules"
 
 target      = "xilinx"
 syn_device  = "xc6slx45t"
@@ -14,5 +15,6 @@ files = [
 modules = {
     "local" :  [
         "../../../",
+        "../../../modules/common"
     ],
 }

@@ -1,74 +1,201 @@
 # SPDX-License-Identifier: CC0-1.0
 #
 # SPDX-FileCopyrightText: 2019 CERN
-
----
 variables:
-  KOJI_TARGET: 'ohwr7'
-  KOJI_DISTTAG: '.el7.cern'
-  DIST_PATH: distribution
-  BUILD_PATH: distribution/rpmbuild
-  SRPM_PATH: distribution/rpmbuild/SRPMS/dkms-${CI_PROJECT_NAME}*src.rpm
-
-
+  GIT_SUBMODULE_STRATEGY: normal
+  GIT_DEPTH: "1"
+  
 stages:
-  - static-analysis
-  - build
-  - srpm
-  - kscratch
-  - kbuild
+    - simulation
 
-reuse:
-  stage: static-analysis
-  image: fsfe/reuse:latest
+vhdl_cores_simulation:
+  tags:
+  - ghdl_ohwrcs8
+  stage: simulation
   script:
-    - reuse lint
-  allow_failure: true
+    - /entrypoint.sh
+    - cd testbench/
+    - make
+#  artifacts:
+#    paths:
 
-build:
-  stage: build
-  script:
-    - yum install -y kernel-devel git
-    - export LINUX=/usr/src/kernels/*/
-    - make -C software
+#wb_i2c_master_simulation:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#    - cd testbench/wishbone/wb_i2c_master
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - cat Makefile
+#    - make
+#    - vsim -c -do run.do
+##  artifacts:
+##    paths:
+##      - hdl/testbench/wishbone/wb_fine_pulse_gen
 
-build-dkms:
-  stage: build
-  script:
-    - yum install -y kernel-devel lua git dkms
-    - export LINUX=/usr/src/kernels/*/
-    - export PREFIX=$(mktemp -d)
-    - make -C software/ -f dkms.mk dkms_install
-    - make -C ${PREFIX}/usr/src/${CI_PROJECT_NAME}*/
 
-build_srpm:
-  stage: srpm
-  script:
-    - yum-builddep -y ${DIST_PATH}/*.spec
-    - export LINUX=/usr/src/kernels/*/
-    - make -C distribution rpmbuild-source
-  artifacts:
-    paths:
-      - ${SRPM_PATH}
-    expire_in: 1 day
+#wb_fine_pulse_gen_simulate:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#    - cd testbench/wishbone/wb_fine_pulse_gen
+#    - git submodule init && git submodule update
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - cat Makefile
+#    - make
+#    - vsim -c -do run.do
+#  artifacts:
+#    paths:
+#      - hdl/testbench/wishbone/wb_fine_pulse_gen
 
-.koji_deps_template: &koji_deps
-  before_script:
-    - yum install -y koji krb5-workstation rpm-build
-    - echo ${OHWR_PASSWORD} | kinit ${OHWR_USER}
+#wb_xilinx_fpga_loader_simulate:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#   - cd testbench/wishbone/wb_xilinx_fpga_loader
+#    - git submodule init && git submodule update
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - make
+#    - vsim -c -do run.do
+#  artifacts:
+#    paths:
+#      - hdl/testbench/wishbone/wb_fine_pulse_gen
 
-kscratch:
-  <<: *koji_deps
-  stage: kscratch
-  script:
-    - koji --config=.koji build --wait --scratch ${KOJI_TARGET} ${SRPM_PATH}
+#wb_uart_simulate:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#    - cd testbench/wishbone/wb_uart
+#    - git submodule init && git submodule update
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - make
+#    - vsim -c -do run.do
+#  artifacts:
+#    paths:
+#      - hdl/testbench/wishbone/wb_fine_pulse_gen
 
-kbuild-ohwr:
-  <<: *koji_deps
-  stage: kbuild
-  only:
-    - /^v[0-9]+\.[0-9]+\.[0-9]+$/
-  except:
-    - branches
-  script:
-    - koji --config=.koji build --wait ${KOJI_TARGET} ${SRPM_PATH}
+
+#wb_gpio_port_simulate:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#    - cd testbench/wishbone/wb_gpio_port
+#    - git submodule init && git submodule update
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - make
+#    - vsim -c -do run.do
+#  artifacts:
+#    paths:
+#      - hdl/testbench/wishbone/
+
+#wb_simple_pwm_simulate:
+#  tags:
+#  - modelsim_10_2a
+#  stage: simulation
+#  script:
+#    - /entrypoint.sh
+#    - source ~/setup_modelsim.sh
+#    - cd testbench/wishbone/wb_simple_pwm
+#    - git submodule init && git submodule update
+#    - cp /opt/compiled_libs_ise14.7/modelsim.ini .
+#    - hdlmake makefile
+#    - make
+#    - vsim -c -do run.do
+##  artifacts:
+##    paths:
+##      - hdl/testbench/wishbone/wb_fine_pulse_gen
+
+
+
+
+
+
+#---
+#variables:
+#  KOJI_TARGET: 'ohwr7'
+#  KOJI_DISTTAG: '.el7.cern'
+#  DIST_PATH: distribution
+#  BUILD_PATH: distribution/rpmbuild
+#  SRPM_PATH: distribution/rpmbuild/SRPMS/dkms-${CI_PROJECT_NAME}*src.rpm
+
+
+#stages:
+#  - static-analysis
+#  - build
+#  - srpm
+#  - kscratch
+#  - kbuild
+
+#reuse:
+#  stage: static-analysis
+#  image: fsfe/reuse:latest
+#  script:
+#    - reuse lint
+#  allow_failure: true
+
+#build:
+#  stage: build
+#  script:
+#    - yum install -y kernel-devel git
+#    - export LINUX=/usr/src/kernels/*/
+#    - make -C software
+
+#build-dkms:
+#  stage: build
+#  script:
+#    - yum install -y kernel-devel lua git dkms
+#    - export LINUX=/usr/src/kernels/*/
+#    - export PREFIX=$(mktemp -d)
+#    - make -C software/ -f dkms.mk dkms_install
+#    - make -C ${PREFIX}/usr/src/${CI_PROJECT_NAME}*/
+
+#build_srpm:
+#  stage: srpm
+#  script:
+#    - yum-builddep -y ${DIST_PATH}/*.spec
+#    - export LINUX=/usr/src/kernels/*/
+#    - make -C distribution rpmbuild-source
+#  artifacts:
+#    paths:
+#      - ${SRPM_PATH}
+#    expire_in: 1 day
+
+#.koji_deps_template: &koji_deps
+#  before_script:
+#    - yum install -y koji krb5-workstation rpm-build
+#    - echo ${OHWR_PASSWORD} | kinit ${OHWR_USER}
+
+#kscratch:
+#  <<: *koji_deps
+#  stage: kscratch
+#  script:
+#    - koji --config=.koji build --wait --scratch ${KOJI_TARGET} ${SRPM_PATH}
+
+#kbuild-ohwr:
+#  <<: *koji_deps
+#  stage: kbuild
+#  only:
+#    - /^v[0-9]+\.[0-9]+\.[0-9]+$/
+#  except:
+#    - branches
+#  script:
+#    - koji --config=.koji build --wait ${KOJI_TARGET} ${SRPM_PATH}
