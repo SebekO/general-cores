@@ -7,7 +7,7 @@
 -- Company    : GSI
 -- Created    : 2011-01-25
 -- Last update: 2013-03-04
--- Platform   : 
+-- Platform   :
 -- Standard   : VHDL'93
 -------------------------------------------------------------------------------
 -- Description: True dual-port synchronous RAM for Altera FPGAs with:
@@ -43,8 +43,8 @@ entity generic_dpram is
     g_with_byte_enable         : boolean := false;
     g_addr_conflict_resolution : string := "dont_care";
     g_init_file                : string := "none";
-    g_dual_clock               : boolean := true;
-    g_fail_if_file_not_found   : boolean := false);
+    g_fail_if_file_not_found   : boolean := true; -- dummy (exists in Xilinx/generic)
+    g_dual_clock               : boolean := true);
   port(
     rst_n_i : in std_logic := '1';      -- synchronous reset, active LO
 
@@ -55,7 +55,7 @@ entity generic_dpram is
     aa_i   : in  std_logic_vector(f_log2_size(g_size)-1 downto 0);
     da_i   : in  std_logic_vector(g_data_width-1 downto 0);
     qa_o   : out std_logic_vector(g_data_width-1 downto 0);
-    
+
     -- Port B
     clkb_i : in  std_logic;
     bweb_i : in  std_logic_vector((g_data_width+7)/8-1 downto 0);
@@ -83,7 +83,7 @@ architecture syn of generic_dpram is
       return "DONT_CARE";
     end if;
   end f_sameport_order;
-  
+
   function f_diffport_order(x : string) return string is
   begin
     if x = "read_first" then
@@ -97,7 +97,7 @@ architecture syn of generic_dpram is
       return "DONT_CARE";
     end if;
   end f_diffport_order;
-  
+
   function f_filename(x : string) return string is
   begin
     if x'length = 0 or x = "none" then
@@ -106,43 +106,43 @@ architecture syn of generic_dpram is
       return x;
     end if;
   end f_filename;
-  
+
   constant c_num_bytes    : integer := (g_data_width+7)/8;
   constant c_addr_width   : integer := f_log2_size(g_size);
   constant sameport_order : string  := f_sameport_order(g_addr_conflict_resolution);
   constant diffport_order : string  := f_diffport_order(g_addr_conflict_resolution);
   constant c_init_file    : string  := f_filename(g_init_file);
-  
+
   signal qa : std_logic_vector(g_data_width-1 downto 0);
   signal qb : std_logic_vector(g_data_width-1 downto 0);
   signal da : std_logic_vector(g_data_width-1 downto 0);
   signal db : std_logic_vector(g_data_width-1 downto 0);
   signal nba : boolean;
   signal nbb : boolean;
-  
+
 begin
 
   assert (g_addr_conflict_resolution /= "write_first" or (g_dual_clock = false and g_with_byte_enable = false))
   report "generic_dpram: write_first is only possible when dual_clock and g_with_byte_enable are false"
   severity failure;
-  
+
   assert (g_addr_conflict_resolution /= "read_first" or g_dual_clock = false)
   report "generic_dpram: read_first is only possible when dual_clock is false"
   severity failure;
-  
+
   assert (g_addr_conflict_resolution /= "write_first")
   report "generic_dpram: write_first requires a bypass MUX"
   severity note;
-  
+
   case_qb_raw : if (g_addr_conflict_resolution /= "write_first") generate
     qa_o <= qa;
     qb_o <= qb;
   end generate;
-  
+
   case_qb_bypass : if (g_addr_conflict_resolution = "write_first") generate
     qa_o <= qa when nba else db;
     qb_o <= qb when nbb else da;
-    
+
     memoize : process(clka_i) is
     begin
       if rising_edge(clka_i) then
@@ -153,7 +153,7 @@ begin
       end if;
     end process;
   end generate;
-  
+
   case_be_dual : if (g_with_byte_enable = true and g_dual_clock = true) generate
     memory : altsyncram
       generic map(
@@ -185,7 +185,7 @@ begin
         data_a    => da_i,
         byteena_a => bwea_i,
         q_a       => qa,
-        
+
         clock1    => clkb_i,
         wren_b    => web_i,
         address_b => ab_i,
@@ -193,7 +193,7 @@ begin
         byteena_b => bweb_i,
         q_b       => qb);
   end generate;
-    
+
   case_be_single : if (g_with_byte_enable = true and g_dual_clock = false) generate
     memory : altsyncram
       generic map(
@@ -225,14 +225,14 @@ begin
         data_a    => da_i,
         byteena_a => bwea_i,
         q_a       => qa,
-        
+
         wren_b    => web_i,
         address_b => ab_i,
         data_b    => db_i,
         byteena_b => bweb_i,
         q_b       => qb);
   end generate;
-    
+
   case_nobe_dual : if (g_with_byte_enable = false and g_dual_clock = true) generate
     memory : altsyncram
       generic map(
@@ -261,14 +261,14 @@ begin
         address_a => aa_i,
         data_a    => da_i,
         q_a       => qa,
-        
+
         clock1    => clkb_i,
         wren_b    => web_i,
         address_b => ab_i,
         data_b    => db_i,
         q_b       => qb);
   end generate;
-    
+
   case_nobe_single : if (g_with_byte_enable = false and g_dual_clock = false) generate
     memory : altsyncram
       generic map(
@@ -297,11 +297,11 @@ begin
         address_a => aa_i,
         data_a    => da_i,
         q_a       => qa,
-        
+
         wren_b    => web_i,
         address_b => ab_i,
         data_b    => db_i,
         q_b       => qb);
   end generate;
-    
+
 end syn;

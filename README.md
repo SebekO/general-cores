@@ -13,12 +13,22 @@ In [modules/common](modules/common) there are general purpose cores:
 * The package [matrix_pkg](modules/common/matrix_pkg.vhd) declares a 2d
   array of std_logic, and some subprograms to handle it.
 
+* Edge detectors are provided by [gc_posedge](modules/common/gc_posedge.vhd),
+  [gc_negedge](modules/common/gc_negedge.vhd), and
+  [gc_edge_detect](modules/common/gc_edge_detect.vhd).
+
 * For clock-domain crossing or asynchronous signal register, use
-  [gc_sync_ffs](modules/common/gc_sync_ffs.vhd).  It also has an edge
-  detector.
+  [gc_sync](modules/common/gc_sync.vhd).  This is the basic synchronizer.
+  If you also need an edge detector, use
+  [gc_sync_ffs](modules/common/gc_sync_ffs.vhd).
   The other synchronizer [gc_sync_register](modules/common/gc_sync_register.vhd)
   is deprecated.  It can synchronize multiple signals at the same time but
   doesn't ensure coherency between these signals.
+
+  The module [gc_sync_edge](modules/common/gc_sync_edge.vhd) provides a
+  synchronizer with an (positive or negative) edge detector.  The signal
+  edge is always detected on the rising edge of the clock.  This module is
+  simpler than the gc_sync_ffs module.
 
   To pass words from one clock domain to another, you can use the module
   [gc_sync_word_wr](modules/common/gc_sync_word_wr.vhd) for writing data,
@@ -33,6 +43,13 @@ In [modules/common](modules/common) there are general purpose cores:
   Module [gc_async_signals_input_stage](modules/common/gc_async_signals_input_stage.vhd)
   contains a complex handling for asynchronous signals (crossing clock
   domains, deglitcher, edge detection, pulse extension...)
+
+  * CDC modules come also with specific timing contraints in [modules/common/xdc](modules/common/xdc).
+    These constraints can be used in Vivado projects (so-called "module-bound" constraints)
+    to automatically derive proper timing constraints for CDC paths in each module.
+    To use it, add specific constraint file to your project and set `SCOPED_TO_REF`
+    property in GUI or your TCL file.  
+    (e.g. add `gc_sync.xdc` if you use `gc_sync.vhd` and set `SCOPED_TO_REF=gc_sync`)
 
 * For reset generation, you can use [gc_reset](modules/common/gc_reset.vhd)
   which generate synchronous resets once all the PLL lock signals are set.
@@ -186,17 +203,31 @@ Directory [modules/wishbone](modules/wishbone) contains modules for wishbone.
   - [wb_vic](modules/wishbone/wb_vic) is the vectored interrupt controller.
   - [wb_ds182x_readout](modules/wishbone/wb_ds182x_readout) is a direct
     interface to the digital thermometer.
+  - [wb_xc7_fw_update](modules/wishbone/wb_xc7_fw_update) is an SPI interface
+    to drive the xc7 bitstream spi flash (using the ht-flash tool).
 
 * There are utilities to handle a wishbone bus:
   - [wb_clock_crossing](modules/wishbone/wb_clock_crossing) handle clock domain
     crossing.
-  - [wb_register](modules/wishbone/wb_register) add a pipeline register.
+  - [wb_register](modules/wishbone/wb_register) adds a pipeline register.
+  - [wb_skidpad2](modules/wishbone/wb_register) adds a pipeline register to
+    a pipelined wishbone bus (in one direction only) without downgrading
+    the throughput.
 
 * There are modules to convert to a different bus
   - [wb_async_bridge](modules/wishbone/wb_async_bridge) is a bridge with the
     AT91SAM9x CPU external bus interface.
   - [wb_axi4lite_bridge](modules/wishbone/wb_axi4lite_bridge) is an axi4lite
     to wishbone bridge
+  - [wb16_to_wb32](modules/wishbone/wb16_to_wb32) is an adapter from a
+    16 data bit wishbone master to a 32 data bit wishbone slave.  It uses
+    an intermediate register.  Refer to the module for how to use it.
+
+* There are modules for axi4 bus
+  - [axi4lite32_axi4full64_bridge](modules/axi/axi4lite32_axi4full64_bridge) is
+    a bridge from axi4full64 to axi4lite32.  It was defined to interface with
+    the Vivado PCI-e bridge and doesn't support all the axi4full features
+    (in particular the burst accesses).
 
 * There a modules to build a bus hierarchy:
   - [wb_bus_fanout](modules/wishbone/wb_bus_fanout) is a simple master to
@@ -210,3 +241,5 @@ Directory [modules/wishbone](modules/wishbone) contains modules for wishbone.
     superseeded by the crossbar.
   - [wb_metadata](modules/wishbone/wb_metadata) is a little helper to
     create metadata for the convention.
+  - [wb_indirect](modules/wishbone/wb_indirect) provides a wishbone
+    master driven by an address and a data registers.

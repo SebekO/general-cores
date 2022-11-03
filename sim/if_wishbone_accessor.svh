@@ -13,7 +13,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
       m_default_xfer_size = 4;
    endfunction // new
 
-   virtual task set_mode(wb_cycle_type_t mode);
+   virtual task automatic set_mode(wb_cycle_type_t mode);
       m_cycle_type  = mode;
    endtask // set_mode
    
@@ -29,18 +29,18 @@ virtual class CWishboneAccessor extends CBusAccessor;
    //                        RANDOM - event occurs randomly with probability (prob)
    // These two can be combined (random events occuring after a certain initial delay)
    // DELAYED events can be repeated (rep_rate parameter)
-   virtual task add_event(wba_sim_event_t evt, wba_sim_behavior_t behv, int dly_start, real prob, int rep_rate);
+   virtual task automatic add_event(wba_sim_event_t evt, wba_sim_behavior_t behv, int dly_start, real prob, int rep_rate);
 
    endtask // add_event
 
 
    // [slave only] gets a cycle from the queue
-   virtual task get(ref wb_cycle_t xfer);
+   virtual task  automatic get(ref wb_cycle_t xfer);
       
    endtask // get
 
    // [master only] executes a cycle and returns its result
-   virtual task put(ref wb_cycle_t xfer);
+   virtual task  automatic put(ref wb_cycle_t xfer);
 
    endtask // put
    
@@ -49,7 +49,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endfunction // idle
    
    // [master only] generic write(s), blocking
-   virtual task writem(uint64_t addr[], uint64_t data[], int size = 4, ref int result = _null);
+   virtual task  automatic writem(uint64_t addr[], uint64_t data[], int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
@@ -66,19 +66,23 @@ virtual class CWishboneAccessor extends CBusAccessor;
         end
 
 //      $display("DS: %d", cycle.data.size());
-      
+
       put(cycle);
+      // wait for the transfer completion notification to avoid getting the result of the wrong transfer
+      // in case multiple threads are calling readm()/writem() in parallel.
+      @cycle.done;
       get(cycle);
       result  = cycle.result;
       
    endtask // write
 
    // [master only] generic read(s), blocking
-   virtual task readm(uint64_t addr[], ref uint64_t data[],input int size = 4, ref int result = _null);
+   virtual task  automatic readm(uint64_t addr[], ref uint64_t data[],input int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
       cycle.ctype  = m_cycle_type;
+
       cycle.rw  = 1'b0;
       
       for(i=0;i < addr.size(); i++)
@@ -90,6 +94,9 @@ virtual class CWishboneAccessor extends CBusAccessor;
         end
 
       put(cycle);
+      // wait for the transfer completion notification to avoid getting the result of the wrong transfer
+      // in case multiple threads are calling readm()/writem() in parallel.
+      @cycle.done;
       get(cycle);
 
       for(i=0;i < addr.size(); i++)
@@ -99,7 +106,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
 
    endtask // readm
 
-   virtual task read(uint64_t addr, ref uint64_t data, input int size = 4, ref int result = _null);
+   virtual task  automatic read(uint64_t addr, ref uint64_t data, input int size = 4, ref int result = _null);
       uint64_t aa[], da[];
       aa     = new[1];
       da     = new[1];
@@ -108,7 +115,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
       data  = da[0];
    endtask
 
-   virtual task write(uint64_t addr, uint64_t data, int size = 4, ref int result = _null);
+   virtual task  automatic write(uint64_t addr, uint64_t data, int size = 4, ref int result = _null);
       uint64_t aa[], da[];
       aa     = new[1];
       da     = new[1];
