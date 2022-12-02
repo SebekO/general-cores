@@ -45,6 +45,8 @@
 //            rather than constants from spi_defines file.
 //      2016-08-24: by Jan Pospisil (j.pospisil@cern.ch)
 //          * added default values for determined start-up state
+//      2022-12-02: by Sebastian Owarzany (sebastian.dawid.owarzany@cern.ch)
+//          * added master out slave in direction selector pin
 //////////////////////////////////////////////////////////////////////
 
 `include "spi_defines.v"
