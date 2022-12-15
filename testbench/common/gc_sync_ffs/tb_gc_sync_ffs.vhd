@@ -7,7 +7,7 @@
 -- unit name:   gc_sync_ffs
 --
 -- description: Testbench that verifies the Synchronizer chain and edge detector.
---   		All the registers in the chain are cleared at reset.
+--      All the registers in the chain are cleared at reset.
 --
 --------------------------------------------------------------------------------
 -- Copyright CERN 2010-2020
@@ -43,7 +43,7 @@ use osvvm.CoveragePkg.all;
 entity tb_gc_sync_ffs is
   generic (
     g_seed      : natural;
-  	g_SYNC_EDGE : string := "positive");
+    g_SYNC_EDGE : string := "positive");
 end entity;
 
 --==============================================================================
@@ -53,31 +53,31 @@ end entity;
 architecture tb of tb_gc_sync_ffs is
 
   -- Constants
-	constant C_CLK_PERIOD : time := 10 ns;
+  constant C_CLK_PERIOD : time := 10 ns;
 
-	--Signals
-	signal tb_clk_i    : std_logic := '1';   -- clock from the destination clock domain
+  --Signals
+  signal tb_clk_i    : std_logic := '1';   -- clock from the destination clock domain
   signal tb_rst_n_i  : std_logic;   -- async reset
   signal tb_data_i   : std_logic := '0';   -- async input
   signal tb_synced_o : std_logic;   -- synchronized output
   signal tb_npulse_o : std_logic;   -- negative edge detect output
   signal tb_ppulse_o : std_logic;  -- positive edge detect output
-	signal stop : boolean;
+  signal stop : boolean;
 
   -- Shared variable used for coverage
-	shared variable cp_rst_i : covPType;
+  shared variable cp_rst_i : covPType;
 
 begin
 
-	--Unit Under Test
-	UUT : entity work.gc_sync_ffs
-	generic map (
+  --Unit Under Test
+  UUT : entity work.gc_sync_ffs
+  generic map (
     g_SYNC_EDGE => g_SYNC_EDGE)
-	port map (
-	  clk_i    => tb_clk_i,
+  port map (
+    clk_i    => tb_clk_i,
     rst_n_i  => tb_rst_n_i,
-	  data_i   => tb_data_i,
-	  synced_o => tb_synced_o,
+    data_i   => tb_data_i,
+    synced_o => tb_synced_o,
     npulse_o => tb_npulse_o,
     ppulse_o => tb_ppulse_o);
 
@@ -93,19 +93,19 @@ begin
     wait;
   end process;
 
-	tb_rst_n_i <= '0', '1' after 2 * C_CLK_PERIOD;
+  tb_rst_n_i <= '0', '1' after 2 * C_CLK_PERIOD;
 
   -- Randomized stimulus
   Stim: process
-		variable data    : RandomPType; 
-		variable ncycles : natural; 
+    variable data    : RandomPType;
+    variable ncycles : natural;
   begin
     data.InitSeed(g_seed);
     report "[STARTING Slave] with seed = " & to_string(g_seed);
     while (NOW < 1 ms)  loop
-			wait until (rising_edge(tb_clk_i));
-			tb_data_i <= data.randSlv(1)(1);
-     	nCycles   := nCycles + 1;
+      wait until (rising_edge(tb_clk_i));
+      tb_data_i <= data.randSlv(1)(1);
+      nCycles   := nCycles + 1;
     end loop;
     report "Number of simulation cycles = " & to_string(nCycles);
     STOP <= TRUE;
@@ -117,42 +117,42 @@ begin
   --                           Assertions - Self Checking                       --
   --------------------------------------------------------------------------------
 
-  -- Assertion to check if the output 
-  -- pulse is synchronized 
-	sync_output : process
-	begin
-		if (g_SYNC_EDGE = "positive") then
-			if (tb_data_i = '1') then
-				wait for 3*C_CLK_PERIOD;
-				assert (tb_synced_o = '1' 
-					and tb_ppulse_o = '1' and tb_npulse_o='0')
-				report "the output is not synchronized"
-				severity failure;
-			end if;
-		elsif (g_SYNC_EDGE = "negative") then
-			if (tb_data_i = '1') then
-				wait for 3 *C_CLK_PERIOD;
-				assert (tb_synced_o = '1' 
-					and tb_ppulse_o = '1' and tb_npulse_o='0')
-				report "the output is not synchronized"
-				severity failure;
-			end if;
-		else
-			assert (g_SYNC_EDGE="positive" or g_SYNC_EDGE="negative")
-			report "Wrong value for g_SYNC_EDGE"
-			severity failure;
-		end if;
-		wait;
-	end process sync_output;
+  -- Assertion to check if the output
+  -- pulse is synchronized
+  sync_output : process
+  begin
+    if (g_SYNC_EDGE = "positive") then
+      if (tb_data_i = '1') then
+        wait for 3*C_CLK_PERIOD;
+        assert (tb_synced_o = '1'
+          and tb_ppulse_o = '1' and tb_npulse_o='0')
+        report "the output is not synchronized"
+        severity failure;
+      end if;
+    elsif (g_SYNC_EDGE = "negative") then
+      if (tb_data_i = '1') then
+        wait for 3 *C_CLK_PERIOD;
+        assert (tb_synced_o = '1'
+          and tb_ppulse_o = '1' and tb_npulse_o='0')
+        report "the output is not synchronized"
+        severity failure;
+      end if;
+    else
+      assert (g_SYNC_EDGE="positive" or g_SYNC_EDGE="negative")
+      report "Wrong value for g_SYNC_EDGE"
+      severity failure;
+    end if;
+    wait;
+  end process sync_output;
 
   --------------------------------------------------------------------------------
   --                                Coverage                                    --
   --------------------------------------------------------------------------------
 
- 	--sets up coverpoint bins
- 	InitCoverage: process 
- 	begin        
-	  cp_rst_i.AddBins("reset has asserted", ONE_BIN);
+  --sets up coverpoint bins
+  InitCoverage: process
+  begin
+    cp_rst_i.AddBins("reset has asserted", ONE_BIN);
     wait;
   end process InitCoverage;
 

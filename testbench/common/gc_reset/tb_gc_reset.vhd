@@ -80,16 +80,16 @@ begin
     rstn_o     => tb_rstn_o);
 
   -- Clock generation
-	clk_proc : process
-	begin
+  clk_proc : process
+  begin
     while not stop loop
       tb_free_clk_i <= '1';
       wait for C_CLK_PERIOD/2;
       tb_free_clk_i <= '0';
       wait for C_CLK_PERIOD/2;
     end loop;
-		wait;
-	end process clk_proc;
+    wait;
+  end process clk_proc;
 
   -- Stimulus
   stim : process
@@ -100,14 +100,14 @@ begin
     report "[STARTING] with seed = " & to_string(g_seed);
     while NOW < 8 ms loop
       wait until (rising_edge(tb_free_clk_i));
-	    tb_locked_i <= data.randSlv(1)(1);
+      tb_locked_i <= data.randSlv(1)(1);
       tb_clks_i   <= data.randSlv(g_clocks);
-	    ncycles     := ncycles + 1;
-	  end loop;
-	  report "Number of simulation cycles = " & to_string(ncycles);
-	  stop <= TRUE;
+      ncycles     := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-	  wait;
+    wait;
   end process stim;
 
   --------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ begin
       end if;
     end process;
     s_rstn_o(i) <= s_sync_chains(i)(0);
-  end generate; 
+  end generate;
 
   --------------------------------------------------------------------------------
   --                              Assertions                                    --
@@ -153,28 +153,28 @@ begin
       assert (tb_rstn_o = s_rstn_o)
         report "Output mimatch" severity failure;
     end if;
-  end process; 
+  end process;
 
   --------------------------------------------------------------------------------
   --                              Coverage                                      --
   --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-	init_coverage : process
-	begin
+  init_coverage : process
+  begin
     cp_master_rstn.AddBins("Master reset asserted", ONE_BIN);
     cp_rstn_o.AddBins("Output reset asserted", ONE_BIN);
-		wait;
-	end process init_coverage;
+    wait;
+  end process init_coverage;
 
   -- sample coverpoints for reset
   sample_rst_n_i : process
-	begin
-		loop
-			wait until (rising_edge(tb_free_clk_i)); 
-			cp_master_rstn.ICover(to_integer(s_master_rstn = '1'));
-		end loop;
-	end process;
+  begin
+    loop
+      wait until (rising_edge(tb_free_clk_i));
+      cp_master_rstn.ICover(to_integer(s_master_rstn = '1'));
+    end loop;
+  end process;
 
   -- sample coverpoints for input data
   sample_rstn_o : process(tb_free_clk_i)
@@ -186,12 +186,12 @@ begin
     end loop;
   end process;
 
-  -- Coverage report 
+  -- Coverage report
   cover_report: process
-	begin
-		wait until stop;
+  begin
+    wait until stop;
     cp_master_rstn.writebin;
     cp_rstn_o.writebin;
-	end process;
+  end process;
 
 end tb;

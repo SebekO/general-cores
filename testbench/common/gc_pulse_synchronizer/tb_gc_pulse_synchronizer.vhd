@@ -6,7 +6,7 @@
 --
 -- unit name:   tb_gc_pulse_synchronizer
 --
--- description: testbench for full feedback pulse synchronizer (works 
+-- description: testbench for full feedback pulse synchronizer (works
 -- independently of the input/output clock domain frequency ratio)
 --
 --------------------------------------------------------------------------------
@@ -43,8 +43,8 @@ architecture tb of tb_gc_pulse_synchronizer is
   constant C_CLK_IN_PERIOD  : time := 10 ns;
   constant C_CLK_OUT_PERIOD : time := 8 ns;
 
-	--signals
-	signal tb_clk_in_i    : std_logic;
+  --signals
+  signal tb_clk_in_i    : std_logic;
   signal tb_rst_n_i     : std_logic;
   signal tb_clk_out_i   : std_logic;
   signal tb_d_ready_o   : std_logic;
@@ -54,25 +54,25 @@ architecture tb of tb_gc_pulse_synchronizer is
   -- Shared variables used for coverage
   shared variable cp_rst_in_i  : covPType;
   shared variable cp_data_i    : covPType;
-  shared variable cp_data_o    : covPType; 
+  shared variable cp_data_o    : covPType;
 
-	signal stop : boolean := FALSE;
+  signal stop : boolean := FALSE;
 
 begin
 
   -- Unit Under Test
   UUT : entity work.gc_pulse_synchronizer
-	port map (
-		clk_in_i    => tb_clk_in_i,
+  port map (
+    clk_in_i    => tb_clk_in_i,
     rst_n_i     => tb_rst_n_i,
     clk_out_i   => tb_clk_out_i,
     d_ready_o   => tb_d_ready_o,
     d_p_i       => tb_d_p_i,
     q_p_o       => tb_q_p_o);
-    
+
   --clocks generation
-	clk_in_gen : process
-	begin
+  clk_in_gen : process
+  begin
     while not stop loop
       tb_clk_in_i <= '1';
       wait for C_CLK_IN_PERIOD/2;
@@ -80,10 +80,10 @@ begin
       wait for C_CLK_IN_PERIOD/2;
     end loop;
     wait;
-	end process;
+  end process;
 
-	clk_out_gen : process
-	begin
+  clk_out_gen : process
+  begin
     while not stop loop
       tb_clk_out_i <= '1';
       wait for C_CLK_OUT_PERIOD/2;
@@ -91,7 +91,7 @@ begin
       wait for C_CLK_OUT_PERIOD/2;
     end loop;
     wait;
-	end process;
+  end process;
 
   -- Reset generation
   tb_rst_n_i  <= '0', '1' after 2*C_CLK_IN_PERIOD;
@@ -115,11 +115,11 @@ begin
   end process;
 
   --------------------------------------------------------------------------------
-  --                            Assertions                                      -- 
+  --                            Assertions                                      --
   --------------------------------------------------------------------------------
 
   -- Self-Checking : after the de-assertion of ready_o, in the next rising edge
-  -- of clock we expect the output to be HIGH 
+  -- of clock we expect the output to be HIGH
   valid_out_data : process
   begin
     while not stop loop
@@ -138,23 +138,23 @@ begin
   --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-	init_coverage : process
-	begin
-		cp_rst_in_i.AddBins("reset in has been asserted", ONE_BIN);
+  init_coverage : process
+  begin
+    cp_rst_in_i.AddBins("reset in has been asserted", ONE_BIN);
     cp_data_i.AddBins("new HIGH data arrived", ONE_BIN);
     cp_data_o.AddBins("output pulse for HIGH input", ONE_BIN);
-		wait;
-	end process init_coverage;
+    wait;
+  end process init_coverage;
 
   -- Sample the coverpoints
-	sample_rst_i : process
-	begin
-		loop
-			wait on tb_rst_n_i;
-			wait for C_CLK_IN_PERIOD;
-			cp_rst_in_i.ICover(to_integer(tb_rst_n_i = '1'));
-		end loop;
-	end process sample_rst_i;
+  sample_rst_i : process
+  begin
+    loop
+      wait on tb_rst_n_i;
+      wait for C_CLK_IN_PERIOD;
+      cp_rst_in_i.ICover(to_integer(tb_rst_n_i = '1'));
+    end loop;
+  end process sample_rst_i;
 
   sample_data_i : process
   begin
@@ -174,13 +174,13 @@ begin
     end loop;
   end process;
 
-	cover_report: process
-	begin
-		wait until stop;
-		cp_rst_in_i.writebin;
+  cover_report: process
+  begin
+    wait until stop;
+    cp_rst_in_i.writebin;
     cp_data_i.writebin;
     cp_data_o.writebin;
-	end process; 
+  end process;
 
 end tb;
 

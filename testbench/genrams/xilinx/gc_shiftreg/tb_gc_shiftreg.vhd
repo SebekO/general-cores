@@ -43,7 +43,7 @@ use osvvm.CoveragePkg.all;
 --                   Entity declaration for tb_gc_shiftreg                   --
 --=============================================================================
 
-entity tb_gc_shiftreg is 
+entity tb_gc_shiftreg is
     generic (
         g_seed : natural;
         g_size : integer);
@@ -83,15 +83,15 @@ begin
 
   -- Clock process
   clk_proc : process
-	begin
-		while not stop loop
-			tb_clk_i <= '1';
-			wait for C_CLK_PERIOD/2;
-			tb_clk_i <= '0';
-			wait for C_CLK_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_proc;
+  begin
+    while not stop loop
+      tb_clk_i <= '1';
+      wait for C_CLK_PERIOD/2;
+      tb_clk_i <= '0';
+      wait for C_CLK_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_proc;
 
   --------------------------------------------------------------------------------
   --                                Stimulus                                    --
@@ -119,10 +119,10 @@ begin
   --------------------------------------------------------------------------------
   --                              Assertions                                    --
   --------------------------------------------------------------------------------
- 
+
   -- Geneerate the output data of the testbench
   g_size_big : if (g_size > 32) generate
-        
+
     process
     begin
       while not stop loop
@@ -133,15 +133,15 @@ begin
       end loop;
       wait;
     end process;
-        
+
     s_q_o <= s_dat_o(to_integer(unsigned(tb_a_i)));
 
   end generate;
-    
+
   --------------------------------------------------------------------------------
   --                              Assertions                                    --
   --------------------------------------------------------------------------------
-    
+
   -- Assure that size is derivative of 64
   assert (g_size >32 AND (g_size mod 64) = 0)
     report "Wrong size" severity failure;

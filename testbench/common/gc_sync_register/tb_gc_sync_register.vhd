@@ -42,9 +42,9 @@ use osvvm.CoveragePkg.all;
 --=============================================================================
 
 entity tb_gc_sync_register is
-	generic (
+  generic (
     g_seed  : natural;
-		g_WIDTH : integer := 8);
+    g_WIDTH : integer := 8);
 end entity;
 
 --==============================================================================
@@ -54,59 +54,59 @@ end entity;
 architecture tb of tb_gc_sync_register is
 
   -- Constants
-	constant C_CLK_PERIOD : time := 10 ns;
-	
+  constant C_CLK_PERIOD : time := 10 ns;
+
   -- Signals
-	signal tb_clk_i 	  : std_logic;
-	signal tb_rst_n_a_i : std_logic;
-	signal tb_d_i		    : std_logic_vector(g_WIDTH-1 downto 0) := (others=>'0');
-	signal tb_q_o		    : std_logic_vector(g_WIDTH-1 downto 0);
+  signal tb_clk_i     : std_logic;
+  signal tb_rst_n_a_i : std_logic;
+  signal tb_d_i       : std_logic_vector(g_WIDTH-1 downto 0) := (others=>'0');
+  signal tb_q_o       : std_logic_vector(g_WIDTH-1 downto 0);
   signal s_data_o     : std_logic_vector(g_WIDTH-1 downto 0) := (others=>'0');
   signal s_data_0     : std_logic_vector(g_WIDTH-1 downto 0) := (others=>'0');
-	signal stop         : boolean;
+  signal stop         : boolean;
 
 begin
-	
-	-- Unit Under Test
-	UUT : entity work.gc_sync_register
-	generic map (
-		g_WIDTH => g_WIDTH)
-	port map (
-		clk_i 	  => tb_clk_i,
-		rst_n_a_i => tb_rst_n_a_i,
-		d_i 	  => tb_d_i,
-		q_o 	  => tb_q_o);
 
-	clk_i : process
-	begin
-		while stop = FALSE loop
-			tb_clk_i <= '1';
-			wait for C_CLK_PERIOD/2;
-			tb_clk_i <= '0';
-			wait for C_CLK_PERIOD/2;
-		end loop;
-		wait;
-	end process;
+  -- Unit Under Test
+  UUT : entity work.gc_sync_register
+  generic map (
+    g_WIDTH => g_WIDTH)
+  port map (
+    clk_i     => tb_clk_i,
+    rst_n_a_i => tb_rst_n_a_i,
+    d_i     => tb_d_i,
+    q_o     => tb_q_o);
 
-	tb_rst_n_a_i <= '0', '1' after 2 * C_CLK_PERIOD;
+  clk_i : process
+  begin
+    while stop = FALSE loop
+      tb_clk_i <= '1';
+      wait for C_CLK_PERIOD/2;
+      tb_clk_i <= '0';
+      wait for C_CLK_PERIOD/2;
+    end loop;
+    wait;
+  end process;
+
+  tb_rst_n_a_i <= '0', '1' after 2 * C_CLK_PERIOD;
 
   --Stimulus
-	stim : process
-		variable ncycles : natural;
-		variable data    : RandomPType;
-	begin
+  stim : process
+    variable ncycles : natural;
+    variable data    : RandomPType;
+  begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
-		while (NOW < 1 ms) loop
-			wait until (rising_edge(tb_clk_i));
-			tb_d_i  <= data.randSlv(g_WIDTH);
-			ncycles := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
+    while (NOW < 1 ms) loop
+      wait until (rising_edge(tb_clk_i));
+      tb_d_i  <= data.randSlv(g_WIDTH);
+      ncycles := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
     report "Test PASS!";
-		stop <= TRUE;
-		wait;
-	end process stim;
+    stop <= TRUE;
+    wait;
+  end process stim;
 
   --------------------------------------------------------------------------------
   --                           Assertions - Self Checking                       --

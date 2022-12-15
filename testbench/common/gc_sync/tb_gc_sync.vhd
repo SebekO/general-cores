@@ -37,36 +37,36 @@ use osvvm.CoveragePkg.all;
 entity tb_gc_sync is
   generic (
     g_seed      : natural;
-	  g_SYNC_EDGE : string := "positive");
+    g_SYNC_EDGE : string := "positive");
 end entity;
 
 
 architecture tb of tb_gc_sync is
-	
-	-- Constants
-	constant C_CLK_PERIOD : time := 10 ns;
 
-	-- Signals
-	signal tb_clk_i : std_logic;
-	signal tb_rst_i : std_logic;
-	signal tb_d_i   : std_logic := '0';
-	signal tb_q_o   : std_logic;
+  -- Constants
+  constant C_CLK_PERIOD : time := 10 ns;
+
+  -- Signals
+  signal tb_clk_i : std_logic;
+  signal tb_rst_i : std_logic;
+  signal tb_d_i   : std_logic := '0';
+  signal tb_q_o   : std_logic;
   signal stop     : boolean;
 
   -- Shared variables, used for coverage
-  shared variable cp_rst_i : covPType;    
-     
+  shared variable cp_rst_i : covPType;
+
 begin
-	
+
   --Unit Under Test
-	UUT : entity work.gc_sync
-	generic map (
-		g_SYNC_EDGE => g_SYNC_EDGE)
-	port map (
-  	clk_i     => tb_clk_i,
-		rst_n_a_i => tb_rst_i,
-		d_i 	  => tb_d_i,
-		q_o 	  =>  tb_q_o);
+  UUT : entity work.gc_sync
+  generic map (
+    g_SYNC_EDGE => g_SYNC_EDGE)
+  port map (
+    clk_i     => tb_clk_i,
+    rst_n_a_i => tb_rst_i,
+    d_i     => tb_d_i,
+    q_o     =>  tb_q_o);
 
    --Clock generation
   clk_i_process : process
@@ -79,8 +79,8 @@ begin
     end loop;
     wait;
   end process;
-  
-  -- Reset generation  
+
+  -- Reset generation
   tb_rst_i <= '0', '1' after 2*C_CLK_PERIOD;
 
    -- Randomized stimulus
@@ -117,7 +117,7 @@ begin
        else
          wait for 2*C_CLK_PERIOD;
          assert (tb_q_o = '0')
-           report "output not de-asserted after two clocks" severity failure; 
+           report "output not de-asserted after two clocks" severity failure;
        end if;
      end if;
      wait;
@@ -128,8 +128,8 @@ begin
    -------------------------------------------------------------------------------
 
    --sets up coverpoint bins
-   InitCoverage: process 
-   begin        
+   InitCoverage: process
+   begin
      cp_rst_i.AddBins("reset has asserted", ONE_BIN);
      wait;
    end process InitCoverage;

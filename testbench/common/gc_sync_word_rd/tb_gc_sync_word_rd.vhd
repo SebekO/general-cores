@@ -52,7 +52,7 @@ use osvvm.CoveragePkg.all;
 entity tb_gc_sync_word_rd is
   generic (
     g_seed  : natural;
-  	g_WIDTH : positive := 8);
+    g_WIDTH : positive := 8);
 end entity;
 
 --==============================================================================
@@ -82,32 +82,32 @@ architecture tb of tb_gc_sync_word_rd is
   shared variable cp_rst_out_i : covPType;
 
 begin
-   
+
   --Unit Under Test
   UUT : entity work.gc_sync_word_rd
   generic map (
     g_WIDTH => g_WIDTH)
   port map (
-   	clk_out_i   => tb_clk_out_i,
-	  rst_out_n_i => tb_rst_out_n_i,
-	  clk_in_i    => tb_clk_in_i,
-	  rst_in_n_i  => tb_rst_in_n_i,
-	  data_in_i   => tb_data_in_i,
-	  rd_out_i    => tb_rd_out_i,
-	  ack_out_o   => tb_ack_out_o,
-	  data_out_o  => tb_data_out_o,
-	  rd_in_o     => tb_rd_in_o);
+    clk_out_i   => tb_clk_out_i,
+    rst_out_n_i => tb_rst_out_n_i,
+    clk_in_i    => tb_clk_in_i,
+    rst_in_n_i  => tb_rst_in_n_i,
+    data_in_i   => tb_data_in_i,
+    rd_out_i    => tb_rd_out_i,
+    ack_out_o   => tb_ack_out_o,
+    data_out_o  => tb_data_out_o,
+    rd_in_o     => tb_rd_in_o);
 
   -- Input clock/reset generation
   clk_in : process
   begin
-	  while not stop loop
-	    tb_clk_in_i <= '0';
-	    wait for C_CLK_IN_PERIOD/2;
-	    tb_clk_in_i <= '1';
-	    wait for C_CLK_OUT_PERIOD/2;
-	  end loop;
-	wait;
+    while not stop loop
+      tb_clk_in_i <= '0';
+      wait for C_CLK_IN_PERIOD/2;
+      tb_clk_in_i <= '1';
+      wait for C_CLK_OUT_PERIOD/2;
+    end loop;
+  wait;
   end process clk_in;
 
   tb_rst_in_n_i <= '0', '1' after 2 * C_CLK_IN_PERIOD;
@@ -115,47 +115,47 @@ begin
   -- Output clock/reset
   clk_out : process
   begin
-	  while stop = FALSE loop
-	    tb_clk_out_i <= '0';
-	    wait for C_CLK_OUT_PERIOD/2;
-	    tb_clk_out_i <= '1';
-	    wait for C_CLK_OUT_PERIOD/2;
-	  end loop;
-	wait;
+    while stop = FALSE loop
+      tb_clk_out_i <= '0';
+      wait for C_CLK_OUT_PERIOD/2;
+      tb_clk_out_i <= '1';
+      wait for C_CLK_OUT_PERIOD/2;
+    end loop;
+  wait;
   end process clk_out;
 
   tb_rst_out_n_i <= '0', '1' after 2 * C_CLK_OUT_PERIOD;
 
   -- Randomized stimulus
   stim : process
-	  variable data    : RandomPType;
-	  variable ncycles : natural;
+    variable data    : RandomPType;
+    variable ncycles : natural;
   begin
     data.InitSeed(g_seed);
     report "[STARTING Slave] with seed = " & to_string(g_seed);
     while (NOW < 1 ms) loop
-	    wait until (rising_edge(tb_clk_in_i) and tb_rst_in_n_i='1');
+      wait until (rising_edge(tb_clk_in_i) and tb_rst_in_n_i='1');
         if (tb_rd_in_o='1') then
-	        tb_rd_out_i <= '1';
+          tb_rd_out_i <= '1';
         else
           tb_rd_out_i <= '0';
         end if;
-	      if (tb_rd_out_i = '1' and tb_clk_in_i = '1') then
-	        tb_data_in_i <= data.randSlv(g_WIDTH);
+        if (tb_rd_out_i = '1' and tb_clk_in_i = '1') then
+          tb_data_in_i <= data.randSlv(g_WIDTH);
         end if;
-	      ncycles := ncycles + 1;
-	    end loop;
-	    report "Number of simulation cycles = " & to_string(ncycles);
+        ncycles := ncycles + 1;
+      end loop;
+      report "Number of simulation cycles = " & to_string(ncycles);
       report "Test PASS!";
-	    stop <= TRUE;
-	    wait;
+      stop <= TRUE;
+      wait;
     end process stim;
 
   --------------------------------------------------------------------------------
   --                           Assertions - Self Checking                       --
   --------------------------------------------------------------------------------
 
-	--Assertions   
+  --Assertions
   self_check : process
   begin
     while not stop loop
@@ -171,10 +171,10 @@ begin
   --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-  InitCoverage: process 
-  begin        
+  InitCoverage: process
+  begin
     cp_rst_in_i.AddBins("input reset has been asserted", ONE_BIN);
-	  cp_rst_out_i.AddBins("output reset has been asserted", ONE_BIN);
+    cp_rst_out_i.AddBins("output reset has been asserted", ONE_BIN);
     wait;
   end process InitCoverage;
 
@@ -190,15 +190,15 @@ begin
   begin
     loop
       wait on tb_rst_out_n_i;
-	    cp_rst_out_i.ICover (to_integer(tb_rst_out_n_i = '1'));
+      cp_rst_out_i.ICover (to_integer(tb_rst_out_n_i = '1'));
     end loop;
   end process;
 
   CoverReport: process
   begin
     wait until STOP;
-  	cp_rst_in_i.writebin;
-	  cp_rst_out_i.writebin;
+    cp_rst_in_i.writebin;
+    cp_rst_out_i.writebin;
   end process;
 
 end tb;

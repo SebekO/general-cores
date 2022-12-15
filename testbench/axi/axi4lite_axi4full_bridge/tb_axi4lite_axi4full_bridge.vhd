@@ -39,7 +39,7 @@ use osvvm.CoveragePkg.all;
 --                Entity declaration for tb_axi4lite_axi4full_bridge         --
 --=============================================================================
 
-entity tb_axi4lite_axi4full_bridge is 
+entity tb_axi4lite_axi4full_bridge is
   generic (
     g_seed       : natural;
     g_ADDR_WIDTH : natural := 32;
@@ -178,7 +178,7 @@ architecture tb of tb_axi4lite_axi4full_bridge is
                       GenBin(t_wr_state'pos(prev)),
                       GenBin(t_wr_state'pos(curr)));
   end procedure;
-  
+
   -- legal states for Read FSM
   procedure fsm_covadd_states_rd (
     name  : in string;
@@ -214,7 +214,7 @@ architecture tb of tb_axi4lite_axi4full_bridge is
       covdb.ICover((t_wr_state'pos(v_state), t_wr_state'pos(state)));
     end loop;
   end procedure;
-  
+
   -- bin collection for Read FSM
   procedure fsm_covcollect_rd (
     signal reset : in std_logic;
@@ -418,7 +418,7 @@ begin
   -- de-asserted when reset is low.
   process (tb_clk_i)
   begin
-    if rising_edge(tb_clk_i) then 
+    if rising_edge(tb_clk_i) then
       if tb_rst_n_i = '0' then
         tb_m_awready <= '0';
       else
@@ -436,18 +436,18 @@ begin
 
   -- WREADY generation
   -- wready is asserted for one clock cycle when both
-  -- awvalid and wvalid are asserted. wready is 
-  -- de-asserted when reset is low. 
+  -- awvalid and wvalid are asserted. wready is
+  -- de-asserted when reset is low.
   process (tb_clk_i)
   begin
-    if rising_edge(tb_clk_i) then 
+    if rising_edge(tb_clk_i) then
       if tb_rst_n_i = '0' then
         tb_m_wready <= '0';
       else
         if tb_m_wready = '0' and tb_m_wvalid = '1' and tb_m_awvalid = '1' then
-          -- slave is ready to accept write data when 
+          -- slave is ready to accept write data when
           -- there is a valid write address and write data
-          -- on the write address and data bus. 
+          -- on the write address and data bus.
           tb_m_wready <= '1';
         else
           tb_m_wready <= '0';
@@ -458,40 +458,40 @@ begin
 
   -- RVALID generation
   process (tb_clk_i)
-	begin
-	  if rising_edge(tb_clk_i) then
-	    if tb_rst_n_i = '0' then
-	      tb_m_rvalid <= '0';
-	      tb_m_rresp  <= "00";
-	    else
-	      if tb_m_arready = '1' and tb_m_arvalid = '1' and tb_m_rvalid = '0' then
-	        -- Valid read data is available at the read data bus
-	        tb_m_rvalid <= '1';
-	        tb_m_rresp  <= "00"; -- 'OKAY' response
-	      elsif tb_m_rvalid = '1' and tb_m_rready = '1' then
-	        tb_m_rvalid <= '0';
+  begin
+    if rising_edge(tb_clk_i) then
+      if tb_rst_n_i = '0' then
+        tb_m_rvalid <= '0';
+        tb_m_rresp  <= "00";
+      else
+        if tb_m_arready = '1' and tb_m_arvalid = '1' and tb_m_rvalid = '0' then
+          -- Valid read data is available at the read data bus
+          tb_m_rvalid <= '1';
+          tb_m_rresp  <= "00"; -- 'OKAY' response
+        elsif tb_m_rvalid = '1' and tb_m_rready = '1' then
+          tb_m_rvalid <= '0';
           tb_m_rresp  <= (others=>'X');
-	      end if;
-	    end if;
-	  end if;
-	end process;
+        end if;
+      end if;
+    end if;
+  end process;
 
-	-- ARREADY generation
+  -- ARREADY generation
   process (tb_clk_i)
-	begin
-	  if rising_edge(tb_clk_i) then 
-	    if tb_rst_n_i = '0' then
-	      tb_m_arready <= '0';
-	    else
-	      if tb_m_arready = '0' and tb_m_arvalid = '1' then
-	        -- indicates that the slave has acceped the valid read address
-	        tb_m_arready <= '1';
-	      else
-	        tb_m_arready <= '0';
-	      end if;
-	    end if;
-	  end if;                   
-	end process;
+  begin
+    if rising_edge(tb_clk_i) then
+      if tb_rst_n_i = '0' then
+        tb_m_arready <= '0';
+      else
+        if tb_m_arready = '0' and tb_m_arvalid = '1' then
+          -- indicates that the slave has acceped the valid read address
+          tb_m_arready <= '1';
+        else
+          tb_m_arready <= '0';
+        end if;
+      end if;
+    end if;
+  end process;
 
   --==============================================================================
   --                              Coverage                                      --
@@ -591,7 +591,7 @@ begin
     end if;
   end process p_wr_fsm;
 
-  -- Legal, illegal states and coverage 
+  -- Legal, illegal states and coverage
   -- report for write side FSM
   process
   begin
@@ -613,10 +613,10 @@ begin
     fsm_covadd_illegal("ILLEGAL",sv_cover_wr);
     wait;
   end process;
-    
+
   -- collect the cov bins
   fsm_covcollect_wr(tb_rst_n_i, tb_clk_i, s_wstate, sv_cover_wr);
- 
+
   -- coverage report
   cov_report_wr : process
   begin
@@ -711,7 +711,7 @@ begin
     fsm_covadd_illegal("ILLEGAL",sv_cover_rd);
     wait;
   end process;
-  
+
   -- collect the cov bins
   fsm_covcollect_rd(tb_rst_n_i, tb_clk_i, s_rstate, sv_cover_rd);
 
@@ -739,7 +739,7 @@ begin
       report "SLAVE: Wrong WREADY for WVALID LOW" severity failure;
     end if;
     if falling_edge(tb_s_bready) then
-      assert (tb_s_bvalid = '0') 
+      assert (tb_s_bvalid = '0')
       report "SLAVE: Wrong BVALID for BREADY LOW" severity failure;
     end if;
     if falling_edge(tb_s_arvalid) then
@@ -761,7 +761,7 @@ begin
       report "MASTER: Wrong AWVALID for AWREADY LOW" severity failure;
     end if;
     if falling_edge(tb_m_wready) then
-      assert (tb_m_wvalid = '0') 
+      assert (tb_m_wvalid = '0')
       report "MASTER: Wrong WVALID for WREADY LOW" severity failure;
     end if;
     if falling_edge(tb_m_bvalid) then

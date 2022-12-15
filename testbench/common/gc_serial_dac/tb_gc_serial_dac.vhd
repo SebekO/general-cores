@@ -6,13 +6,13 @@
 -- Author     : Konstantinos Blantos
 -- Company    : CERN BE-CEM-EDL
 -- Created    : 2021-12-17
--- Last update: 
+-- Last update:
 -- Platform   : FPGA-generic
 -- Standard   : VHDL 2008
 -------------------------------------------------------------------------------
--- Description: Testbench for the DAC unit provides an interface to a 16 bit 
--- serial Digital to Analogue converter (MAX5441, AD5662, SPI/QSPI/MICROWIRE 
--- compatible) 
+-- Description: Testbench for the DAC unit provides an interface to a 16 bit
+-- serial Digital to Analogue converter (MAX5441, AD5662, SPI/QSPI/MICROWIRE
+-- compatible)
 -------------------------------------------------------------------------------
 --
 -- Copyright (c) 2009 - 2010 CERN
@@ -42,7 +42,7 @@ use osvvm.CoveragePkg.all;
 entity tb_gc_serial_dac is
   generic (
     g_seed : natural;
-    g_num_data_bits  : integer := 2; 
+    g_num_data_bits  : integer := 2;
     g_num_extra_bits : integer := 0;
     g_num_cs_select  : integer := 1;
     g_sclk_polarity  : integer := 0);
@@ -65,7 +65,7 @@ architecture tb of tb_gc_serial_dac is
   signal tb_dac_sdata_o   : std_logic;
   signal tb_busy_o        : std_logic;
   signal stop : boolean;
-  signal s_data_o : std_logic_vector(g_num_data_bits+g_num_extra_bits-1 downto 0); 
+  signal s_data_o : std_logic_vector(g_num_data_bits+g_num_extra_bits-1 downto 0);
   signal s_divider   : unsigned(11 downto 0);
   signal s_div_muxed : std_logic;
   signal s_bit_cnt   : std_logic_vector(g_num_data_bits+g_num_extra_bits+1 downto 0);
@@ -98,16 +98,16 @@ begin
     busy_o         => tb_busy_o);
 
   -- Clock generation
-	clk_proc : process
-	begin
+  clk_proc : process
+  begin
     while not stop loop
-			tb_clk_i <= '1';
-			wait for C_CLK_PERIOD/2;
-			tb_clk_i <= '0';
-			wait for C_CLK_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_proc;
+      tb_clk_i <= '1';
+      wait for C_CLK_PERIOD/2;
+      tb_clk_i <= '0';
+      wait for C_CLK_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_proc;
 
   -- Reset generation
   tb_rst_n_i <= '0', '1' after 2*C_CLK_PERIOD;
@@ -115,21 +115,21 @@ begin
   -- Stimulus
   stim : process
     variable data : RandomPType;
-	  variable ncycles : natural;
+    variable ncycles : natural;
   begin
     while NOW < 4 ms loop
       -- when we are not busy, we sent data
       wait until (rising_edge(tb_clk_i) and tb_busy_o = '0');
-	    tb_value_i       <= data.randSlv(g_num_data_bits);
+      tb_value_i       <= data.randSlv(g_num_data_bits);
       tb_load_i        <= data.randSlv(1)(1);
       tb_cs_sel_i      <= data.randSlv(g_num_cs_select);
       tb_sclk_divsel_i <= data.randSlv(3);
-	    ncycles          := ncycles + 1;
-	  end loop;
-	  report "Number of simulation cycles = " & to_string(ncycles);
-	  stop <= TRUE;
+      ncycles          := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-	  wait;
+    wait;
   end process stim;
 
   --------------------------------------------------------------------------------
@@ -139,9 +139,9 @@ begin
   divider_sel : process (s_divider, tb_sclk_divsel_i)
   begin  -- process
     case tb_sclk_divsel_i is
-      when "000"  => s_div_muxed <= s_divider(1);  
-      when "001"  => s_div_muxed <= s_divider(2); 
-      when "010"  => s_div_muxed <= s_divider(3); 
+      when "000"  => s_div_muxed <= s_divider(1);
+      when "001"  => s_div_muxed <= s_divider(2);
+      when "010"  => s_div_muxed <= s_divider(3);
       when "011"  => s_div_muxed <= s_divider(4);
       when "100"  => s_div_muxed <= s_divider(5);
       when "101"  => s_div_muxed <= s_divider(6);
@@ -197,10 +197,10 @@ begin
       end if;
     end if;
   end process;
-    
+
   data_out : process(tb_clk_i)
   begin
-    if rising_edge(tb_clk_i) then 
+    if rising_edge(tb_clk_i) then
       if tb_rst_n_i = '0' then
         s_data_o <= (others=>'0');
       else

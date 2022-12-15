@@ -44,14 +44,14 @@ architecture tb of tb_gc_posedge is
 
   -- Constants
   constant C_CLK_PERIOD : time := 10 ns;
-   
-  -- Signals 
+
+  -- Signals
   signal tb_clk_i   : std_logic;
   signal tb_rst_n_i : std_logic;
   signal tb_data_i  : std_logic := '0';
   signal tb_pulse_o : std_logic;
   signal stop       : boolean;
-  
+
   -- Variables used for coverage
   shared variable cp_rst_i  : covPType;
   shared variable cp_data_i : covPType;
@@ -71,43 +71,43 @@ begin
     pulse_o => tb_pulse_o);
 
   -- Clock generation
-	clk_proc : process
-	begin
+  clk_proc : process
+  begin
     while STOP = FALSE loop
-		  tb_clk_i <= '1';
+      tb_clk_i <= '1';
       wait for C_CLK_PERIOD/2;
       tb_clk_i <= '0';
       wait for C_CLK_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_proc;
+    end loop;
+    wait;
+  end process clk_proc;
 
   -- Reset generation
-	tb_rst_n_i <= '0', '1' after 4*C_CLK_PERIOD;
+  tb_rst_n_i <= '0', '1' after 4*C_CLK_PERIOD;
 
   -- Stimulus
-	stim : process
+  stim : process
     variable ncycles : natural;
     variable data    : RandomPType;
-	begin
+  begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
     wait until tb_rst_n_i='1';
-		while NOW < 2 ms loop
+    while NOW < 2 ms loop
       wait until rising_edge(tb_clk_i);
       tb_data_i <= data.randSlv(1)(1);
-			ncycles   := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
-		stop <= TRUE;
+      ncycles   := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-		wait;
-	end process;
+    wait;
+  end process;
 
   --------------------------------------------------------------------------------
   --                            Assertions                                      --
   --------------------------------------------------------------------------------
- 
+
   --Assertion to check that the width of the output pulse
   --is asserted for only one clock cycle
   one_clk_width : process
@@ -124,14 +124,14 @@ begin
     wait;
   end process;
 
-  -- Check that the output pulse is asserted 
+  -- Check that the output pulse is asserted
   -- in the rising edge of the input pulse
   check_edge : process
   begin
     while not stop loop
       wait until rising_edge(tb_data_i);
       wait for 0 ns; --wait for delta time
-      assert (tb_pulse_o = '1') 
+      assert (tb_pulse_o = '1')
         report "Positive edge didn't detect"
         severity failure;
     end loop;
@@ -143,23 +143,23 @@ begin
   --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-	init_coverage : process
-	begin
-		cp_rst_i.AddBins("reset has asserted", ONE_BIN);
+  init_coverage : process
+  begin
+    cp_rst_i.AddBins("reset has asserted", ONE_BIN);
     cp_data_i.AddBins("Input pulse detected", ONE_BIN);
     cp_pulse_o.AddBins("Output pulse detected", ONE_BIN);
-		wait;
-	end process init_coverage;
+    wait;
+  end process init_coverage;
 
   -- sample coverpoints for reset
   sample_rst_n_i : process
-	begin
+  begin
     loop
       wait on tb_rst_n_i;
       wait for C_CLK_PERIOD;
       cp_rst_i.ICover(to_integer(tb_rst_n_i = '1'));
     end loop;
-	end process;
+  end process;
 
   -- sample coverpoints for input data
   sample_data_i : process(tb_clk_i)
@@ -190,13 +190,13 @@ begin
     end process;
   end generate;
 
-  -- Coverage report 
+  -- Coverage report
   cover_report: process
-	begin
-		wait until stop;
-		cp_rst_i.writebin;
+  begin
+    wait until stop;
+    cp_rst_i.writebin;
     cp_data_i.writebin;
     cp_pulse_o.writebin;
-	end process;
+  end process;
 
 end tb;

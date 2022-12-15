@@ -46,8 +46,8 @@ architecture tb of tb_gc_pulse_synchronizer2 is
   constant C_CLK_IN_PERIOD  : time := 5 ns;
   constant C_CLK_OUT_PERIOD : time := 10 ns;
 
-	-- signals
-	signal tb_clk_in_i    : std_logic;
+  -- signals
+  signal tb_clk_in_i    : std_logic;
   signal tb_rst_in_n_i  : std_logic;
   signal tb_clk_out_i   : std_logic;
   signal tb_rst_out_n_i : std_logic;
@@ -55,31 +55,31 @@ architecture tb of tb_gc_pulse_synchronizer2 is
   signal tb_d_ack_p_o   : std_logic;
   signal tb_d_p_i       : std_logic := '0';
   signal tb_q_p_o       : std_logic;
-	signal stop : boolean := FALSE;
+  signal stop : boolean := FALSE;
 
   -- Shared variables used for coverage
-  shared variable cp_rst_in_i  : covPType; 
+  shared variable cp_rst_in_i  : covPType;
   shared variable cp_rst_out_i : covPType;
   shared variable cp_data_i    : covPType;
   shared variable cp_data_o    : covPType;
 
 begin
 
-	-- Unit Under Test
-	UUT : entity work.gc_pulse_synchronizer2
-	port map (
-		clk_in_i    => tb_clk_in_i,
-  	rst_in_n_i  => tb_rst_in_n_i,
-   	clk_out_i   => tb_clk_out_i,
-   	rst_out_n_i => tb_rst_out_n_i,
-   	d_ready_o   => tb_d_ready_o,
-   	d_ack_p_o   => tb_d_ack_p_o,
-   	d_p_i       => tb_d_p_i,
-   	q_p_o       => tb_q_p_o);
+  -- Unit Under Test
+  UUT : entity work.gc_pulse_synchronizer2
+  port map (
+    clk_in_i    => tb_clk_in_i,
+    rst_in_n_i  => tb_rst_in_n_i,
+    clk_out_i   => tb_clk_out_i,
+    rst_out_n_i => tb_rst_out_n_i,
+    d_ready_o   => tb_d_ready_o,
+    d_ack_p_o   => tb_d_ack_p_o,
+    d_p_i       => tb_d_p_i,
+    q_p_o       => tb_q_p_o);
 
-	-- Clocks generation
-	clk_in_gen : process
-	begin
+  -- Clocks generation
+  clk_in_gen : process
+  begin
     while not stop loop
       tb_clk_in_i <= '1';
       wait for C_CLK_IN_PERIOD/2;
@@ -87,10 +87,10 @@ begin
       wait for C_CLK_IN_PERIOD/2;
     end loop;
     wait;
-	end process;
+  end process;
 
-	clk_out_gen : process
-	begin
+  clk_out_gen : process
+  begin
     while not stop loop
       tb_clk_out_i <= '1';
       wait for C_CLK_OUT_PERIOD/2;
@@ -98,11 +98,11 @@ begin
       wait for C_CLK_OUT_PERIOD/2;
     end loop;
     wait;
-	end process;
+  end process;
 
   -- Resets generation
-	tb_rst_in_n_i  <= '0', '1' after 2*C_CLK_IN_PERIOD;
-	tb_rst_out_n_i <= '0', '1' after 2*C_CLK_OUT_PERIOD;
+  tb_rst_in_n_i  <= '0', '1' after 2*C_CLK_IN_PERIOD;
+  tb_rst_out_n_i <= '0', '1' after 2*C_CLK_OUT_PERIOD;
 
 
   -- Stimulus
@@ -127,7 +127,7 @@ begin
   --                              Assertions                                    --
   --------------------------------------------------------------------------------
 
-  -- Self-Checking : after the de-assertion of ready_o, after one clock cycle 
+  -- Self-Checking : after the de-assertion of ready_o, after one clock cycle
   -- (due to g_sync module), we want the output to be like the input pulse
   -- but last for one clock
   valid_out_data : process
@@ -145,36 +145,36 @@ begin
 
   --------------------------------------------------------------------------------
   --                                  Coverage                                  --
-  --------------------------------------------------------------------------------	
+  --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-	init_coverage : process
-	begin
-		cp_rst_in_i.AddBins("reset in has been asserted", ONE_BIN);
+  init_coverage : process
+  begin
+    cp_rst_in_i.AddBins("reset in has been asserted", ONE_BIN);
     cp_rst_out_i.AddBins("reset out has been asserted",ONE_BIN);
     cp_data_i.AddBins("new HIGH data arrives",ONE_BIN);
     cp_data_o.AddBins("output pulse for HIGH input",ONE_BIN);
-		wait;
-	end process init_coverage;
+    wait;
+  end process init_coverage;
 
   -- Sample the coverpoints
-	sample_rst_i : process
-	begin
-		loop
-			wait on tb_rst_in_n_i;
-			wait for C_CLK_IN_PERIOD;
-			cp_rst_in_i.ICover(to_integer(tb_rst_in_n_i = '1'));
-		end loop;
-	end process sample_rst_i;
+  sample_rst_i : process
+  begin
+    loop
+      wait on tb_rst_in_n_i;
+      wait for C_CLK_IN_PERIOD;
+      cp_rst_in_i.ICover(to_integer(tb_rst_in_n_i = '1'));
+    end loop;
+  end process sample_rst_i;
 
-	sample_rst_out : process
-	begin
-		loop
-			wait on tb_rst_out_n_i;
-			wait for C_CLK_OUT_PERIOD;
-			cp_rst_out_i.ICover(to_integer(tb_rst_out_n_i = '1'));
-		end loop;
-	end process sample_rst_out;
+  sample_rst_out : process
+  begin
+    loop
+      wait on tb_rst_out_n_i;
+      wait for C_CLK_OUT_PERIOD;
+      cp_rst_out_i.ICover(to_integer(tb_rst_out_n_i = '1'));
+    end loop;
+  end process sample_rst_out;
 
   sample_data_i : process
   begin
@@ -195,14 +195,14 @@ begin
   end process;
 
   -- coverage reports
-	cover_report: process
-	begin
-		wait until stop;
-		cp_rst_out_i.writebin;
-		cp_rst_in_i.writebin;
+  cover_report: process
+  begin
+    wait until stop;
+    cp_rst_out_i.writebin;
+    cp_rst_in_i.writebin;
     cp_data_i.writebin;
     cp_data_o.writebin;
-	end process; 
+  end process;
 
 
 

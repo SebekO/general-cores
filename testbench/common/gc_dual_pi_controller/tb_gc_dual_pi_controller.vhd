@@ -1,12 +1,12 @@
 -------------------------------------------------------------------------------
 -- Title      : Testbench for a Dual channel PI controller for use in WR PLLs
--- Project    : White Rabbit 
+-- Project    : White Rabbit
 -------------------------------------------------------------------------------
 -- File       : tb_gc_dual_pi_controller.vhd
 -- Author     : Konstantinos Blantos
 -- Company    : CERN BE-CEM-EDL
 -- Created    : 2021-12-21
--- Last update: 
+-- Last update:
 -- Platform   : FPGA-generic
 -- Standard   : VHDL 2008
 -------------------------------------------------------------------------------
@@ -18,20 +18,20 @@
 --
 -- Copyright (c) 2009 - 2010 CERN
 --
--- This source file is free software; you can redistribute it   
--- and/or modify it under the terms of the GNU Lesser General   
--- Public License as published by the Free Software Foundation; 
--- either version 2.1 of the License, or (at your option) any   
--- later version.                                               
+-- This source file is free software; you can redistribute it
+-- and/or modify it under the terms of the GNU Lesser General
+-- Public License as published by the Free Software Foundation;
+-- either version 2.1 of the License, or (at your option) any
+-- later version.
 --
--- This source is distributed in the hope that it will be       
--- useful, but WITHOUT ANY WARRANTY; without even the implied   
--- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR      
--- PURPOSE.  See the GNU Lesser General Public License for more 
--- details.                                                     
+-- This source is distributed in the hope that it will be
+-- useful, but WITHOUT ANY WARRANTY; without even the implied
+-- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+-- PURPOSE.  See the GNU Lesser General Public License for more
+-- details.
 --
--- You should have received a copy of the GNU Lesser General    
--- Public License along with this source; if not, download it   
+-- You should have received a copy of the GNU Lesser General
+-- Public License along with this source; if not, download it
 -- from http://www.gnu.org/licenses/lgpl-2.1.html
 --
 -------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ architecture tb of tb_gc_dual_pi_controller is
   constant C_CLK_SYS_PERIOD : time := 10 ns;
   constant C_OUTPUT_BIAS : signed(g_dacval_bits + g_integrator_fracbits-1 downto 0) := to_signed(g_output_bias, g_dacval_bits) & to_signed(0, g_integrator_fracbits);
 
-  constant C_INTEGRATOR_BITS : integer := g_error_bits + g_integrator_overbits + g_coef_bits;    
+  constant C_INTEGRATOR_BITS : integer := g_error_bits + g_integrator_overbits + g_coef_bits;
   -- signals
   signal tb_clk_sys_i         : std_logic;
   signal tb_rst_n_sysclk_i    : std_logic;
@@ -97,7 +97,7 @@ architecture tb of tb_gc_dual_pi_controller is
 
   signal stop                 : boolean;
   signal s_freq_mode          : std_logic;
-  signal s_dac_val_o          : unsigned(c_INTEGRATOR_BITS-1 downto 0) := (others=>'0'); 
+  signal s_dac_val_o          : unsigned(c_INTEGRATOR_BITS-1 downto 0) := (others=>'0');
   signal s_rounded_val_o      : unsigned(g_dacval_bits-1 downto 0);
   signal s_reg_i              : signed(c_INTEGRATOR_BITS-1 downto 0);
   signal s_sat_hi             : std_logic;
@@ -122,9 +122,9 @@ architecture tb of tb_gc_dual_pi_controller is
       PI_SATURATE,
       PI_ROUND_SUM,
       PI_DISABLED);
-  
+
   signal pi_state : t_dmpll_state;
-    
+
   shared variable sv_cover : covPType;
 
   --------------------------------------------------------------------------------
@@ -143,8 +143,8 @@ architecture tb of tb_gc_dual_pi_controller is
                      GenBin(t_dmpll_state'pos(curr)));
     wait;
   end procedure;
-    
-  -- illegal 
+
+  -- illegal
   procedure fsm_covadd_illegal (
     name  : in string;
     covdb : inout covPType ) is
@@ -186,11 +186,11 @@ begin
     phase_err_i       => tb_phase_err_i,
     phase_err_stb_p_i => tb_phase_err_stb_p_i,
     freq_err_i        => tb_freq_err_i,
-    freq_err_stb_p_i  => tb_freq_err_stb_p_i, 
+    freq_err_stb_p_i  => tb_freq_err_stb_p_i,
     mode_sel_i        => tb_mode_sel_i,
     dac_val_o         => tb_dac_val_o,
     dac_val_stb_p_o   => tb_dac_val_stb_p_o,
-    pll_pcr_enable_i  => tb_pll_pcr_enable_i, 
+    pll_pcr_enable_i  => tb_pll_pcr_enable_i,
     pll_pcr_force_f_i => tb_pll_pcr_force_f_i,
     pll_fbgr_f_kp_i   => tb_pll_fbgr_f_kp_i,
     pll_fbgr_f_ki_i   => tb_pll_fbgr_f_ki_i,
@@ -198,29 +198,29 @@ begin
     pll_pbgr_p_ki_i   => tb_pll_pbgr_p_ki_i);
 
   -- Clock generation
-	clk_sys_proc : process
-	begin
-		while STOP = FALSE loop
-			tb_clk_sys_i <= '1';
-			wait for C_CLK_SYS_PERIOD/2;
-			tb_clk_sys_i <= '0';
-			wait for C_CLK_SYS_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_sys_proc;
+  clk_sys_proc : process
+  begin
+    while STOP = FALSE loop
+      tb_clk_sys_i <= '1';
+      wait for C_CLK_SYS_PERIOD/2;
+      tb_clk_sys_i <= '0';
+      wait for C_CLK_SYS_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_sys_proc;
 
   -- reset generation
   tb_rst_n_sysclk_i <= '0', '1' after 4*C_CLK_SYS_PERIOD;
 
   -- Stimulus
   stim : process
-	    variable ncycles : natural;
+      variable ncycles : natural;
       variable data    : RandomPType;
   begin
     data.InitSeed(g_seed);
     report "[STARTING Slave] with seed = " & to_string(g_seed);
     while NOW < 2 ms loop
-	    wait until (rising_edge(tb_clk_sys_i) and tb_rst_n_sysclk_i = '1');
+      wait until (rising_edge(tb_clk_sys_i) and tb_rst_n_sysclk_i = '1');
       -- general I/O
       tb_pll_pcr_enable_i  <= data.randSlv(1)(1);
       -- frequency mode
@@ -243,19 +243,19 @@ begin
   end process stim;
 
   -- Frequency mode when '1'
-  -- Phase mode when '0'    
+  -- Phase mode when '0'
   tb_mode_sel_i <= '1' when g_mode = 1 else '0';
   tb_pll_pcr_force_f_i <= '1' when g_mode = 1 else '0';
 
   --------------------------------------------------------------------------------
   --                                  Coverage                                  --
   --------------------------------------------------------------------------------
-    
+
   -- FSM
   p_fsm : process(tb_clk_sys_i,tb_rst_n_sysclk_i)
   begin
     if rising_edge(tb_clk_sys_i) then
-      if tb_rst_n_sysclk_i = '0' then 
+      if tb_rst_n_sysclk_i = '0' then
         pi_state <= PI_CHECK_MODE;
         s_freq_mode <= '1';
         s_reg_i <= (others=>'0');
@@ -263,13 +263,13 @@ begin
       else
         case pi_state is
           when PI_DISABLED =>
-                        
+
             if (tb_pll_pcr_enable_i = '1') then
               pi_state <= PI_CHECK_MODE;
             end if;
 
           when PI_CHECK_MODE =>
-                        
+
             if (tb_pll_pcr_force_f_i = '0') then
               s_freq_mode <= tb_mode_sel_i;
             else
@@ -284,10 +284,10 @@ begin
             end if;
 
             when PI_WAIT_SAMPLE =>
-                        
+
               if (s_freq_mode = '1' and tb_freq_err_stb_p_i = '1') then
                 pi_state <= PI_MUL_KI;
-                mula <= signed(tb_freq_err_i); 
+                mula <= signed(tb_freq_err_i);
                 mulb <= signed(tb_pll_fbgr_f_ki_i);
               elsif (s_freq_mode = '0' and tb_phase_err_stb_p_i = '1') then
                 pi_state <= PI_MUL_KI;
@@ -296,8 +296,8 @@ begin
               end if;
 
             when PI_MUL_KI =>
-                       
-              if (s_freq_mode = '1') then 
+
+              if (s_freq_mode = '1') then
                 mulb <= signed(tb_pll_fbgr_f_kp_i);
               else
                 mulb <= signed(tb_pll_pbgr_p_kp_i);
@@ -306,26 +306,26 @@ begin
                 pi_state <= PI_INTEGRATE;
 
              when PI_INTEGRATE =>
-                       
+
               if (s_sat_lo = '0' and s_sat_hi = '0') then
-                s_reg_i <= s_reg_i + s_mulo_reg; 
+                s_reg_i <= s_reg_i + s_mulo_reg;
               end if;
 
               if (s_sat_hi = '1' and s_mulo_reg(s_mulo_reg'high) = '1') or (s_sat_lo = '1' and s_mulo_reg(s_mulo_reg'high) = '0') then
                 s_reg_i <= s_reg_i + s_mulo_reg;
               end if;
-                        
+
               pi_state <= PI_MUL_KP;
 
-            when PI_MUL_KP => 
-                       
-              s_mulo_reg <= mulo; 
+            when PI_MUL_KP =>
+
+              s_mulo_reg <= mulo;
               pi_state <= PI_CALC_SUM;
 
             when PI_CALC_SUM =>
               --output_val calculation
               s_dac_val_o <= unsigned(C_OUTPUT_BIAS + resize(s_mulo_reg, s_dac_val_o'length) + resize(s_reg_i, s_dac_val_o'length));
-                       
+
               pi_state <= PI_SATURATE;
 
             when PI_SATURATE =>
@@ -336,7 +336,7 @@ begin
                 s_sat_hi <= '1';
                 s_sat_lo <= '0';
               -- if sat_lo = '1'
-              elsif (tb_dac_val_o = s_zeros) then  
+              elsif (tb_dac_val_o = s_zeros) then
                 pi_state <= PI_CHECK_MODE;
                 s_sat_hi <= '0';
                 s_sat_lo <= '1';
@@ -345,11 +345,11 @@ begin
                 s_sat_hi <= '0';
                 s_sat_lo <= '0';
                 pi_state <= PI_ROUND_SUM;
-              end if;  
-                    
+              end if;
+
 
             when PI_ROUND_SUM =>
-                        
+
               if (s_round_up = '1') then
                 s_data_o <= std_logic_vector(s_rounded_val_o+1);
               else
@@ -380,12 +380,12 @@ begin
   fsm_covadd_states("PI_DISABLED    ->PI_DISABLED   ",PI_DISABLED,   PI_DISABLED   ,sv_cover);
   fsm_covadd_states("PI_CHECK_MODE  ->PI_CHECK_MODE ",PI_CHECK_MODE, PI_CHECK_MODE ,sv_cover);
   fsm_covadd_states("PI_WAIT_SAMPLE ->PI_WAIT_SAMPLE",PI_WAIT_SAMPLE,PI_WAIT_SAMPLE,sv_cover);
-  -- illegal states 
+  -- illegal states
   fsm_covadd_illegal("ILLEGAL",sv_cover);
-  
+
   -- collect the cov bins
   fsm_covcollect(tb_rst_n_sysclk_i, tb_clk_sys_i, pi_state, sv_cover);
- 
+
   -- coverage report
   cov_report : process
   begin
@@ -395,10 +395,10 @@ begin
   end process;
 
   --------------------------------------------------------------------------------
-  --                              Self - Checking                               --  
+  --                              Self - Checking                               --
   --------------------------------------------------------------------------------
 
-  -- Mode selection    
+  -- Mode selection
   assert (g_mode = 1 or g_mode = 0)
     report "wrong mode selected" severity failure;
 
@@ -410,7 +410,7 @@ begin
 
   s_round_up      <= std_logic(s_dac_val_o(g_integrator_fracbits - 1));
   s_rounded_val_o <= s_dac_val_o(g_integrator_fracbits + g_dacval_bits - 1 downto g_integrator_fracbits);
-    
+
   out_check : process(tb_clk_sys_i)
   begin
     if rising_edge(tb_clk_sys_i) then

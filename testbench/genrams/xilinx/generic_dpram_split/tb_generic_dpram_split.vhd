@@ -89,7 +89,7 @@ architecture tb of tb_generic_dpram_split is
     signal web_rep    : std_logic_vector(c_num_bytes-1 downto 0) := (others=>'0');
     signal s_int_a    : natural;
     signal s_int_b    : natural;
-        
+
     -- Type of the RAM
     type t_split_ram is array(0 to g_size-1) of std_logic_vector(7 downto 0);
 
@@ -119,10 +119,10 @@ architecture tb of tb_generic_dpram_split is
                                                   f_file_to_ramtype(1),
                                                   f_file_to_ramtype(2),
                                                   f_file_to_ramtype(3));
-    
+
 
 begin
-    
+
     -- Unit Under Test
     UUT : entity work.generic_dpram_split
     generic map (
@@ -145,16 +145,16 @@ begin
         qb_o    => tb_qb_o);
 
     -- Clock and reset
-	  clk_proc : process
-	  begin
-		  while stop = FALSE loop
-			  tb_clk_i <= '1';
-			  wait for C_CLK_PERIOD/2;
-			  tb_clk_i <= '0';
-			  wait for C_CLK_PERIOD/2;
-		  end loop;
-		  wait;
-	  end process clk_proc;
+    clk_proc : process
+    begin
+      while stop = FALSE loop
+        tb_clk_i <= '1';
+        wait for C_CLK_PERIOD/2;
+        tb_clk_i <= '0';
+        wait for C_CLK_PERIOD/2;
+      end loop;
+      wait;
+    end process clk_proc;
 
     tb_rst_n_i <= '0', '1' after 2 * C_CLK_PERIOD;
 
@@ -199,7 +199,7 @@ begin
 
     -- Processes to create two RAMs to store the data
     ram_port_a_and_b : for i in 0 to 3 generate
-        
+
         port_a : process(tb_clk_i)
         begin
             if (rising_edge(tb_clk_I)) then
@@ -240,7 +240,7 @@ begin
             end if;
         end if;
     end process;
-    
+
     -- Compare the testbench's RAM_B with the RTL output for port B
     check_port_b : process(tb_clk_i)
     begin

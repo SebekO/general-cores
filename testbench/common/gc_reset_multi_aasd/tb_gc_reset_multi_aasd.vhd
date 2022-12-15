@@ -8,9 +8,9 @@
 --
 -- unit name:   tb_gc_reset_multi_aasd
 --
--- description: Testbench for multiple clock domain reset generator and 
---              synchronizer with Asynchronous Assert and 
---              Syncrhonous Deassert (AASD). 
+-- description: Testbench for multiple clock domain reset generator and
+--              synchronizer with Asynchronous Assert and
+--              Syncrhonous Deassert (AASD).
 --
 --------------------------------------------------------------------------------
 -- Copyright CERN 2018
@@ -38,22 +38,22 @@ use osvvm.CoveragePkg.all;
 entity tb_gc_reset_multi_aasd is
   generic (
     g_seed    : natural;
-  	-- number of clock domains
-  	g_CLOCKS  : natural := 2;
+    -- number of clock domains
+    g_CLOCKS  : natural := 2;
     -- Number of clock ticks (per domain) that the input reset must remain
     -- deasserted and stable before deasserting the reset output(s)
-  	g_RST_LEN : natural := 1);
+    g_RST_LEN : natural := 1);
 end entity;
 
 architecture tb of tb_gc_reset_multi_aasd is
 
   -- Constants
-	constant C_CLK_PERIOD : time := 10 ns;
+  constant C_CLK_PERIOD : time := 10 ns;
 
-	-- Signals
-	signal tb_arst_i  : std_logic := '0';
-	signal tb_clks_i  : std_logic_vector(g_CLOCKS-1 downto 0) := (others=>'0');
-	signal tb_rst_n_o : std_logic_vector(g_CLOCKS-1 downto 0);
+  -- Signals
+  signal tb_arst_i  : std_logic := '0';
+  signal tb_clks_i  : std_logic_vector(g_CLOCKS-1 downto 0) := (others=>'0');
+  signal tb_rst_n_o : std_logic_vector(g_CLOCKS-1 downto 0);
   signal stop       : boolean;
   signal s_cnt_rst  : unsigned(g_RST_LEN-1 downto 0) := (others=>'0');
   signal s_cnt_clks : unsigned(g_CLOCKS-1 downto 0)  := (others=>'0');
@@ -65,35 +65,35 @@ architecture tb of tb_gc_reset_multi_aasd is
 
 begin
 
-	--Unit Under Test
-	UUT : entity work.gc_reset_multi_aasd
-	generic map (
-		g_CLOCKS  => g_CLOCKS,
-		g_RST_LEN => g_RST_LEN)
-	port map (
-		arst_i  => tb_arst_i,
-		clks_i  => tb_clks_i,
-		rst_n_o => tb_rst_n_o);
+  --Unit Under Test
+  UUT : entity work.gc_reset_multi_aasd
+  generic map (
+    g_CLOCKS  => g_CLOCKS,
+    g_RST_LEN => g_RST_LEN)
+  port map (
+    arst_i  => tb_arst_i,
+    clks_i  => tb_clks_i,
+    rst_n_o => tb_rst_n_o);
 
-	--Stimulus
-	stim : process
-		variable ncycles : natural;
+  --Stimulus
+  stim : process
+    variable ncycles : natural;
     variable data    : RandomPType;
-	begin
+  begin
     data.InitSeed(g_seed);
-		report "[STARTING] with seed = " & to_string(g_seed);
+    report "[STARTING] with seed = " & to_string(g_seed);
     while NOW < 1 ms loop
       wait for C_CLK_PERIOD;
-			tb_clks_i <= data.randSlv(g_CLOCKS);
-      tb_arst_i <= data.randSlv(1)(1);           
-			ncycles   := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
-		stop <= TRUE;
+      tb_clks_i <= data.randSlv(g_CLOCKS);
+      tb_arst_i <= data.randSlv(1)(1);
+      ncycles   := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-		wait;
-	end process;
-    
+    wait;
+  end process;
+
   --------------------------------------------------------------------------------
   --                            Assertions                                      --
   --------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ begin
 
   -- Assertion 2: for one clock domain
   single_clk_domain : if (g_CLOCKS = 1) generate
-    assert_check : for I in g_CLOCKS-1 downto 0 generate    
+    assert_check : for I in g_CLOCKS-1 downto 0 generate
       check : process(tb_clks_i, tb_arst_i)
       begin
         if tb_arst_i = '0' then
@@ -117,7 +117,7 @@ begin
                 report "wrong" severity failure;
             end if;
           end if;
-        else 
+        else
           s_cnt_rst <= (others=>'0');
         end if;
       end process;
@@ -129,16 +129,16 @@ begin
   -- Assertion 3: for many clock domains
   many_clk_domains : if (g_CLOCKS > 1) generate
     assert_check : for I in g_CLOCKS-1 downto 0 generate
-      
+
       check : process(tb_clks_i, s_rst)
       begin
         if s_rst = '1' then --if NOT reset
           s_rst_chains(i) <= (others=>'0');
-        elsif rising_edge(tb_clks_i(i)) then 
+        elsif rising_edge(tb_clks_i(i)) then
           s_rst_chains(i) <= '1' & s_rst_chains(i)(g_RST_LEN-1 downto 1);
         end if;
       end process;
-      
+
       process(tb_clks_i, s_rst)
       begin
         if s_rst = '0' then
@@ -150,6 +150,6 @@ begin
       end process;
 
     end generate;
-  end generate;    
+  end generate;
 
 end tb;

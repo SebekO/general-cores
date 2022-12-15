@@ -6,10 +6,10 @@
 --
 -- unit name:   tb_generic_dpram_dualclock
 --
--- description: Testbench for a true dual-port synchronous RAM for Xilinx FPGAs 
+-- description: Testbench for a true dual-port synchronous RAM for Xilinx FPGAs
 --              with:
 --                  - configurable address and data bus width
---                  - byte-addressing mode (data bus width restricted to 
+--                  - byte-addressing mode (data bus width restricted to
 --                    multiple of 8 bits)
 --
 --------------------------------------------------------------------------------
@@ -70,10 +70,10 @@ architecture tb of tb_generic_dpram_dualclock is
     constant C_CLKA_PERIOD : time := 10 ns;
     constant C_CLKB_PERIOD : time := 8 ns;
     constant c_num_bytes : integer := (g_data_width+7)/8;
-    
+
     -- types
     type t_ram_type is array(0 to g_size-1) of std_logic_vector(g_data_width-1 downto 0);
-    
+
     -- functions
     impure function f_file_to_ramtype return t_ram_type is
         variable tmp    : t_ram_type;
@@ -166,27 +166,27 @@ begin
 
 
     -- Clocks and reset generation
-	clka_proc : process
-	begin
-		while stop = FALSE loop
-			tb_clka_i <= '1';
-			wait for C_CLKA_PERIOD/2;
-			tb_clka_i <= '0';
-			wait for C_CLKA_PERIOD/2;
-		end loop;
-		wait;
-	end process clka_proc;
+  clka_proc : process
+  begin
+    while stop = FALSE loop
+      tb_clka_i <= '1';
+      wait for C_CLKA_PERIOD/2;
+      tb_clka_i <= '0';
+      wait for C_CLKA_PERIOD/2;
+    end loop;
+    wait;
+  end process clka_proc;
 
-	clkb_proc : process
-	begin
-		while stop = FALSE loop
-			tb_clkb_i <= '1';
-			wait for C_CLKB_PERIOD/2;
-			tb_clkb_i <= '0';
-			wait for C_CLKB_PERIOD/2;
-		end loop;
-		wait;
-	end process clkb_proc;
+  clkb_proc : process
+  begin
+    while stop = FALSE loop
+      tb_clkb_i <= '1';
+      wait for C_CLKB_PERIOD/2;
+      tb_clkb_i <= '0';
+      wait for C_CLKB_PERIOD/2;
+    end loop;
+    wait;
+  end process clkb_proc;
 
     tb_rst_n_i <= '0', '1' after 30 ns;
 
@@ -242,15 +242,15 @@ begin
     s_web_rep <= (others => tb_web_i);
     s_tb_we_a <= tb_bwea_i and s_wea_rep;
     s_tb_we_b <= tb_bweb_i and s_web_rep;
-    
+
     --------------------------------------------------------------------------------
     -- Test case 1 : Byte enable & dont care/Rd first in addr conflict resolution --
     --------------------------------------------------------------------------------
-    
+
     g_with_byte_enable_read_first : if (g_with_byte_enable = TRUE
                            AND (g_addr_conflict_resolution = "dont_care"
-                              OR g_addr_conflict_resolution = "read_first")) generate 
-    
+                              OR g_addr_conflict_resolution = "read_first")) generate
+
         process (tb_clka_i)
         begin
             if rising_edge(tb_clka_i) then
@@ -289,11 +289,11 @@ begin
     --------------------------------------------------------------------------------
     -- Test case 2 : No byte enable, dont care/Rd first in addr conflict resolution --
     --------------------------------------------------------------------------------
-    
+
     g_no_byte_enable_read_first : if (g_with_byte_enable = FALSE
                               AND (g_addr_conflict_resolution = "read_first"
-                                OR g_addr_conflict_resolution = "dont_care")) generate 
- 
+                                OR g_addr_conflict_resolution = "dont_care")) generate
+
         port_a : process
         begin
             while (stop = FALSE) loop
@@ -305,7 +305,7 @@ begin
             end loop;
             wait;
         end process;
-        
+
         port_b : process
         begin
             while (stop = FALSE) loop
@@ -323,10 +323,10 @@ begin
     --------------------------------------------------------------------------------
     -- Test case 3 : No byte enable & Write first in addr conflict resolution     --
     --------------------------------------------------------------------------------
-    
+
     g_no_byte_enable_write_first : if (g_with_byte_enable = FALSE
                             AND g_addr_conflict_resolution = "write_first") generate
- 
+
         port_a : process
         begin
             while (stop = FALSE) loop
@@ -340,7 +340,7 @@ begin
             end loop;
             wait;
         end process;
-        
+
         port_b : process
         begin
             while (stop = FALSE) loop
@@ -354,16 +354,16 @@ begin
             end loop;
             wait;
         end process;
-        
+
     end generate;
 
     --------------------------------------------------------------------------------
     -- Test case 4 : No byte enable & no change in addr conflict resolution       --
     --------------------------------------------------------------------------------
-    
+
     g_no_byte_enable_write_no_change : if (g_with_byte_enable = FALSE
                             AND g_addr_conflict_resolution = "no_change") generate
- 
+
         port_a : process
         begin
             while (stop = FALSE) loop
@@ -376,7 +376,7 @@ begin
             end loop;
             wait;
         end process;
-        
+
         port_b : process
         begin
             while (stop = FALSE) loop
@@ -389,13 +389,13 @@ begin
             end loop;
             wait;
         end process;
-        
+
     end generate;
 
     --------------------------------------------------------------------------------
     --                              Assertions                                    --
     --------------------------------------------------------------------------------
-    
+
     -- Compare the testbench's RAM_A with the RTL output for port A
     check_port_a : process(tb_clka_i)
     begin

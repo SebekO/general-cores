@@ -53,7 +53,7 @@ entity tb_gc_frequency_meter is
   generic (
     g_seed                   : natural;
     g_WITH_INTERNAL_TIMEBASE : boolean := FALSE;
-    g_CLK_SYS_FREQ           : integer := 10; 
+    g_CLK_SYS_FREQ           : integer := 10;
     g_SYNC_OUT               : boolean := FALSE;
     g_COUNTER_BITS           : integer := 8);
 end entity;
@@ -67,7 +67,7 @@ architecture tb of tb_gc_frequency_meter is
   -- Signals
   signal tb_clk_sys_i    : std_logic;
   signal tb_clk_in_i     : std_logic;
-  signal tb_rst_n_i      : std_logic;  
+  signal tb_rst_n_i      : std_logic;
   signal tb_pps_p1_i     : std_logic;
   signal tb_freq_o       : std_logic_vector(g_COUNTER_BITS-1 downto 0);
   signal tb_freq_valid_o : std_logic;
@@ -97,16 +97,16 @@ begin
     freq_valid_o => tb_freq_valid_o);
 
   -- Clocks generation
-	clk_sys_proc : process
-	begin
-		while not stop loop
-			tb_clk_sys_i <= '1';
-			wait for C_CLK_SYS_PERIOD/2;
-			tb_clk_sys_i <= '0';
-			wait for C_CLK_SYS_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_sys_proc;
+  clk_sys_proc : process
+  begin
+    while not stop loop
+      tb_clk_sys_i <= '1';
+      wait for C_CLK_SYS_PERIOD/2;
+      tb_clk_sys_i <= '0';
+      wait for C_CLK_SYS_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_sys_proc;
 
   clk_in_proc : process
   begin
@@ -119,62 +119,62 @@ begin
     wait;
   end process clk_in_proc;
 
-	-- Reset generation
+  -- Reset generation
   tb_rst_n_i <= '0', '1' after 4*C_CLK_SYS_PERIOD;
 
   -- Stimulus if g_with_internal_timebase = TRUE
   stim_with_internal_timebase : if (g_with_internal_timebase = TRUE) generate
-	  stim : process
-		    variable ncycles : natural;
+    stim : process
+        variable ncycles : natural;
         variable data    : RandomPType;
-	  begin
+    begin
       data.InitSeed(g_seed);
       report "[STARTING] with seed = " & to_string(g_seed);
-		  while NOW < 2 ms loop
+      while NOW < 2 ms loop
         wait until rising_edge(tb_clk_sys_i);
-			  tb_pps_p1_i <= data.randSlv(1)(1);
-			  ncycles := ncycles + 1;
-		  end loop;
-		  report "Number of simulation cycles = " & to_string(ncycles);
-		  stop <= TRUE;
+        tb_pps_p1_i <= data.randSlv(1)(1);
+        ncycles := ncycles + 1;
+      end loop;
+      report "Number of simulation cycles = " & to_string(ncycles);
+      stop <= TRUE;
       report "Test PASS!";
-		  wait;
-	  end process;
+      wait;
+    end process;
   end generate;
-    
+
   -- Stimulus if g_with_internal_timebase = TRUE
   stim_without_internal_timebase : if (g_with_internal_timebase = FALSE) generate
     stim : process
       variable ncycles : natural;
-		  variable data    : RandomPType;
-	  begin
+      variable data    : RandomPType;
+    begin
       data.InitSeed(g_seed);
       report "[STARTING] with seed = " & to_string(g_seed);
-		  while NOW < 2 ms loop
-			  wait until (rising_edge(tb_clk_sys_i) and tb_freq_valid_o = '1');
-			  tb_pps_p1_i <= data.randSlv(1)(1);
-			  ncycles := ncycles + 1;
-		  end loop;
-		  report "Number of simulation cycles = " & to_string(ncycles);
-		  stop <= TRUE;
+      while NOW < 2 ms loop
+        wait until (rising_edge(tb_clk_sys_i) and tb_freq_valid_o = '1');
+        tb_pps_p1_i <= data.randSlv(1)(1);
+        ncycles := ncycles + 1;
+      end loop;
+      report "Number of simulation cycles = " & to_string(ncycles);
+      stop <= TRUE;
       report "Test PASS!";
-		  wait;
-	  end process;
+      wait;
+    end process;
   end generate;
-    
+
   --------------------------------------------------------------------------------
   -- Self-Checking and Assertions
   --------------------------------------------------------------------------------
 
   -- Reproduce the behavior of the internal counter
   with_internal_timebase : if (g_WITH_INTERNAL_TIMEBASE = TRUE) generate
-        
+
     internal_counter : process(tb_clk_sys_i)
     begin
       if rising_edge(tb_clk_sys_i) then
         if s_cnt_gate = g_CLK_SYS_FREQ-1 then
           s_cnt_gate   <= (others=>'0');
-          s_gate_pulse <= '1'; 
+          s_gate_pulse <= '1';
         else
           s_cnt_gate   <= s_cnt_gate + 1;
           s_gate_pulse <= '0';
@@ -194,12 +194,12 @@ begin
         s_gate_pulse_synced <= '0';
       end loop;
     end process;
-    
+
   end generate with_internal_timebase;
- 
+
   -- Reproduce the behavior when no internal timebase activated
-  no_internal_timebase : if (g_WITH_INTERNAL_TIMEBASE = FALSE) generate 
-    
+  no_internal_timebase : if (g_WITH_INTERNAL_TIMEBASE = FALSE) generate
+
     no_internal_counter : process
     begin
       while not stop loop
@@ -228,7 +228,7 @@ begin
     end if;
   end process;
 
-  sync_out : if (g_SYNC_OUT = FALSE) generate    
+  sync_out : if (g_SYNC_OUT = FALSE) generate
     check_unsync_out_data : process
     begin
       while not stop loop
@@ -252,7 +252,7 @@ begin
         assert (s_data_o = s_freq)
           report "Data mismatch" severity failure;
       end loop;
-    end process; 
+    end process;
   end generate;
-    
+
 end tb;

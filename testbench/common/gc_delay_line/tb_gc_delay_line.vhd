@@ -73,7 +73,7 @@ architecture tb of tb_gc_delay_line is
   signal stop       : boolean;
   signal s_cnt      : unsigned(g_delay-1 downto 0) := (others=>'0');
 
-  -- array used for self-checking 
+  -- array used for self-checking
   type t_dly_array is array (0 to g_delay) of std_logic_vector(g_width-1 downto 0);
   signal s_dly_arr : t_dly_array;
 
@@ -132,7 +132,7 @@ begin
   assert (g_delay > 1)
   report "Wrong value for Delay" severity failure;
 
-  -- Fill in the array with random input data 
+  -- Fill in the array with random input data
   delay_array : process(tb_clk_i)
   begin
     if (tb_rst_n_i = '0') then
@@ -147,7 +147,7 @@ begin
     end if;
   end process;
 
-  -- Self-checking process  
+  -- Self-checking process
   self_check : process(tb_clk_i)
   begin
     if rising_edge(tb_clk_i) and tb_rst_n_i = '1' then

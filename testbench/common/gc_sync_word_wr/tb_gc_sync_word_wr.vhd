@@ -103,11 +103,11 @@ begin
   begin
     while not stop loop
       tb_clki <= '0';
-	    wait for C_CLK_IN_PERIOD/2;
-	    tb_clki <= '1';
-	    wait for C_CLK_OUT_PERIOD/2;
+      wait for C_CLK_IN_PERIOD/2;
+      tb_clki <= '1';
+      wait for C_CLK_OUT_PERIOD/2;
     end loop;
-	  wait;
+    wait;
   end process clk_in;
 
   tb_rsti <= '0', '1' after 3 * C_CLK_IN_PERIOD;
@@ -116,52 +116,52 @@ begin
   clk_out : process
   begin
     while not stop loop
-	    tb_clko <= '0';
-	    wait for C_CLK_OUT_PERIOD/2;
-	    tb_clko <= '1';
-	    wait for C_CLK_OUT_PERIOD/2;
-	  end loop;
-	  wait;
+      tb_clko <= '0';
+      wait for C_CLK_OUT_PERIOD/2;
+      tb_clko <= '1';
+      wait for C_CLK_OUT_PERIOD/2;
+    end loop;
+    wait;
   end process clk_out;
 
   tb_rsto <= '0', '1' after 4 * C_CLK_OUT_PERIOD;
 
   -- Randomized stimulus
   stim : process
-	  variable data : RandomPType;
-	  variable ncycles : natural;
+    variable data : RandomPType;
+    variable ncycles : natural;
   begin
     data.InitSeed(g_seed);
     report "[STARTING Slave] with seed = " & to_string(g_seed);
     tb_wri <= '0';
     wait until tb_rsti = '1';
     while (NOW < 1 ms) loop
-	    wait until (rising_edge(tb_clki) and tb_busy='0');
-	    tb_din  <= data.randSlv(g_WIDTH);
+      wait until (rising_edge(tb_clki) and tb_busy='0');
+      tb_din  <= data.randSlv(g_WIDTH);
       tb_wri  <= data.randSlv(1)(1);
-	    ncycles := ncycles + 1;
-	  end loop;
-	  report "Number of simulation cycles = " & to_string(ncycles);
+      ncycles := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
     report "Test PASS!";
-	  stop <= TRUE;
-	  wait;
+    stop <= TRUE;
+    wait;
   end process stim;
-    
+
   --------------------------------------------------------------------------------
   --                           Assertions - Self Checking                       --
   --------------------------------------------------------------------------------
- 	
-	-- Assertion to verify the behavior of ACK signal
+
+  -- Assertion to verify the behavior of ACK signal
   data_o_check : process
-	begin
+  begin
     if rising_edge(tb_clki) then
       assert (tb_ack /= tb_wro)
         report "ACK and write enable equal" severity failure;
       assert (tb_ack /= tb_busy)
         report "ACK while still busy" severity failure;
     end if;
-		wait;
-	end process data_o_check;
+    wait;
+  end process data_o_check;
 
   --Self-Checking: Checks that the output data is the
   --same as the input data
@@ -180,7 +180,7 @@ begin
     wr_side : process (tb_clki)
     begin
       if rising_edge(tb_clki) then
-        if (tb_busy= '0') then 
+        if (tb_busy= '0') then
           s_data_o <= tb_din;
         end if;
       end if;
@@ -202,10 +202,10 @@ begin
   --------------------------------------------------------------------------------
 
   --sets up coverpoint bins
-  InitCoverage: process 
-  begin        
+  InitCoverage: process
+  begin
     cp_rst_in_i.AddBins("input reset has been asserted", ONE_BIN);
-	  cp_rst_out_i.AddBins("output reset has been asserted", ONE_BIN);
+    cp_rst_out_i.AddBins("output reset has been asserted", ONE_BIN);
     wait;
   end process InitCoverage;
 
@@ -214,10 +214,10 @@ begin
   begin
     loop
       wait on tb_rsti;
-	    wait on tb_rsto;
-      wait for C_CLK_IN_PERIOD;          
+      wait on tb_rsto;
+      wait for C_CLK_IN_PERIOD;
       cp_rst_in_i.ICover (to_integer(tb_rsti = '1'));
-	    cp_rst_out_i.ICover (to_integer(tb_rsto = '1'));
+      cp_rst_out_i.ICover (to_integer(tb_rsto = '1'));
     end loop;
   end process Sample;
 
@@ -226,7 +226,7 @@ begin
   begin
     wait until STOP;
     cp_rst_in_i.writebin;
-	  cp_rst_out_i.writebin;
+    cp_rst_out_i.writebin;
   end process;
 
 end tb;

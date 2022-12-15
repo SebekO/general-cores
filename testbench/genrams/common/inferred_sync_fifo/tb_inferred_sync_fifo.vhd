@@ -47,7 +47,7 @@ entity tb_inferred_sync_fifo is
     g_seed                   : natural;
     g_data_width             : natural;
     g_size                   : natural;
-    g_show_ahead             : boolean; 
+    g_show_ahead             : boolean;
     g_show_ahead_legacy_mode : boolean;
     g_with_empty             : boolean := true;
     g_with_full              : boolean := true;
@@ -124,9 +124,9 @@ begin
     clk_i          => tb_clk_i,
     d_i            => tb_d_i,
     we_i           => tb_we_i,
-    q_o            => tb_q_o, 
+    q_o            => tb_q_o,
     rd_i           => tb_rd_i,
-    empty_o        => tb_empty_o,       
+    empty_o        => tb_empty_o,
     full_o         => tb_full_o,
     almost_empty_o => tb_almost_empty_o,
     almost_full_o  => tb_almost_full_o,
@@ -134,37 +134,37 @@ begin
   );
 
   --clock and reset
-	clk_proc : process
-	begin
-	  while stop = FALSE loop
-		  tb_clk_i <= '1';
-			wait for C_CLK_PERIOD/2;
-			tb_clk_i <= '0';
-			wait for C_CLK_PERIOD/2;
+  clk_proc : process
+  begin
+    while stop = FALSE loop
+      tb_clk_i <= '1';
+      wait for C_CLK_PERIOD/2;
+      tb_clk_i <= '0';
+      wait for C_CLK_PERIOD/2;
     end loop;
-		wait;
-	end process clk_proc;
+    wait;
+  end process clk_proc;
 
-	tb_rst_n_i <= '0', '1' after 4*C_CLK_PERIOD;
+  tb_rst_n_i <= '0', '1' after 4*C_CLK_PERIOD;
 
   -- Stimulus for input data
-	stim : process
+  stim : process
     variable data    : RandomPType;
-	  variable ncycles : natural;
-	begin
+    variable ncycles : natural;
+  begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & integer'image(g_seed);
-		while (NOW < 4 ms ) loop
-		  wait until (rising_edge (tb_clk_i) and tb_rst_n_i = '1');
-		  tb_d_i  <= data.randSlv(g_data_width);
+    while (NOW < 4 ms ) loop
+      wait until (rising_edge (tb_clk_i) and tb_rst_n_i = '1');
+      tb_d_i  <= data.randSlv(g_data_width);
       tb_wr   <= data.randSlv(1)(1);
       tb_rd   <= data.randSlv(1)(1);
-		  ncycles := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
-		stop <= TRUE;
+      ncycles := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-		wait;
+    wait;
   end process stim;
 
   -- Write and Read enable
@@ -211,7 +211,7 @@ begin
   begin
     if rising_edge(tb_clk_i) then
       assert (NOT(tb_we_i = '1' AND tb_full_o = '1'))
-        report "Can not write in a full FIFO" 
+        report "Can not write in a full FIFO"
         severity failure;
     end if;
   end process;

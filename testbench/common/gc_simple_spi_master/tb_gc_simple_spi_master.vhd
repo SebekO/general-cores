@@ -6,29 +6,29 @@
 -- Author     : Konstantinos Blantos
 -- Company    : CERN (BE-CEM-EDL)
 -- Created    : 2021-12-13
--- Last update: 
+-- Last update:
 -- Platform   : FPGA-generic
 -- Standard   : VHDL'93
 -------------------------------------------------------------------------------
--- Description: Testbench for a simple SPI master (bus-less). 
+-- Description: Testbench for a simple SPI master (bus-less).
 -------------------------------------------------------------------------------
 --
 -- Copyright (c) 2011-2013 CERN / BE-CO-HT
 --
--- This source file is free software; you can redistribute it   
--- and/or modify it under the terms of the GNU Lesser General   
--- Public License as published by the Free Software Foundation; 
--- either version 2.1 of the License, or (at your option) any   
--- later version.                                               
+-- This source file is free software; you can redistribute it
+-- and/or modify it under the terms of the GNU Lesser General
+-- Public License as published by the Free Software Foundation;
+-- either version 2.1 of the License, or (at your option) any
+-- later version.
 --
--- This source is distributed in the hope that it will be       
--- useful, but WITHOUT ANY WARRANTY; without even the implied   
--- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR      
--- PURPOSE.  See the GNU Lesser General Public License for more 
--- details.                                                     
+-- This source is distributed in the hope that it will be
+-- useful, but WITHOUT ANY WARRANTY; without even the implied
+-- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+-- PURPOSE.  See the GNU Lesser General Public License for more
+-- details.
 --
--- You should have received a copy of the GNU Lesser General    
--- Public License along with this source; if not, download it   
+-- You should have received a copy of the GNU Lesser General
+-- Public License along with this source; if not, download it
 -- from http://www.gnu.org/licenses/lgpl-2.1.html
 --
 -------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ use osvvm.CoveragePkg.all;
 
 entity tb_gc_simple_spi_master is
   generic (
-    g_seed           : natural;
+    g_seed           : natural := 1992;
     g_div_ratio_log2 : integer := 2;
     g_num_data_bits  : integer := 2);
 end entity;
@@ -75,10 +75,10 @@ architecture tb of tb_gc_simple_spi_master is
   type t_state is (IDLE, TX_CS, TX_DAT1, TX_DAT2, TX_SCK1, TX_SCK2, TX_CS2, TX_GAP);
   signal s_state : t_state;
   signal s_cnt   : unsigned(4 downto 0) := (others=>'0');
-  
-  -- Shared variable used for FSM coverage  
+
+  -- Shared variable used for FSM coverage
   shared variable sv_cover : covPType;
-    
+
   --------------------------------------------------------------------------------
   --                    Procedures used for fsm coverage                        --
   --------------------------------------------------------------------------------
@@ -94,8 +94,8 @@ architecture tb of tb_gc_simple_spi_master is
                    GenBin(t_state'pos(prev)),
                    GenBin(t_state'pos(curr)));
   end procedure;
-    
-  -- illegal 
+
+  -- illegal
   procedure fsm_covadd_illegal (
     name  : in string;
     covdb : inout covPType ) is
@@ -137,27 +137,27 @@ begin
     data_o     => tb_data_o,
     spi_cs_n_o => tb_spi_cs_n_o,
     spi_sclk_o => tb_spi_sclk_o,
-    spi_mosi_o => s_mosi, 
-    spi_miso_i => s_mosi); 
+    spi_mosi_o => s_mosi,
+    spi_miso_i => s_mosi);
 
    -- Clock generation
-	clk_sys_proc : process
-	begin
+  clk_sys_proc : process
+  begin
     while not stop loop
-			tb_clk_sys_i <= '1';
-			wait for C_CLK_SYS_PERIOD/2;
-			tb_clk_sys_i <= '0';
-			wait for C_CLK_SYS_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_sys_proc;
+      tb_clk_sys_i <= '1';
+      wait for C_CLK_SYS_PERIOD/2;
+      tb_clk_sys_i <= '0';
+      wait for C_CLK_SYS_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_sys_proc;
 
   -- Reset generation
   tb_rst_n_i <= '0', '1' after 4*C_CLK_SYS_PERIOD;
 
   -- Slave clocks in the data on risigin SCLK edge
   tb_cpol_i <= '1';
-    
+
   -- Stimulus
   stim : process
     variable ncycles : natural;
@@ -165,18 +165,18 @@ begin
   begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
-    while NOW < 4 ms loop
+    while NOW < 1 ms loop
       wait until (rising_edge(tb_clk_sys_i) and tb_rst_n_i = '1');
       tb_start_i <= data.randSlv(1)(1);
       tb_cs_i    <= data.randSlv(1)(1);
       ncycles    := ncycles + 1;
     end loop;
-	  report "Number of simulation cycles = " & to_string(ncycles);
-	  stop <= TRUE;
-	  wait;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
+    wait;
   end process stim;
-  
-  -- Stimulus for data  
+
+  -- Stimulus for data
   stim_data : process
     variable data    : RandomPType;
     variable ncycles : natural;
@@ -219,34 +219,34 @@ begin
         s_cnt <= (others=>'0');
       else
         case s_state is
-          when IDLE => 
+          when IDLE =>
             s_cnt <= (others=>'0');
-            if tb_start_i = '1' then 
+            if tb_start_i = '1' then
               s_state <= TX_CS;
             end if;
-                     
-          when TX_CS => 
-            if s_tick='1' then 
-              s_state <=TX_DAT1; 
+
+          when TX_CS =>
+            if s_tick='1' then
+              s_state <=TX_DAT1;
             end if;
-                     
-          when TX_DAT1 => 
-            if s_tick='1' then 
-              s_state <= TX_SCK1; 
+
+          when TX_DAT1 =>
+            if s_tick='1' then
+              s_state <= TX_SCK1;
             end if;
-                     
-          when TX_SCK1 => 
-            if s_tick='1' then 
+
+          when TX_SCK1 =>
+            if s_tick='1' then
               s_state <= TX_DAT2;
               s_cnt <= s_cnt + 1;
             end if;
-                     
-          when TX_DAT2 => 
-            if s_tick='1' then 
-              s_state <= TX_SCK2; 
+
+          when TX_DAT2 =>
+            if s_tick='1' then
+              s_state <= TX_SCK2;
             end if;
-                     
-          when TX_SCK2 => 
+
+          when TX_SCK2 =>
             if s_tick='1' then
               if s_cnt=g_num_data_bits then
                 s_state <= TX_CS2;
@@ -254,28 +254,28 @@ begin
                 s_state <= TX_DAT1;
               end if;
             end if;
-                     
-          when TX_CS2 => 
-            if s_tick='1' then 
-              s_state <= TX_GAP; 
+
+          when TX_CS2 =>
+            if s_tick='1' then
+              s_state <= TX_GAP;
             end if;
-                     
-          when TX_GAP => 
-            if s_tick='1' then 
-              s_state <= IDLE; 
+
+          when TX_GAP =>
+            if s_tick='1' then
+              s_state <= IDLE;
             end if;
-                     
+
           when others =>
-            null; 
+            null;
         end case;
       end if;
     end if;
   end process;
-    
+
   --------------------------------------------------------------------------------
   --                              Assertions                                    --
   --------------------------------------------------------------------------------
-    
+
   process
   begin
     while not stop loop
@@ -315,11 +315,11 @@ begin
   end process;
 
   fsm_covcollect(tb_rst_n_i, tb_clk_sys_i, s_state,sv_cover);
-    
+
   -- coverage report
   cov_report : process
   begin
-    wait until stop ; 
+    wait until stop ;
     sv_cover.writebin;
   end process;
 

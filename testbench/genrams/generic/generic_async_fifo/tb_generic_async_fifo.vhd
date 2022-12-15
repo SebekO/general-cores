@@ -38,7 +38,7 @@ use ieee.numeric_std.all;
 use work.genram_pkg.all;
 use work.gencores_pkg.all;
 
---OSVMM library 
+--OSVMM library
 library osvvm;
 use osvvm.RandomPkg.all;
 use osvvm.CoveragePkg.all;
@@ -104,7 +104,7 @@ architecture tb of tb_generic_async_fifo is
   signal stop : boolean;
   signal tb_wr : std_logic := '0';
   signal tb_rd : std_logic := '0';
-  
+
   -- 2D array is for self-checking purpose
   type t_array is array (0 to g_size)
           of std_logic_vector(g_data_width-1 downto 0);
@@ -152,7 +152,7 @@ begin
     wr_almost_full_o  => tb_wr_almost_full_o,
     wr_count_o        => tb_wr_count_o,
     clk_rd_i          => tb_clk_rd_i,
-    q_o               => tb_q_o, 
+    q_o               => tb_q_o,
     rd_i              => tb_rd_i,
     rd_empty_o        => tb_rd_empty_o,
     rd_full_o         => tb_rd_full_o,
@@ -160,65 +160,65 @@ begin
     rd_almost_full_o  => tb_rd_almost_full_o,
     rd_count_o        => tb_rd_count_o);
 
-	--WR clock
-	wr_clk : process
-	begin
-		while stop = FALSE loop
-			tb_clk_wr_i <= '1';
-			wait for C_CLK_WR_PERIOD/2;
-			tb_clk_wr_i <= '0';
-			wait for C_CLK_WR_PERIOD/2;
-		end loop;
-		wait;
-	end process wr_clk;
+  --WR clock
+  wr_clk : process
+  begin
+    while stop = FALSE loop
+      tb_clk_wr_i <= '1';
+      wait for C_CLK_WR_PERIOD/2;
+      tb_clk_wr_i <= '0';
+      wait for C_CLK_WR_PERIOD/2;
+    end loop;
+    wait;
+  end process wr_clk;
 
   -- RD clock
-	rd_clk : process
-	begin
-		while stop = FALSE loop
-			tb_clk_rd_i <= '1';
-			wait for C_CLK_RD_PERIOD/2;
-			tb_clk_rd_i <= '0';
-			wait for C_CLK_RD_PERIOD/2;
-		end loop;
-		wait;
-	end process rd_clk;
+  rd_clk : process
+  begin
+    while stop = FALSE loop
+      tb_clk_rd_i <= '1';
+      wait for C_CLK_RD_PERIOD/2;
+      tb_clk_rd_i <= '0';
+      wait for C_CLK_RD_PERIOD/2;
+    end loop;
+    wait;
+  end process rd_clk;
 
   tb_rst_n_i <= '0', '1' after 4*C_CLK_WR_PERIOD;
 
   -- Stimulus for write side input data
-	stim_wr : process
+  stim_wr : process
     variable data    : RandomPType;
-	  variable ncycles : natural;
-	begin
+    variable ncycles : natural;
+  begin
     data.InitSeed(g_seed_wr);
     report "[STARTING - WR] with seed = " & integer'image(g_seed_wr);
-		while (NOW < 1 ms ) loop
-		  wait until (rising_edge (tb_clk_wr_i) and tb_rst_n_i = '1');
-		  tb_d_i  <= data.randSlv(g_data_width);
+    while (NOW < 1 ms ) loop
+      wait until (rising_edge (tb_clk_wr_i) and tb_rst_n_i = '1');
+      tb_d_i  <= data.randSlv(g_data_width);
       tb_wr   <= data.randSlv(1)(1);
-		  ncycles := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
-		stop <= TRUE;
+      ncycles := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-		wait;
+    wait;
   end process stim_wr;
 
   -- Stimulus for read side input data
-	stim_rd : process
+  stim_rd : process
     variable data    : RandomPType;
-	  variable ncycles : natural;
-	begin
+    variable ncycles : natural;
+  begin
     data.InitSeed(g_seed_rd);
     report "[STARTING - RD] with seed = " & integer'image(g_seed_rd);
-		while (stop = FALSE) loop
-		  wait until (rising_edge (tb_clk_rd_i) and tb_rst_n_i = '1');
+    while (stop = FALSE) loop
+      wait until (rising_edge (tb_clk_rd_i) and tb_rst_n_i = '1');
       tb_rd   <= data.randSlv(1)(1);
-		  ncycles := ncycles + 1;
-		end loop;
-		report "Number of simulation cycles = " & to_string(ncycles);
-		wait;
+      ncycles := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    wait;
   end process stim_rd;
 
   -- Write and Read enable
@@ -265,7 +265,7 @@ begin
   begin
     if rising_edge(tb_clk_wr_i) then
       assert (NOT(tb_we_i = '1' AND tb_wr_full_o = '1'))
-        report "WR SIDE: Can not write in a full FIFO" 
+        report "WR SIDE: Can not write in a full FIFO"
         severity failure;
     end if;
   end process;
@@ -297,7 +297,7 @@ begin
     end if;
   end process;
 
-  no_almost_empty_full : if (g_with_wr_almost_empty = false 
+  no_almost_empty_full : if (g_with_wr_almost_empty = false
                        or g_with_rd_almost_empty = false
                        or g_with_wr_almost_full= false
                        or g_with_rd_almost_full= false) generate
@@ -323,7 +323,7 @@ begin
   end generate;
 
 
-  almost_empty_full : if (g_with_wr_almost_empty = true 
+  almost_empty_full : if (g_with_wr_almost_empty = true
                        or g_with_rd_almost_empty = true
                        or g_with_wr_almost_full= true
                        or g_with_rd_almost_full= true)
@@ -332,7 +332,7 @@ begin
     self_check_rd : process
     begin
       while (stop = FALSE) loop
-        wait until rising_edge(tb_clk_rd_i); 
+        wait until rising_edge(tb_clk_rd_i);
         if (tb_rd_i = '1' ) then
           wait for C_CLK_RD_PERIOD;
           if (s_arr(s_rd_ptr) = tb_q_o) then

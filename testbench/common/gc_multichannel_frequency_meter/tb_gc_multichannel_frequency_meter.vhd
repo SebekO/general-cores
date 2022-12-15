@@ -64,22 +64,22 @@ architecture tb of tb_gc_multichannel_frequency_meter is
   signal s_gate_pulse_synced : std_logic_vector(g_CHANNELS-1 downto 0) := (others=>'0');
   signal s_data_o            : std_logic_vector(g_COUNTER_BITS-1 downto 0) := (others=>'0');
   signal s_freq_valid_o      : std_logic:='0';
-    
+
   -- Types
   type t_channel is record
     cnt         : unsigned(g_COUNTER_BITS-1 downto 0);
     freq        : unsigned(g_COUNTER_BITS-1 downto 0);
     freq_valid_o: std_logic;
   end record;
-    
+
   type t_channel_array is array (0 to g_CHANNELS-1) of t_channel;
   signal ch        : t_channel_array;
-  signal index     : integer range 0 to g_CHANNELS+1; 
+  signal index     : integer range 0 to g_CHANNELS+1;
   signal s_ready_o : std_logic := '0';
 
 begin
 
-  -- Unit Under Test  
+  -- Unit Under Test
   UUT : entity work.gc_multichannel_frequency_meter
   generic map (
     g_WITH_INTERNAL_TIMEBASE => g_WITH_INTERNAL_TIMEBASE,
@@ -88,31 +88,31 @@ begin
     g_CHANNELS               => g_CHANNELS)
   port map (
     clk_sys_i     => tb_clk_sys_i,
-    clk_in_i      => tb_clk_in_i,   
+    clk_in_i      => tb_clk_in_i,
     rst_n_i       => tb_rst_n_i,
     pps_p1_i      => tb_pps_p1_i,
-    channel_sel_i => tb_channel_sel_i, 
-    freq_o        => tb_freq_o, 
+    channel_sel_i => tb_channel_sel_i,
+    freq_o        => tb_freq_o,
     freq_valid_o  => tb_freq_valid_o);
 
   -- Clock generation
-	clk_sys_proc : process
-	begin
-		while STOP = FALSE loop
-			tb_clk_sys_i <= '1';
-			wait for C_CLK_SYS_PERIOD/2;
-			tb_clk_sys_i <= '0';
-			wait for C_CLK_SYS_PERIOD/2;
-		end loop;
-		wait;
-	end process clk_sys_proc;
+  clk_sys_proc : process
+  begin
+    while STOP = FALSE loop
+      tb_clk_sys_i <= '1';
+      wait for C_CLK_SYS_PERIOD/2;
+      tb_clk_sys_i <= '0';
+      wait for C_CLK_SYS_PERIOD/2;
+    end loop;
+    wait;
+  end process clk_sys_proc;
 
-	-- Reset generation
+  -- Reset generation
   tb_rst_n_i <= '0', '1' after 4*C_CLK_SYS_PERIOD;
-    
-	-- Stimulus
+
+  -- Stimulus
   stim : process
-	  variable ncycles : natural;
+    variable ncycles : natural;
     variable data    : RandomPType;
   begin
     data.InitSeed(g_seed);
@@ -121,49 +121,49 @@ begin
       tb_clk_in_i      <= data.randSlv(g_CHANNELS);
       wait until (rising_edge(tb_clk_sys_i) and tb_rst_n_i = '1');
       tb_channel_sel_i <= data.randslv(0,g_CHANNELS-1,f_log2_ceil(g_CHANNELS));
-		  ncycles          := ncycles + 1;
-	  end loop;
-	  report "Number of simulation cycles = " & to_string(ncycles);
-	  stop <= TRUE;
+      ncycles          := ncycles + 1;
+    end loop;
+    report "Number of simulation cycles = " & to_string(ncycles);
+    stop <= TRUE;
     report "Test PASS!";
-	  wait;
-	end process;
+    wait;
+  end process;
 
   -- Stimulus for pps_p1_i when time internal is FALSE
   stim_when_false : if (g_WITH_INTERNAL_TIMEBASE = FALSE) generate
     stim_false : process
-	    variable data : RandomPType;
+      variable data : RandomPType;
     begin
       data.InitSeed(g_seed);
-	    while NOW < 2 ms loop
+      while NOW < 2 ms loop
         wait until rising_edge(tb_clk_sys_i) and s_ready_o='1';
-		    tb_pps_p1_i <= data.randSlv(1)(1);
-	    end loop;
-	    wait;
-	  end process;  
+        tb_pps_p1_i <= data.randSlv(1)(1);
+      end loop;
+      wait;
+    end process;
   end generate;
 
   -- Stimulus for pps_p1_i when time internal is TRUE
   stim_when_true : if (g_WITH_INTERNAL_TIMEBASE = TRUE) generate
     stim_false : process
-	    variable data : RandomPType;
+      variable data : RandomPType;
     begin
       data.InitSeed(g_seed);
-	    while NOW < 2 ms loop
+      while NOW < 2 ms loop
         wait until (rising_edge(tb_clk_sys_i) and tb_rst_n_i='1');
-		    tb_pps_p1_i <= data.randSlv(1)(1);
-	    end loop;
-	    wait;
-	  end process; 
+        tb_pps_p1_i <= data.randSlv(1)(1);
+      end loop;
+      wait;
+    end process;
   end generate;
-    
+
   --------------------------------------------------------------------------------
   --                      Self-Checking and Assertions                          --
   --------------------------------------------------------------------------------
 
   -- Reproduce the behavior of the internal counter
   with_internal_timebase : if (g_WITH_INTERNAL_TIMEBASE = TRUE) generate
-        
+
     internal_counter : process(tb_clk_sys_i)
     begin
       if rising_edge(tb_clk_sys_i) then
@@ -173,7 +173,7 @@ begin
         else
           if s_cnt_gate = g_CLK_SYS_FREQ-1 then
             s_cnt_gate   <= (others=>'0');
-            s_gate_pulse <= '1'; 
+            s_gate_pulse <= '1';
           else
             s_cnt_gate   <= s_cnt_gate + 1;
             s_gate_pulse <= '0';
@@ -184,7 +184,7 @@ begin
 
   end generate with_internal_timebase;
 
-  -- Reproduce the RTL behavarior to generate self-check 
+  -- Reproduce the RTL behavarior to generate self-check
   gen_channels : for i in 0 to g_CHANNELS-1 generate
 
     internal_timebase : if (g_WITH_INTERNAL_TIMEBASE=TRUE) generate
@@ -208,7 +208,7 @@ begin
         clk_in_i  => tb_clk_sys_i,
         clk_out_i => tb_clk_in_i(i),
         rst_n_i   => tb_rst_n_i,
-        d_ready_o => s_ready_o, 
+        d_ready_o => s_ready_o,
         d_p_i     => tb_pps_p1_i,
         q_p_o     => s_gate_pulse_synced(i));
 
