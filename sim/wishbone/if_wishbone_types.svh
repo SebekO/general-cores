@@ -1,11 +1,24 @@
+//------------------------------------------------------------------------------
+// CERN BE-CEM-EDL
+// General Cores Library
+// https://www.ohwr.org/projects/general-cores
+//------------------------------------------------------------------------------
 //
-// Title          : Pipelined Wishbone BFM - type definitions
+// description: common typedefs for Wishbone BFMs.
 //
-// File           : if_wishbone_types.sv
-// Author         : Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
-// Created        : Tue Mar 23 12:19:36 2010
-// Standard       : Verilog 2001
-//
+//------------------------------------------------------------------------------
+// Copyright CERN 2010-2019
+//------------------------------------------------------------------------------
+// Copyright and related rights are licensed under the Solderpad Hardware
+// License, Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
+// http://solderpad.org/licenses/SHL-2.0.
+// Unless required by applicable law or agreed to in writing, software,
+// hardware and materials distributed under this License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+// or implied. See the License for the specific language governing permissions
+// and limitations under the License.
+//------------------------------------------------------------------------------
 
 `ifndef __IF_WB_TYPES_SVH
 `define __IF_WB_TYPES_SVH

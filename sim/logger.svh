@@ -1,27 +1,27 @@
-/*
- * This program source code file is part of MasterFip project.
- *
- * Copyright (C) 2013-2017 CERN
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
+//------------------------------------------------------------------------------
+// CERN BE-CEM-EDL
+// General Cores Library
+// https://www.ohwr.org/projects/general-cores
+//------------------------------------------------------------------------------
+//
+// units: Logger/LoggerClient/UnitTest/UnitTestMessage
+//
+// description: Simple classes for testbench status logging/reporting.
+//
+//------------------------------------------------------------------------------
+// Copyright CERN 2010-2019
+//------------------------------------------------------------------------------
+// Copyright and related rights are licensed under the Solderpad Hardware
+// License, Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
+// http://solderpad.org/licenses/SHL-2.0.
+// Unless required by applicable law or agreed to in writing, software,
+// hardware and materials distributed under this License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+// or implied. See the License for the specific language governing permissions
+// and limitations under the License.
+//------------------------------------------------------------------------------
 
-/* logger.svh - implementation of test result logging classes */
 
 `ifndef __LOGGER_SVH
  `define __LOGGER_SVH
