@@ -9,11 +9,13 @@ sim_top    = "main" # for hdlmake3
 
 include_dirs = [
     "../../../sim/",
+    "../../../sim/wishbone",
 ]
 
 modules = {
     "local" :  [
         "../../../",
+        "../../../sim",
     ],
 }
 

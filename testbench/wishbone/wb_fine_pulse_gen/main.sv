@@ -14,49 +14,19 @@
 
 `timescale 1ps/1ps
 
-`include "vhd_wishbone_master.svh"
+`include "wishbone/vhd_wishbone_master.svh"
 `include "wb_fine_pulse_gen_regs.vh"
 
-module dupa;
-    xwb_fine_pulse_gen dut();
-endmodule // dupa
+`include "glbl.v"
 
-class IBusDevice;
+import gencores_sim_pkg::*;
 
-   CBusAccessor m_acc;
-   uint64_t m_base;
-
-   function new ( CBusAccessor acc, uint64_t base );
-      m_acc =acc;
-      m_base = base;
-   endfunction // new
-   
-   virtual task write32( uint32_t addr, uint32_t val );
-      m_acc.write(m_base +addr, val);
-   endtask // write
-   
-   virtual task read32( uint32_t addr, output uint32_t val );
-      uint64_t val64;
-      
-      m_acc.read(m_base +addr, val64);
-      val = val64;
-      
-   endtask // write
-   
-   
-
-endclass // BusDevice
-
-
-class FinePulseGenDriver extends IBusDevice;
+class FinePulseGenDriver extends CBusDevice;
 
    protected int m_use_delayctrl = 1;
    protected real m_coarse_range = 16.0;
    protected real m_delay_tap_size = 0.078; /*ns*/
    protected int  m_fine_taps;
-   
-   
-   
 
    function new(CBusAccessor acc, int base);
       super.new(acc,base);
@@ -69,19 +39,19 @@ class FinePulseGenDriver extends IBusDevice;
 
       $error("Calibrate start");
       
-      write32( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_EN_VTC);
-      write32( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  |  `FPG_ODELAY_CALIB_RST_OSERDES | `FPG_ODELAY_CALIB_RST_ODELAY);
+      writel( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_EN_VTC);
+      writel( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  |  `FPG_ODELAY_CALIB_RST_OSERDES | `FPG_ODELAY_CALIB_RST_ODELAY);
       #100ns;
-      write32( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  | `FPG_ODELAY_CALIB_RST_OSERDES );
+      writel( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  | `FPG_ODELAY_CALIB_RST_OSERDES );
       #100ns;
-      write32( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  );
+      writel( `ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_RST_IDELAYCTRL  );
       #100ns;
-      write32( `ADDR_FPG_ODELAY_CALIB, 0 );
+      writel( `ADDR_FPG_ODELAY_CALIB, 0 );
       #100ns;
 
       while(1)
 	begin
-	   read32( `ADDR_FPG_ODELAY_CALIB, rv );
+	   readl( `ADDR_FPG_ODELAY_CALIB, rv );
 	   $display("odelay = %x", rv);
 	   
 	   if ( rv & `FPG_ODELAY_CALIB_RDY )
@@ -89,10 +59,10 @@ class FinePulseGenDriver extends IBusDevice;
 	   
 	end
 
-      write32(`ADDR_FPG_ODELAY_CALIB, 0);
-      write32(`ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_CAL_LATCH);
+      writel(`ADDR_FPG_ODELAY_CALIB, 0);
+      writel(`ADDR_FPG_ODELAY_CALIB, `FPG_ODELAY_CALIB_CAL_LATCH);
 
-      read32( `ADDR_FPG_ODELAY_CALIB, rv );
+      readl( `ADDR_FPG_ODELAY_CALIB, rv );
 
       calib_time = real'(1.0);
       calib_taps = (rv & `FPG_ODELAY_CALIB_TAPS) >> `FPG_ODELAY_CALIB_TAPS_OFFSET;
