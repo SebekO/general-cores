@@ -3,6 +3,8 @@
 
 `include "if_wishbone_types.svh"
 
+import gencores_sim_pkg::CBusAccessor;
+
 virtual class CWishboneAccessor extends CBusAccessor;
 
    static int _null  = 0;
@@ -49,7 +51,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endfunction // idle
    
    // [master only] generic write(s), blocking
-   virtual task  automatic writem(uint64_t addr[], uint64_t data[], int size = 4, ref int result = _null);
+   virtual task  automatic writem(u64_vector_t addr, u64_vector_t data, int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
@@ -77,7 +79,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endtask // write
 
    // [master only] generic read(s), blocking
-   virtual task  automatic readm(uint64_t addr[], ref uint64_t data[],input int size = 4, ref int result = _null);
+   virtual task  automatic readm(u64_vector_t addr, ref u64_vector_t data,input int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
@@ -107,21 +109,13 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endtask // readm
 
    virtual task  automatic read(uint64_t addr, ref uint64_t data, input int size = 4, ref int result = _null);
-      uint64_t aa[], da[];
-      aa     = new[1];
-      da     = new[1];
-      aa[0]  = addr;
+      automatic u64_vector_t aa = '{ addr }, da = '{ 0 };
       readm(aa, da, size, result);
       data  = da[0];
    endtask
 
    virtual task  automatic write(uint64_t addr, uint64_t data, int size = 4, ref int result = _null);
-      uint64_t aa[], da[];
-      aa     = new[1];
-      da     = new[1];
-      
-      aa[0]  = addr;
-      da[0]  = data;
+      automatic u64_vector_t aa = '{ addr }, da = '{ data };
       writem(aa, da, size, result);
    endtask
    
