@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// CERN BE-CO-HT
+// CERN BE-CEM-EDL
 // General Cores Library
 // https://www.ohwr.org/projects/general-cores
 //------------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 // and limitations under the License.
 //------------------------------------------------------------------------------
 
-`include "simdrv_defs.svh"
+`include "gencores_sim_defs.svh"
 `include "if_wishbone_types.svh"
 `include "if_wishbone_accessor.svh"
 

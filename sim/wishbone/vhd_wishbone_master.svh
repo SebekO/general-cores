@@ -1,7 +1,32 @@
+//------------------------------------------------------------------------------
+// CERN BE-CEM-EDL
+// General Cores Library
+// https://www.ohwr.org/projects/general-cores
+//------------------------------------------------------------------------------
+//
+// unit name: IVHDWishboneMaster
+//
+// description: Wishbone master BFM with interface compatibile with the VHDL
+//              side of gencores (wishbone_pkg)
+//
+//------------------------------------------------------------------------------
+// Copyright CERN 2010-2019
+//------------------------------------------------------------------------------
+// Copyright and related rights are licensed under the Solderpad Hardware
+// License, Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
+// http://solderpad.org/licenses/SHL-2.0.
+// Unless required by applicable law or agreed to in writing, software,
+// hardware and materials distributed under this License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+// or implied. See the License for the specific language governing permissions
+// and limitations under the License.
+//------------------------------------------------------------------------------
+
 `ifndef __VHD_WISHBONE_MASTER_INCLUDED
  `define __VHD_WISHBONE_MASTER_INCLUDED
 
-`include "simdrv_defs.svh"
+`include "gencores_sim_defs.svh"
 `include "if_wb_master.svh"
 
 import wishbone_pkg::*;

@@ -1,7 +1,34 @@
+//------------------------------------------------------------------------------
+// CERN BE-CEM-EDL
+// General Cores Library
+// https://www.ohwr.org/projects/general-cores
+//------------------------------------------------------------------------------
+//
+// unit name: CWishboneAccessor
+//
+// description: Driver class for the Wisbhone Master BFM.
+//
+//------------------------------------------------------------------------------
+// Copyright CERN 2010-2019
+//------------------------------------------------------------------------------
+// Copyright and related rights are licensed under the Solderpad Hardware
+// License, Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
+// http://solderpad.org/licenses/SHL-2.0.
+// Unless required by applicable law or agreed to in writing, software,
+// hardware and materials distributed under this License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+// or implied. See the License for the specific language governing permissions
+// and limitations under the License.
+//------------------------------------------------------------------------------
+
+
 `ifndef IF_WISHBONE_ACCESSOR_SV
 `define IF_WISHBONE_ACCESSOR_SV
 
 `include "if_wishbone_types.svh"
+
+import gencores_sim_pkg::CBusAccessor;
 
 virtual class CWishboneAccessor extends CBusAccessor;
 
@@ -49,7 +76,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endfunction // idle
    
    // [master only] generic write(s), blocking
-   virtual task  automatic writem(uint64_t addr[], uint64_t data[], int size = 4, ref int result = _null);
+   virtual task  automatic writem(u64_vector_t addr, u64_vector_t data, int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
@@ -77,7 +104,7 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endtask // write
 
    // [master only] generic read(s), blocking
-   virtual task  automatic readm(uint64_t addr[], ref uint64_t data[],input int size = 4, ref int result = _null);
+   virtual task  automatic readm(u64_vector_t addr, ref u64_vector_t data,input int size = 4, ref int result = _null);
       wb_cycle_t cycle;
       int i;
 
@@ -107,21 +134,13 @@ virtual class CWishboneAccessor extends CBusAccessor;
    endtask // readm
 
    virtual task  automatic read(uint64_t addr, ref uint64_t data, input int size = 4, ref int result = _null);
-      uint64_t aa[], da[];
-      aa     = new[1];
-      da     = new[1];
-      aa[0]  = addr;
+      automatic u64_vector_t aa = '{ addr }, da = '{ 0 };
       readm(aa, da, size, result);
       data  = da[0];
    endtask
 
    virtual task  automatic write(uint64_t addr, uint64_t data, int size = 4, ref int result = _null);
-      uint64_t aa[], da[];
-      aa     = new[1];
-      da     = new[1];
-      
-      aa[0]  = addr;
-      da[0]  = data;
+      automatic u64_vector_t aa = '{ addr }, da = '{ data };
       writem(aa, da, size, result);
    endtask
    
