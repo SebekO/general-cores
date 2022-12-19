@@ -33,8 +33,8 @@ import wishbone_pkg::*;
 
 interface IVHDWishboneMaster
   (
-   input clk_i,
-   input rst_n_i
+   input wire clk_i,
+   input wire rst_n_i
    );
 
    parameter g_addr_width 	   = 32;
