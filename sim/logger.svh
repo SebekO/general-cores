@@ -103,7 +103,7 @@ class Logger;
        
    
    function new ( string log_file, int id = -1 );
-      m_id = 1;
+      m_id = 0;
       m_loggerId = id;
       m_currentTest = null;
       m_passedTests = 0;
@@ -120,10 +120,10 @@ class Logger;
 
    // begins a test
    function automatic void startTest( string name );
+      m_id++;
       m_currentTest = new( m_id, name );
       m_tests.push_back(m_currentTest);
       $display("[*] Running test %d: %s", m_id, name);
-      m_id++;
    endfunction // startTest
 
    // marks the current test as passed
