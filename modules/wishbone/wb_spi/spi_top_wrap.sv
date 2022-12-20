@@ -40,6 +40,8 @@
 
 //////////////////////////////////////////////////////////////////////
 //  Modifications:
+//      2022-12-20: by Sebastian Owarzany (sebastian.dawid.owarzany@cern.ch)
+//          * add mosi_dir_n_o pin from spi_top module
 //////////////////////////////////////////////////////////////////////
 
 `default_nettype none
@@ -88,6 +90,7 @@ module spi_top_wrap (
     .wb_ack_o(wb_ack_o),
     .wb_err_o(wb_err_o),
     .int_o(),
+	  .mosi_dir_n_o(),
 
     .ss_pad_o(ss_pad),
     .sclk_pad_o(sck_o),
