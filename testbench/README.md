@@ -1,14 +1,32 @@
-The majority of the general cores has each own testbench written in VHDL and is using OSVVM as a verification methodology. Below, there are the requirements, that the user should fullfil, in order to run the tests locally:
+# Description
+The majority of the general cores have their own testbench written in VHDL and as a verification methodology, OSVVM is used. There are also some testbenches which are written in SystemVerilog.
 
-  1. Install `HDLMAKE`, `GHDL` and `OSVVM(2020.05+)`
-  2. Add in `usr/local/lib/ghdl/vendors/config.sh` the path of the downloaded OSVVM
+The common features of each test are:
+  - Randomization of the input signals
+  - FSM coverage (when there are FSM in the RTL design), results are shown at the end of the simulation
+  - Assertions are used to verify aspects of the core's functionality, cumply with the specifications
 
-There are two options for the user, in order to run these testbenches. One is to run them all through the Makefile that exist in this directory. This Makefile, contains all the tests, so with `make`, all the tests will run. The other option is to run a specific one seperately. For that option, these are the steps that need to be followed:
+There are two options for the users, in order to run these tests. First is to run them all by using the Makefile in the current directory. This Makefile contains all the VHDL tests. Second option, is to run each test individually.
 
-  1. Compile OSVVM by running the script: `/usr/local/lib/ghdl/vendors/compile-osvvm --all`
-  2. Run `hdlmake makefile`
-  3. Run `make`
-  4. Run `./run.sh`
-  5. (Optional) add in the run.sh --wave=waveform.ghw to see waveform with gtkwave
-  6. See the results of the test in the terminal
+## Requirements
+  - [hdlmake](https://hdlmake.readthedocs.io/en/master/#install-hdlmake-package)
+  - [ghdl](https://ghdl.github.io/ghdl/development/building/index.html#build)
+  - [OSVVM](https://github.com/OSVVM/OSVVM)  version 2020.05+
+
+## Set up environment
+  - Modify the file **/usr/local/lib/ghdl/vendors/config.sh** by adding the OSVVM path (in OSVVM_settings change the Installation Directory)
+  - Compile OSVVM:
+```console
+/usr/local/lib/ghdl/vendors/compile-osvvm --all
+```
+## How to test
+```console
+hdlmake makefile
+make
+./run.sh
+```
+ Waveform option:
+```console
+ ./run.sh --wave=waveform.ghw
+```
 
