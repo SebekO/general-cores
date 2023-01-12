@@ -30,3 +30,5 @@ make
  ./run.sh --wave=waveform.ghw
 ```
 
+## Maintainer
+- [Konstantinos Blantos](mailto:konstantinos.blantos@cern.ch)
