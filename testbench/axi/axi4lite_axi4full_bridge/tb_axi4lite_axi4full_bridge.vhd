@@ -42,6 +42,7 @@ use osvvm.CoveragePkg.all;
 entity tb_axi4lite_axi4full_bridge is
   generic (
     g_seed       : natural;
+    g_sim_time   : natural;
     g_ADDR_WIDTH : natural := 32;
     g_DATA_WIDTH : natural := 32;
     g_ID_WIDTH   : natural := 4;
@@ -60,6 +61,7 @@ architecture tb of tb_axi4lite_axi4full_bridge is
   --==========================================================
 
   constant C_CLK_PERIOD : time := 10 ns;
+  constant C_SIM_TIME   : time := (g_sim_time*1.0 ms);
   -- Used for FSM coverage
   constant RSP_OKAY     : std_logic_vector(1 downto 0) := b"00";
   constant RSP_EXOKAY   : std_logic_vector(1 downto 0) := b"01";
@@ -133,12 +135,12 @@ architecture tb of tb_axi4lite_axi4full_bridge is
 
   signal stop        : boolean;
   signal waddr       : std_logic_vector(g_ADDR_WIDTH-1 downto 0) := (others=>'0');
-  signal s_wlen      : std_logic_vector(g_LEN_WIDTH-1 downto 0) := (others=>'0');
-  signal s_wsize     : std_logic_vector(2 downto 0);
-  signal s_raddr     : std_logic_vector(g_ADDR_WIDTH-1 downto 0);
-  signal s_rlen      : std_logic_vector(g_LEN_WIDTH-1 downto 0);
+  signal s_wlen      : std_logic_vector(g_LEN_WIDTH-1 downto 0)  := (others=>'0');
+  signal s_wsize     : std_logic_vector(2 downto 0) ;
+  signal s_raddr     : std_logic_vector(g_ADDR_WIDTH-1 downto 0) := (others=>'0');
+  signal s_rlen      : std_logic_vector(g_LEN_WIDTH-1 downto 0)  := (others=>'0');
   signal s_rsize     : std_logic_vector(2 downto 0);
-  signal s_rdata     : std_logic_vector(g_DATA_WIDTH-1 downto 0);
+  signal s_rdata     : std_logic_vector(g_DATA_WIDTH-1 downto 0) := (others=>'0');
   signal s_awvalid   : std_logic;
   signal s_wvalid    : std_logic;
   signal s_wstrb     : std_logic_vector((g_DATA_WIDTH/8)-1 downto 0);
@@ -309,7 +311,7 @@ begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
     wait until tb_rst_n_i = '1';
-    while (NOW < 1 ms) loop
+    while (NOW < C_SIM_TIME) loop
       wait until rising_edge(tb_clk_i);
       -- AXI-4 Full inputs
       tb_s_awaddr  <= data.randSlv(g_ADDR_WIDTH);

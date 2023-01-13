@@ -8,7 +8,7 @@
 -- Platform   : FPGA-generics
 -- Standard   : VHDL '08
 -------------------------------------------------------------------------------
--- Description: 
+-- Description:
 --
 -- Testbench for a WB Slave Classic to AXI4-Lite Master bridge.
 -------------------------------------------------------------------------------
@@ -38,13 +38,15 @@ use osvvm.CoveragePkg.all;
 
 entity tb_xaxi4lite_wb_bridge is
   generic (
-    g_seed : natural);
+    g_seed     : natural;
+    g_sim_time : natural);
 end entity;
 
 architecture tb of tb_xaxi4lite_wb_bridge is
 
   -- Constants
   constant C_CLK_PERIOD : time := 10 ns;
+  constant C_SIM_TIME   : time := (g_sim_time*1.0 ms);
 
   -- Signals
   signal tb_clk_i         : std_logic;
@@ -55,14 +57,14 @@ architecture tb of tb_xaxi4lite_wb_bridge is
   signal tb_axi4_master_i : t_axi4_lite_master_in_32;
 
   signal stop             : boolean;
-  signal s_araddr         : std_logic_vector(31 downto 0); 
+  signal s_araddr         : std_logic_vector(31 downto 0);
   signal s_wb_data        : std_logic_vector(31 downto 0);
 
   type t_state is (IDLE, READ, WRITE, WB_END);
   signal s_state : t_state;
 
   shared variable sv_cover : covPType;
-    
+
   --------------------------------------------------------------------------------
   -- Procedures used for fsm coverage
   --------------------------------------------------------------------------------
@@ -139,7 +141,7 @@ begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
     wait until tb_rst_n_i = '1';
-    while (NOW < 2 ms) loop
+    while (NOW < C_SIM_TIME) loop
       wait until rising_edge(tb_clk_i);
       -- Slave inputs
       tb_wb_slave_i.cyc <= data.randSlv(1)(1);
@@ -280,7 +282,7 @@ begin
     end loop;
     wait;
   end process;
-    
+
 
   -- Check wb and axi4lite signals when READ
   process
@@ -300,13 +302,13 @@ begin
           s_wb_data <= tb_axi4_master_i.RDATA;
           wait for 1 ns;
           assert (tb_wb_slave_o.dat = s_wb_data)
-            report "WB slave output data mismatch" severity failure; 
+            report "WB slave output data mismatch" severity failure;
           assert (tb_wb_slave_o.ack = '1' AND tb_wb_slave_o.err = '0')
             report "Wrong ACK and ERR for specific RRESP" severity failure;
         elsif tb_axi4_master_i.RVALID = '1' then
           wait for 1 ns;
           assert (tb_wb_slave_o.ack = '0' AND tb_Wb_slave_o.err = '1')
-            report "Wrong ACK and ERR" severity failure; 
+            report "Wrong ACK and ERR" severity failure;
         else
           s_wb_data <= (others=>'0');
           assert (tb_wb_slave_o.ack = '0' AND tb_Wb_slave_o.err = '0')

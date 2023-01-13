@@ -41,7 +41,8 @@ use osvvm.CoveragePkg.all;
 
 entity tb_axi4lite32_axi4full64_bridge is
   generic (
-    g_seed : natural);
+    g_seed     : natural;
+    g_sim_time : natural);
 end entity;
 
 --==============================================================================
@@ -55,6 +56,7 @@ architecture tb of tb_axi4lite32_axi4full64_bridge is
   --==========================================================
 
   constant C_CLK_PERIOD : time := 10 ns;
+  constant C_SIM_TIME   : time := (g_sim_time*1.0 ms);
   constant RSP_OKAY     : std_logic_vector(1 downto 0) := b"00";
   constant RSP_EXOKAY   : std_logic_vector(1 downto 0) := b"01";
   constant RSP_SLVERR   : std_logic_vector(1 downto 0) := b"10";
@@ -294,7 +296,7 @@ begin
     data.InitSeed(g_seed);
     report "[STARTING] with seed = " & to_string(g_seed);
     wait until tb_rst_n_i = '1';
-    while (NOW < 4 ms) loop
+    while (NOW < C_SIM_TIME) loop
       wait until rising_edge(tb_clk_i);
       -- AXI-4 Full inputs
       tb_s_awaddr  <= data.randSlv(32);
