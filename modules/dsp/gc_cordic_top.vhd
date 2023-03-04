@@ -27,7 +27,7 @@
 --
 -- rotate / circular
 -- inputs limitations : 
---   - sqrt(x*x + y*y) < K*FS
+--   - sqrt(x*x + y*y) < FS/K
 --   - -FS < z < +FS
 -- outputs :
 --   - x_o = K*FS*(x*cos(z)-y*sin(z)) (-FS <= x_o <= +FS)
@@ -37,10 +37,10 @@
 -- vector / circular
 -- inputs limitations
 --   - avoid small x and y values because the error grows quite large
---   - sqrt(x*x + y*y) < K*FS
+--   - sqrt(x*x + y*y) < FS/K
 --   - -FS < z < +FS
 -- outputs
---   - x_o = K*sqrt(x*x-y*y) (0 <= x_o <= +FS)
+--   - x_o = K*sqrt(x*x+y*y) (0 <= x_o <= +FS)
 --   - y_o = 0
 --   - z_o = z + atan(y/x) (-FS <= z_o <= +FS)
 --
@@ -159,7 +159,6 @@ architecture rtl of gc_cordic_top is
   
   function f_shift(inp : signed; i : integer) return signed is
     variable v_ret : signed(inp'range);
-    variable v_all_ones : std_logic := '1';
   begin
     if i >= inp'left then
       v_ret := (others => '0');
