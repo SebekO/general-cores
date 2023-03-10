@@ -18,6 +18,9 @@
 
 
 /// A set of testbench utilities for AXI interfaces.
+
+`include "axi_intf.sv"
+
 package axi_test;
 
   import axi_pkg::*;
