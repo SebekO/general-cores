@@ -9,7 +9,7 @@ syn_device="xc7k70t"
 include_dirs=["../../../sim", "../include", "../../../sim/wishbone" ]
 modelsim_ini_path="~/eda/modelsim-lib-2016.4"
 
-files = [ "main.sv" ]
+files = [ "main.sv", "../../../sim/regs/wb_fpgen_regs.sv" ]
 
-modules = { "local" :  [ "../../../", "../../../sim/"] }
+modules = { "local" :  [ "../../../", "../../../sim/" ] }
 
