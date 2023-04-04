@@ -124,7 +124,7 @@ architecture syn of inferred_async_fifo is
       gray_next  => (others => '0'),
       bin_x => (others => '0'),
       gray_x  => (others => '0') );
-  
+
 
   type t_mem_type is array (0 to g_size-1) of std_logic_vector(g_data_width-1 downto 0);
   signal mem : t_mem_type := (others => (others => '0'));
@@ -132,9 +132,9 @@ architecture syn of inferred_async_fifo is
 
   attribute ram_type : string;
   attribute ram_type of mem : signal is g_memory_implementation_hint;
-  
+
   signal rcb, wcb : t_counter_block := c_counters_reset_value;
-  
+
   signal full_int, empty_int               : std_logic;
   signal almost_full_int, almost_empty_int : std_logic;
   signal going_full                        : std_logic;
@@ -298,6 +298,7 @@ begin  -- syn
   begin
     if rst_n_i = '0' then
       almost_full_int <= '0';
+      wr_count <= (others => '0');
     elsif rising_edge(clk_wr_i) then
       wr_count <= std_logic_vector(unsigned(wcb.bin) - unsigned(rcb.bin_x));
       if (unsigned(wr_count) >= g_almost_full_threshold) then
