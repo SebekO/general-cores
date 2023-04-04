@@ -20,9 +20,12 @@
 // 2022/12/02  1.0      sowarzan        Created
 ///////////////////////////////////////////////////////////////////////////////
 
+`default_nettype none
+`include "util_pkg.sv"
+
 module generic_async_fifo_wrap #(
   parameter DATA_WIDTH = 16,
-  parameter SIZE       = 2772
+  parameter SIZE       = 2048
 ) (
   // Control/Data Signals,
   input wire rst_i, // FPGA Reset
@@ -31,6 +34,7 @@ module generic_async_fifo_wrap #(
   input wire        clk_wr_i,  // Write Clock
   input wire [15:0] d_i,       // Write data
   input wire        we_i,      // Wrte enable
+  output wire [clogb2(SIZE)-1:0] wr_count_o,
 
   // read port
   input  wire        clk_rd_i, // Read Clock
@@ -82,7 +86,7 @@ module generic_async_fifo_wrap #(
     .wr_full_o(wr_full_o),
     .wr_almost_empty_o(),
     .wr_almost_full_o(),
-    .wr_count_o(),
+    .wr_count_o(wr_count_o),
 
     // read port
     .clk_rd_i(clk_rd_i),
