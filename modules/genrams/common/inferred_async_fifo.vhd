@@ -298,7 +298,6 @@ begin  -- syn
   begin
     if rst_n_i = '0' then
       almost_full_int <= '0';
-      wr_count <= (others => '0');
     elsif rising_edge(clk_wr_i) then
       wr_count <= std_logic_vector(unsigned(wcb.bin) - unsigned(rcb.bin_x));
       if (unsigned(wr_count) >= g_almost_full_threshold) then
