@@ -34,12 +34,13 @@ module generic_async_fifo_wrap #(
   input wire        clk_wr_i,  // Write Clock
   input wire [15:0] d_i,       // Write data
   input wire        we_i,      // Wrte enable
-  output wire [clogb2(SIZE)-1:0] wr_count_o,
+  output wire [clogb2(SIZE)-1:0] wr_count_o, // Data counter
 
   // read port
   input  wire        clk_rd_i, // Read Clock
   output wire [15:0] q_o,      // Read data
-  input  wire        rd_i      // Read enable
+  input  wire        rd_i,     // Read enable
+  output wire [clogb2(SIZE)-1:0] rd_count_o // Data counter
 );
   reg r_we_i, r_rd_i;
   wire wr_full_o, rd_empty_o;
@@ -97,6 +98,6 @@ module generic_async_fifo_wrap #(
     .rd_full_o(),
     .rd_almost_empty_o(),
     .rd_almost_full_o(),
-    .rd_count_o()
+    .rd_count_o(rd_count_o)
   );
 endmodule // generic_async_fifo_wrap
