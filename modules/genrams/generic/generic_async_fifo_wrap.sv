@@ -21,7 +21,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 `default_nettype none
-`include "util_pkg.sv"
 
 module generic_async_fifo_wrap #(
   parameter DATA_WIDTH = 16,
@@ -31,29 +30,19 @@ module generic_async_fifo_wrap #(
   input wire rst_i, // FPGA Reset
 
   // write port
-  input wire        clk_wr_i,  // Write Clock
-  input wire [15:0] d_i,       // Write data
-  input wire        we_i,      // Wrte enable
-  output wire [clogb2(SIZE)-1:0] wr_count_o, // Data counter
+  input  wire        clk_wr_i,  // Write Clock
+  input  wire [15:0] d_i,       // Write data
+  input  wire        we_i,      // Write enable
+  output wire        wr_full_o, // Write full
+  output wire [$clog2(SIZE)-1:0] wr_count_o, // Data counter
 
   // read port
-  input  wire        clk_rd_i, // Read Clock
-  output wire [15:0] q_o,      // Read data
-  input  wire        rd_i,     // Read enable
-  output wire [clogb2(SIZE)-1:0] rd_count_o // Data counter
+  input  wire        clk_rd_i,   // Read Clock
+  output wire [15:0] q_o,        // Read data
+  input  wire        rd_i,       // Read enable
+  output wire        rd_empty_o, // Read empty
+  output wire [$clog2(SIZE)-1:0] rd_count_o // Data counter
 );
-  reg r_we_i, r_rd_i;
-  wire wr_full_o, rd_empty_o;
-
-  always @(wr_full_o, we_i) begin
-    if (wr_full_o) r_we_i <= 1'b0;
-    else r_we_i <= we_i;
-  end
-
-  always @(rd_empty_o, rd_i) begin
-    if (rd_empty_o) r_rd_i <= 1'b0;
-    else r_rd_i <= rd_i;
-  end
 
   generic_async_fifo #(
     .g_data_width(DATA_WIDTH),
@@ -81,7 +70,7 @@ module generic_async_fifo_wrap #(
     // write port
     .clk_wr_i(clk_wr_i),
     .d_i(d_i),
-    .we_i(r_we_i),
+    .we_i(we_i),
 
     .wr_empty_o(),
     .wr_full_o(wr_full_o),
@@ -92,7 +81,7 @@ module generic_async_fifo_wrap #(
     // read port
     .clk_rd_i(clk_rd_i),
     .q_o(q_o),
-    .rd_i(r_rd_i),
+    .rd_i(rd_i),
 
     .rd_empty_o(rd_empty_o),
     .rd_full_o(),
