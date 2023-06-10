@@ -159,6 +159,7 @@ package gencores_pkg is
       cs_sel_i      : in  std_logic_vector(g_num_cs_select-1 downto 0);
       load_i        : in  std_logic;
       sclk_divsel_i : in  std_logic_vector(2 downto 0);
+      dac_sel_i     : in  std_logic_vector(2 downto 0);
       dac_cs_n_o    : out std_logic_vector(g_num_cs_select-1 downto 0);
       dac_sclk_o    : out std_logic;
       dac_sdata_o   : out std_logic;
@@ -656,6 +657,17 @@ package gencores_pkg is
       dec_i : in std_logic;
       counter_o : out std_logic_vector(g_bits downto 0));
   end component gc_async_counter_diff;
+
+  component gc_dec_8b10b
+    port (
+      clk_i       : in  std_logic;
+      rst_n_i     : in  std_logic;
+      in_10b_i    : in  std_logic_vector(9 downto 0);
+      ctrl_o      : out std_logic;
+      code_err_o  : out std_logic;
+      rdisp_err_o : out std_logic;
+      out_8b_o    : out std_logic_vector(7 downto 0));
+  end component;
 
   --============================================================================
   -- Procedures and functions
