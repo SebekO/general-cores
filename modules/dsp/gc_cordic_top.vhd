@@ -92,6 +92,175 @@ use ieee.math_real.all;
 
 use work.gc_cordic_pkg.all;
 
+entity gc_cordic_stg is
+  generic
+  (
+    -- Word-width
+    g_WIDTH : integer := 16;
+    g_STG : integer := 1
+  );
+  port
+  (
+    clk_i : in std_logic;
+    rst_i : in std_logic;
+    
+    mode_i : in t_CORDIC_MODE;
+    submode_i : in t_CORDIC_SUBMODE;
+    x_i : in signed(g_WIDTH-1 downto 0);
+    y_i : in signed(g_WIDTH-1 downto 0);
+    z_i : in signed(g_WIDTH-1 downto 0);
+    valid_i : in std_logic;
+    lim_x_i : in std_logic;
+    lim_y_i : in std_logic;
+
+    mode_o : out t_CORDIC_MODE;
+    submode_o : out t_CORDIC_SUBMODE;
+    x_o : out signed(g_WIDTH-1 downto 0);
+    y_o : out signed(g_WIDTH-1 downto 0);
+    z_o : out signed(g_WIDTH-1 downto 0);
+    valid_o : out std_logic;
+    lim_x_o : out std_logic;
+    lim_y_o : out std_logic
+  );
+end entity gc_cordic_stg;
+
+architecture rtl of gc_cordic_stg is
+  type t_CORDIC_STV is record
+    x : signed(g_WIDTH-1 downto 0);
+    y : signed(g_WIDTH-1 downto 0);
+    z : signed(g_WIDTH-1 downto 0);
+    valid : std_logic;
+    lim_x : std_logic;
+    lim_y : std_logic;
+    mode : t_CORDIC_MODE;
+    submode : t_CORDIC_SUBMODE;
+  end record;
+  constant c_CORDIC_DEFAULT : t_CORDIC_STV := (x => (others => '0'),
+                                               y => (others => '0'),
+                                               z => (others => '0'), 
+                                               valid => '0',
+                                               lim_x => '0',
+                                               lim_y => '0',
+                                               mode => c_MODE_VECTOR,
+                                               submode => c_SUBMODE_CIRCULAR);
+  
+  signal s_stg_in, s_stg_out : t_CORDIC_STV;
+
+  constant c_FS : real := 2.0**(g_WIDTH-1)-1.0;
+  
+  function f_shift(inp : signed; i : integer) return signed is
+    variable v_ret : signed(inp'range);
+  begin
+    if i >= inp'left then
+      v_ret := (others => '0');
+    else
+      v_ret := resize(inp(inp'length-1 downto i), inp'length);
+    end if;
+    return v_ret;
+  end function f_shift;
+
+begin
+  s_stg_in.x <= x_i;
+  s_stg_in.y <= y_i;
+  s_stg_in.z <= z_i;
+  s_stg_in.valid <= valid_i;
+  s_stg_in.lim_x <= lim_x_i;
+  s_stg_in.lim_y <= lim_y_i;
+  s_stg_in.mode <= mode_i;
+  s_stg_in.submode <= submode_i;
+
+  x_o <= s_stg_out.x;
+  y_o <= s_stg_out.y;
+  z_o <= s_stg_out.z;
+  valid_o <= s_stg_out.valid;
+  lim_x_o <= s_stg_out.lim_x;
+  lim_y_o <= s_stg_out.lim_y;
+  mode_o <= s_stg_out.mode;
+  submode_o <= s_stg_out.submode;
+
+  p_iter : process(clk_i)
+
+    constant c_ALPHA_CIRCULAR : signed(g_WIDTH-1 downto 0) := to_signed(integer(arctan(1.0/(2.0**(g_STG)))*c_FS/MATH_PI), g_WIDTH);
+    constant c_ALPHA_LINEAR : signed(g_WIDTH-1 downto 0) := to_signed(integer((1.0/(2.0**g_STG)*c_FS)), g_WIDTH);
+    constant c_ALPHA_HYPERBOLIC : signed(g_WIDTH-1 downto 0) := to_signed(integer(arctanh(1.0/(2.0**g_STG))*c_FS), g_WIDTH);
+    
+    variable v_alpha : signed(g_WIDTH-1 downto 0) := (others => '0');
+    variable v_negate : std_logic := '0'; --inverts when '1', equivalent to di=-1
+    variable v_x_shifted : signed(g_WIDTH-1 downto 0) := (others => '0');
+    variable v_y_shifted : signed(g_WIDTH-1 downto 0) := (others => '0');
+    variable v_x, v_y  : signed(g_WIDTH-1 downto 0) := (others => '0');
+    variable v_z  : signed(g_WIDTH-1 downto 0) := (others => '0');
+    variable v_lim_x, v_lim_y, v_lim_z : std_logic;
+    
+  begin
+    if rising_edge(clk_i) then
+      if rst_i = '1' then
+        s_stg_out.valid <= '0';
+        s_stg_out.x <= (others => '0');
+        s_stg_out.y <= (others => '0');
+        s_stg_out.z <= (others => '0');
+        s_stg_out.lim_x <= '0';
+        s_stg_out.lim_y <= '0';
+        s_stg_out.mode <= "0";
+        s_stg_out.submode <= "00";
+      else
+        case s_stg_in.mode is
+          when c_MODE_ROTATE => 
+            -- di = sign(z) = not z'left. add when z is >= 0, else substract
+            v_negate := s_stg_in.z(s_stg_in.z'left); 
+          when c_MODE_VECTOR => 
+            -- di = -sign(x*y) => + when (+.+) and (-.-), - when (+.-) and (-.+) -> xor
+            v_negate := not (s_stg_in.x(g_WIDTH-1) xor s_stg_in.y(g_WIDTH-1));
+          when others =>
+            report "Wrong mode" severity error;
+            v_negate := '0';
+        end case;
+
+        case s_stg_in.submode is
+          when c_SUBMODE_CIRCULAR =>
+            -- Using f_limit_negate to invert the number depending on v_negate (di)
+            v_alpha := f_limit_negate(true, c_ALPHA_CIRCULAR, v_negate);
+            v_y_shifted := f_limit_negate(true, f_shift(s_stg_in.y, g_STG), v_negate);
+          when c_SUBMODE_LINEAR =>
+            v_alpha := f_limit_negate(true, c_ALPHA_LINEAR, v_negate);
+            v_y_shifted := (others => '0');
+          when c_SUBMODE_HYPERBOLIC =>
+            v_alpha := f_limit_negate(true, c_ALPHA_HYPERBOLIC, v_negate);
+            v_y_shifted := f_limit_negate(true, f_shift(s_stg_in.y, g_STG), v_negate);
+          when others => 
+            report "Wrong submode" severity error;
+        end case;
+
+        v_x_shifted := f_limit_negate(true, f_shift(s_stg_in.x, g_STG), v_negate);
+
+        -- we always want to limit substract on x and y
+        f_limit_subtract(true, s_stg_in.x, v_y_shifted, v_x, v_lim_x);
+        f_limit_add     (true, s_stg_in.y, v_x_shifted, v_y, v_lim_y);
+        -- On vector/circular, the output z is an angle. We want it to freely overflow, because [-FS:+FS] -> [-180°:+180°]
+        f_limit_subtract(s_stg_in.mode /= c_MODE_VECTOR and s_stg_in.submode /= c_SUBMODE_CIRCULAR, s_stg_in.z, v_alpha, v_z, v_lim_z);
+
+        s_stg_out.valid <= s_stg_in.valid;
+        s_stg_out.x <= v_x;
+        s_stg_out.y <= v_y;
+        s_stg_out.z <= v_z;
+        s_stg_out.lim_x <= v_lim_x;
+        s_stg_out.lim_y <= v_lim_y;
+        s_stg_out.mode <= s_stg_in.mode;
+        s_stg_out.submode <= s_stg_in.submode;
+        
+      end if;
+    end if;
+  end process p_iter;
+
+end architecture rtl;
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.math_real.all;
+
+use work.gc_cordic_pkg.all;
+
 entity gc_cordic_top is
   generic
   (
@@ -111,21 +280,19 @@ entity gc_cordic_top is
     -- The other mode combinations may work, but have not been tested.
     mode_i : in t_CORDIC_MODE;
     submode_i : in t_CORDIC_SUBMODE;
-  
-
     x_i : in std_logic_vector(g_WIDTH-1 downto 0);
     y_i : in std_logic_vector(g_WIDTH-1 downto 0);
     z_i : in std_logic_vector(g_WIDTH-1 downto 0);
     valid_i : in std_logic;
 
-    lim_x_o : out std_logic; -- '1' when saturation happened. You may not want to 
-    lim_y_o : out std_logic; -- trust the result in this case.
+    mode_o : out t_CORDIC_MODE;
+    submode_o : out t_CORDIC_SUBMODE;
     x_o : out std_logic_vector(g_WIDTH-1 downto 0);
     y_o : out std_logic_vector(g_WIDTH-1 downto 0);
     z_o : out std_logic_vector(g_WIDTH-1 downto 0);
     valid_o : out std_logic;
-    mode_o : out t_CORDIC_MODE;
-    submode_o : out t_CORDIC_SUBMODE
+    lim_x_o : out std_logic; -- '1' when saturation happened. You may not want to 
+    lim_y_o : out std_logic -- trust the result in this case.
 
   );
 end entity gc_cordic_top;
@@ -147,26 +314,13 @@ architecture rtl of gc_cordic_top is
                                                valid => '0',
                                                lim_x => '0',
                                                lim_y => '0',
-                                               mode => c_MODE_ROTATE,
+                                               mode => c_MODE_VECTOR,
                                                submode => c_SUBMODE_CIRCULAR);
 
   type t_CORDIC_ARRAY is array(natural range <>) of t_CORDIC_STV;
   
   signal s_cordic_init : t_CORDIC_STV;
   signal s_stg : t_CORDIC_ARRAY(0 to g_ITERATIONS) := (others => c_CORDIC_DEFAULT);
-  signal s_di : std_logic_vector(g_ITERATIONS-1 downto 0) := (others => '0');
-  constant c_FS : real := 2.0**(g_WIDTH-1)-1.0;
-  
-  function f_shift(inp : signed; i : integer) return signed is
-    variable v_ret : signed(inp'range);
-  begin
-    if i >= inp'left then
-      v_ret := (others => '0');
-    else
-      v_ret := resize(inp(inp'length-1 downto i), inp'length);
-    end if;
-    return v_ret;
-  end function f_shift;
     
 begin
   
@@ -229,75 +383,35 @@ begin
   end process p_cordic_init;
 
   gen_iterations : for i in 0 to g_ITERATIONS-2 generate
-    p_iter : process(clk_i)
+    cmp_stg : entity work.gc_cordic_stg
+    generic map
+    (
+      g_WIDTH => g_WIDTH,
+      g_STG => i
+    )
+    port map
+    (
+      clk_i => clk_i,
+      rst_i => rst_i,
 
-      constant c_ALPHA_CIRCULAR : signed(g_WIDTH-1 downto 0) := to_signed(integer(arctan(1.0/(2.0**(i)))*c_FS/MATH_PI), g_WIDTH);
-      constant c_ALPHA_LINEAR : signed(g_WIDTH-1 downto 0) := to_signed(integer((1.0/(2.0**i)*c_FS)), g_WIDTH);
-      constant c_ALPHA_HYPERBOLIC : signed(g_WIDTH-1 downto 0) := to_signed(integer(arctanh(1.0/(2.0**i))*c_FS), g_WIDTH);
-      
-      variable v_alpha : signed(g_WIDTH-1 downto 0);
-      variable v_negate : std_logic; --inverts when '1', equivalent to di=-1
-      variable v_x_shifted : signed(g_WIDTH-1 downto 0);
-      variable v_y_shifted : signed(g_WIDTH-1 downto 0);
-      variable v_x, v_y  : signed(g_WIDTH-1 downto 0);
-      variable v_z  : signed(g_WIDTH-1 downto 0);
-      variable v_lim_x, v_lim_y, v_lim_z : std_logic;
-      
-    begin
-      if rising_edge(clk_i) then
-        if rst_i = '1' then
-          s_stg(i+1) <= c_CORDIC_DEFAULT;
-          s_di(i) <= '0';
-        else
-          case s_stg(i).mode is
-            when c_MODE_ROTATE => 
-              -- di = sign(z) = not z'left. add when z is >= 0, else substract
-              v_negate := s_stg(i).z(s_stg(i).z'left); 
-            when c_MODE_VECTOR => 
-              -- di = -sign(x*y) => + when (+.+) and (-.-), - when (+.-) and (-.+) -> xor
-              v_negate := not (s_stg(i).x(g_WIDTH-1) xor s_stg(i).y(g_WIDTH-1));
-            when others =>
-              report "Wrong mode" severity error;
-              v_negate := '0';
-          end case;
+      x_i => s_stg(i).x,
+      y_i => s_stg(i).y,
+      z_i => s_stg(i).z,
+      mode_i => s_stg(i).mode,
+      submode_i => s_stg(i).submode,
+      lim_x_i => s_stg(i).lim_x,
+      lim_y_i => s_stg(i).lim_y,
+      valid_i => s_stg(i).valid,
 
-          case s_stg(i).submode is
-            when c_SUBMODE_CIRCULAR =>
-              -- Using f_limit_negate to invert the number depending on v_negate (di)
-              v_alpha := f_limit_negate(true, c_ALPHA_CIRCULAR, v_negate);
-              v_y_shifted := f_limit_negate(true, f_shift(s_stg(i).y, i), v_negate);
-            when c_SUBMODE_LINEAR =>
-              v_alpha := f_limit_negate(true, c_ALPHA_LINEAR, v_negate);
-              v_y_shifted := (others => '0');
-            when c_SUBMODE_HYPERBOLIC =>
-              v_alpha := f_limit_negate(true, c_ALPHA_HYPERBOLIC, v_negate);
-              v_y_shifted := f_limit_negate(true, f_shift(s_stg(i).y, i), v_negate);
-            when others => 
-              report "Wrong submode" severity error;
-          end case;
-
-          v_x_shifted := f_limit_negate(true, f_shift(s_stg(i).x, i), v_negate);
-
-          s_di(i) <= v_negate;
-
-          -- we always want to limit substract on x and y
-          f_limit_subtract(true, s_stg(i).x, v_y_shifted, v_x, v_lim_x);
-          f_limit_add     (true, s_stg(i).y, v_x_shifted, v_y, v_lim_y);
-          -- On vector/circular, the output z is an angle. We want it to freely overflow, because [-FS:+FS] -> [-180°:+180°]
-          f_limit_subtract(s_stg(i).mode /= c_MODE_VECTOR and s_stg(i).submode /= c_SUBMODE_CIRCULAR, s_stg(i).z, v_alpha, v_z, v_lim_z);
-
-          s_stg(i+1).valid <= s_stg(i).valid;
-          s_stg(i+1).x <= v_x;
-          s_stg(i+1).y <= v_y;
-          s_stg(i+1).z <= v_z;
-          s_stg(i+1).lim_x <= v_lim_x;
-          s_stg(i+1).lim_y <= v_lim_y;
-          s_stg(i+1).mode <= s_stg(i).mode;
-          s_stg(i+1).submode <= s_stg(i).submode;
-          
-        end if;
-      end if;
-    end process p_iter;
+      x_o => s_stg(i+1).x,
+      y_o => s_stg(i+1).y,
+      z_o => s_stg(i+1).z,
+      mode_o => s_stg(i+1).mode,
+      submode_o => s_stg(i+1).submode,
+      lim_x_o => s_stg(i+1).lim_x,
+      lim_y_o => s_stg(i+1).lim_y,
+      valid_o => s_stg(i+1).valid
+    );
   end generate gen_iterations;
   
   x_o <= std_logic_vector(s_stg(g_ITERATIONS-1).x);
