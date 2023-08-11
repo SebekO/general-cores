@@ -31,7 +31,7 @@
 --   - -FS < z < +FS
 -- outputs :
 --   - x_o = K*FS*(x*cos(z)-y*sin(z)) (-FS <= x_o <= +FS)
---   - y_o = K*FS*(y*cos(z)+y*sin(z)) (-FS <= x_o <= +FS)
+--   - y_o = K*FS*(y*cos(z)+z*sin(z)) (-FS <= x_o <= +FS)
 --   - z_o = 0
 --
 -- vector / circular
