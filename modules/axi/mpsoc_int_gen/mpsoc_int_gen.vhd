@@ -85,10 +85,10 @@ begin
   S_AXI_awsize <= "010";
 
   --  Normal Non-cacheable Non-bufferable
-  S_AXI_awcache <= "0010";
+  S_AXI_awcache <= "0000";
 
   --  Reuse the same id.
-  S_AXI_awid <= "000000";
+  S_AXI_awid <= b"00_0000";
   
   S_AXI_awlock <= '0';
 
@@ -108,11 +108,11 @@ begin
   S_AXI_wstrb(3 downto 0) <= "1111";
   S_AXI_wstrb(s_AXI_wstrb'left downto 4) <= (others => '0');
 
+  S_AXI_bready <= '1';
+
   process (clk_i)
   begin
     if rising_edge(clk_i) then
-
-      S_AXI_bready <= '1';
 
       if rst_n_i = '0' then
         S_AXI_awvalid <= '0';
