@@ -461,4 +461,8 @@ begin  -- arch
   regs_in.sr_physical_uart_i <= '1' when g_WITH_PHYSICAL_UART else '0';
   regs_in.sr_virtual_uart_i  <= '1' when g_WITH_VIRTUAL_UART  else '0';
 
+  -- Register to check the endianess. Holds a default value and when user reads
+  -- it as it is, it means the endianess is big, else it is little
+  regs_in.check_endianess_i <= x"AABBCCDD";
+
 end arch;

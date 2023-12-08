@@ -243,4 +243,21 @@ peripheral {
 
 			
 	 };
+     reg {
+      name = "Check Endianess";
+      description = "Register showing the endianess";
+      prefix = "CHECK_ENDIANESS";
+
+
+            field {
+                 name = "Check endianess register";
+                 description = "Register for endianess. Holds a default value based on which the user \
+                 can check anytime the endianess. Default is big endianess";
+                    type = SLV;
+                    size = 32; 
+                    access_dev= WRITE_ONLY;
+                    access_bus=READ_ONLY;
+     };  
+  }; 
+
 };
