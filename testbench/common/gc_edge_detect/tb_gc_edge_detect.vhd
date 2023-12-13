@@ -1,4 +1,8 @@
 --------------------------------------------------------------------------------
+-- SPDX-FileCopyrightText: 2022 CERN (home.cern)
+--
+-- SPDX-License-Identifier: CERN-OHL-W-2.0+
+--------------------------------------------------------------------------------
 -- CERN BE-CEM-EDL
 -- General Cores Library
 -- https://www.ohwr.org/projects/general-cores
@@ -11,31 +15,27 @@
 -- description: testbench for simple edge detector
 --
 --------------------------------------------------------------------------------
--- Copyright CERN 2014-2020
---------------------------------------------------------------------------------
--- Copyright and related rights are licensed under the Solderpad Hardware
--- License, Version 2.0 (the "License"); you may not use this file except
--- in compliance with the License. You may obtain a copy of the License at
--- http://solderpad.org/licenses/SHL-2.0.
--- Unless required by applicable law or agreed to in writing, software,
--- hardware and materials distributed under this License is distributed on an
--- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
--- or implied. See the License for the specific language governing permissions
--- and limitations under the License.
---------------------------------------------------------------------------------
+
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
--- OSVVM library
+library vunit_lib;
+context vunit_lib.vunit_context;
+context vunit_lib.vc_context;
+
 library osvvm;
 use osvvm.RandomPkg.all;
 use osvvm.CoveragePkg.all;
 
+library common_lib;
+
 entity tb_gc_edge_detect is
   generic (
+    runner_cfg   : string;
     g_seed       : natural;
+    g_clk_cycles : natural;
     g_ASYNC_RST  : boolean := FALSE;
     g_PULSE_EDGE : string  := "positive";
     g_CLOCK_EDGE : string  := "positive");
@@ -49,17 +49,121 @@ architecture tb of tb_gc_edge_detect is
   -- Signals
   signal tb_clk_i   : std_logic;
   signal tb_rst_i   : std_logic;
-  signal tb_d_i     : std_logic := '0';
+  signal tb_d_i     : std_logic;
   signal tb_pulse_o : std_logic;
-  signal stop       : boolean;
+  signal stop       : boolean := false;
 
   -- Shared variables, used for coverage
   shared variable cp_rst_i : covPType;
+  shared variable rnd      : RandomPType;
 
 begin
 
+  -- Clock generation
+  p_clk_proc : process
+  begin
+    while true loop
+      tb_clk_i <= '1';
+      wait for C_CLK_PERIOD/2;
+      tb_clk_i <= '0';
+      wait for C_CLK_PERIOD/2;
+    end loop;
+  end process p_clk_proc;
+
+  -- Reset generation
+  tb_rst_i <= '0', '1' after 10*C_CLK_PERIOD;
+
+  --------------------------------------------------------------------------
+  --! Main Test Process required by VUnit
+  p_main_test : process
+  begin
+    test_runner_setup(runner, runner_cfg);
+	rnd.InitSeed(g_seed);
+	info("[STARTING] Seed = " & integer'image(g_seed));
+	while test_suite loop
+      reset_checker_stat;
+
+      if run("test_edge_detect") then
+        tb_d_i <= '0';
+        wait until rising_edge(tb_rst_i);
+        for i in 0 to g_clk_cycles-1 loop
+          wait until rising_edge(tb_clk_i);
+          tb_d_i <= rnd.randSlv(1)(1);
+        end loop;
+      end if;
+
+    end loop;
+    stop <= true;
+	test_runner_cleanup(runner);
+  end process p_main_test;
+
+  -- Timeout watchdog (optional)
+  test_runner_watchdog(runner, 2 ms);
+
+  --sets up coverpoint bins
+  p_init_coverage : process
+  begin
+    cp_rst_i.AddBins("reset has asserted", ONE_BIN);
+    wait;
+  end process p_init_coverage;
+
+  --Assertion to check that the width of the output
+  --pulse is asserted for only one clock cycle
+  p_one_clk_width : process
+  begin
+    while true loop
+      wait until rising_edge(tb_pulse_o);
+      wait until rising_edge(tb_clk_i);
+      wait for 1 ps; --minor time delay just for the simulator to detect the change
+      check_equal(tb_pulse_o,'0',"Wrond duration of the output pulse");
+    end loop;
+  end process p_one_clk_width;
+
+  --Assertion to verify the output based on the clock edge
+  gen_pos_edge : if g_CLOCK_EDGE = "positive" generate
+
+    p_pos_check_output : process
+    begin
+      wait until rising_edge(tb_clk_i);
+      if rising_edge(tb_d_i) then
+        check_equal(tb_pulse_o,'1',"Pulse not detected in positive clk edge");
+      end if;
+    end process p_pos_check_output;
+
+  end generate gen_pos_edge;
+
+  gen_neg_edge : if g_CLOCK_EDGE = "negative" generate
+
+    p_neg_check_output : process
+    begin
+      wait until rising_edge(tb_clk_i);
+      if falling_edge(tb_d_i) then
+        check_equal(tb_pulse_o,'1',"Pulse not detected when negative clk edge");
+      end if;
+    end process p_neg_check_output;
+
+  end generate gen_neg_edge;
+
+  p_sample_cov : process
+  begin
+    loop
+      wait on tb_rst_i;
+      wait for C_CLK_PERIOD;
+      --sample the coverpoints
+      cp_rst_i.ICover(to_integer(tb_rst_i = '1'));
+    end loop;
+  end process p_sample_cov;
+
+  p_cover_report: process
+  begin
+    wait until stop;
+    report"**** Coverage Report ****";
+    cp_rst_i.writebin;
+    report "";
+  end process p_cover_report;
+
   -- Unit Under Test
-  UUT : entity work.gc_edge_detect
+  UUT : entity common_lib.gc_edge_detect
   generic map (
     g_ASYNC_RST  => g_ASYNC_RST,
     g_PULSE_EDGE => g_PULSE_EDGE,
@@ -70,96 +174,4 @@ begin
     data_i  => tb_d_i,
     pulse_o => tb_pulse_o);
 
-  -- Clock generation
-  clk_proc : process
-  begin
-    while STOP = FALSE loop
-      tb_clk_i <= '1';
-      wait for C_CLK_PERIOD/2;
-      tb_clk_i <= '0';
-      wait for C_CLK_PERIOD/2;
-    end loop;
-    wait;
-  end process clk_proc;
-
-  -- Reset generation
-  tb_rst_i <= '0', '1' after 4*C_CLK_PERIOD;
-
-  -- Stimulus
-  stim : process
-    variable data : RandomPType;
-    variable ncycles : natural;
-
-  begin
-    data.InitSeed(g_seed);
-    report "[STARTING] with seed = " & to_string(g_seed);
-    while NOW < 4 ms loop
-      wait until (rising_edge(tb_clk_i) and tb_rst_i = '1');
-      tb_d_i  <= data.randSlv(1)(1);
-      ncycles := ncycles + 1;
-    end loop;
-    report "Number of simulation cycles = " & to_string(ncycles);
-    report "Test PASS!";
-    stop <= TRUE;
-    wait;
-  end process;
-
-  --sets up coverpoint bins
-  init_coverage : process
-  begin
-    cp_rst_i.AddBins("reset has asserted", ONE_BIN);
-    wait;
-  end process init_coverage;
-
-  --Assertion to check that the width of the output pulse
-  --is asserted for only one clock cycle
-  one_clk_width : process
-  begin
-    if rising_edge(tb_clk_i) then
-      if tb_pulse_o = '1' then
-        wait for C_CLK_PERIOD;
-        assert (tb_pulse_o = '0')
-          report "output pulse remains high for more than one clock"
-          severity failure;
-      end if;
-    end if;
-    wait;
-  end process;
-
-  --Assertion to check that output is the same as input
-  --after one clock cycle
-  check_output : process
-  begin
-    if rising_edge(tb_clk_i) then
-      if tb_d_i /= tb_pulse_o then
-        wait for C_CLK_PERIOD;
-        assert (tb_d_i = tb_pulse_o)
-          report "Input and Output signals are different"
-          severity failure;
-      else
-        wait for C_CLK_PERIOD;
-        assert (tb_d_i /= tb_pulse_o)
-          report "Input and Output signals still the same"
-          severity failure;
-      end if;
-    end if;
-    wait;
-  end process check_output;
-
-  sample : process
-  begin
-    loop
-      wait on tb_rst_i;
-      wait for C_CLK_PERIOD;
-      --sample the coverpoints
-      cp_rst_i.ICover(to_integer(tb_rst_i = '1'));
-    end loop;
-  end process sample;
-
-  cover_report: process
-  begin
-    wait until stop;
-    cp_rst_i.writebin;
-  end process;
-
-end tb;
+end architecture tb;
