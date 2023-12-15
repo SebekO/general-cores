@@ -33,7 +33,6 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.gencores_pkg.all;
 use work.genram_pkg.all;
 use work.wishbone_pkg.all;
 use work.UART_wbgen2_pkg.all;
@@ -120,13 +119,12 @@ architecture arch of wb_simple_uart is
   signal phys_rx_data, phys_tx_data : std_logic_vector(7 downto 0);
 
   type t_tx_fifo_state is (IDLE, TRANSMIT_PENDING);
-  type t_rx_fifo_state is (IDLE, RX_READ, RX_WAIT_ACK );
 
   signal tx_fifo_state : t_tx_fifo_state;
-  signal rx_fifo_state : t_rx_fifo_state;
 
-  signal rx_fifo_rdata : std_logic_vector(7 downto 0);
-  signal rx_fifo_wdata : std_logic_vector(7 downto 0);
+  signal s_rx_interrupt: std_logic;
+  signal s_tx_interrupt: std_logic;
+
 begin  -- arch
 
   gen_check_generics : if (not g_WITH_PHYSICAL_UART and not g_WITH_VIRTUAL_UART) generate
@@ -223,38 +221,34 @@ begin  -- arch
         baud8_tick_i => baud_tick8,
         rxd_i        => uart_rxd_i,
         rx_ready_o   => phys_rx_ready,
-        rx_error_o   => open, -- fixme: support RX error detection
+        rx_error_o   => open,
         rx_data_o    => phys_rx_data);
 
   end generate gen_phys_uart;
 
   gen_phys_fifos : if g_WITH_PHYSICAL_UART_FIFO generate
-
-    rx_fifo_wr <= not rx_fifo_full and (phys_rx_ready or ( f_to_std_logic(g_WITH_VIRTUAL_UART) and regs_out.host_tdr_data_wr_o ) );
+    rx_fifo_wr <= not rx_fifo_full and phys_rx_ready;
     tx_fifo_wr <= not tx_fifo_full and regs_out.tdr_tx_data_wr_o;
 
     tx_fifo_reset_n <= rst_n_i and not regs_out.cr_tx_fifo_purge_o;
     rx_fifo_reset_n <= rst_n_i and not regs_out.cr_rx_fifo_purge_o;
 
-    -- RX FIFO write data: Physical UART takes the priority over VUART. Note these
-    -- are not meant to be used simultaneously.
-    rx_fifo_wdata <= phys_rx_data when phys_rx_ready = '1' else regs_out.host_tdr_data_o;
-    
+    rx_fifo_rd <= not rx_fifo_empty and rdr_rack;
 
     U_UART_RX_FIFO : generic_sync_fifo
       generic map (
         g_DATA_WIDTH => 8,
         g_SIZE       => g_RX_FIFO_SIZE,
         g_WITH_COUNT => true,
-        g_SHOW_AHEAD => false
+        g_SHOW_AHEAD => true
         )
       port map (
         rst_n_i => rx_fifo_reset_n,
         clk_i   => clk_sys_i,
-        d_i     => rx_fifo_wdata,
+        d_i     => phys_rx_data,
         we_i    => rx_fifo_wr,
-        q_o     => rx_fifo_rdata,
-        rd_i    => rx_fifo_rd,
+        q_o     => regs_in.rdr_rx_data_i,
+        rd_i    => rdr_rack,
         empty_o => rx_fifo_empty,
         full_o  => rx_fifo_full,
         count_o => rx_fifo_count);
@@ -279,14 +273,12 @@ begin  -- arch
 
     regs_in.sr_rx_fifo_supported_i <= '1';
     regs_in.sr_tx_fifo_supported_i <= '1';
+    regs_in.sr_rx_fifo_valid_i     <= not rx_fifo_empty;
+    regs_in.sr_rx_rdy_i            <= not rx_fifo_empty;
     regs_in.sr_rx_fifo_overflow_i  <= rx_fifo_overflow;
     regs_in.sr_tx_fifo_full_i      <= tx_fifo_full;
     regs_in.sr_tx_fifo_empty_i     <= tx_fifo_empty;
 
-    regs_in.sr_rx_fifo_bytes_i (rx_fifo_count'length-1 downto 0) <= rx_fifo_count;
-    regs_in.sr_rx_fifo_bytes_i ( 15 downto rx_fifo_count'length ) <= (others => '0');
-    
-    
     phys_tx_start <= '1' when tx_fifo_state = IDLE and tx_fifo_empty = '0' else '0';
 
     p_rx_fifo_overflow : process(clk_sys_i)
@@ -295,11 +287,7 @@ begin  -- arch
         if rx_fifo_reset_n = '0' then
           rx_fifo_overflow <= '0';
         else
-          if regs_out.cr_rx_fifo_purge_o = '1' then
-            rx_fifo_overflow <= '0';
-          elsif rx_fifo_full = '1' then
-            rx_fifo_overflow <= '1';
-          end if;
+
         end if;
       end if;
     end process;
@@ -330,47 +318,14 @@ begin  -- arch
       end if;
     end process;
 
-    
-    p_rx_fifo_fsm : process(clk_sys_i)
-    begin
-      if rising_edge(clk_sys_i) then
-        if rx_fifo_reset_n = '0' then
-          rx_fifo_state <= IDLE;
-          regs_in.sr_rx_fifo_valid_i     <= '0';
-          regs_in.sr_rx_rdy_i            <= '0';
-
-        else
-          case rx_fifo_state is
-            when IDLE =>
-              regs_in.sr_rx_fifo_valid_i     <= '0';
-              regs_in.sr_rx_rdy_i            <= '0';
-
-              if rx_fifo_rd = '1' then
-                rx_fifo_state <= RX_READ;
-              end if;
-
-            when RX_READ =>
-
-              regs_in.rdr_rx_data_i <= rx_fifo_rdata;
-              regs_in.sr_rx_fifo_valid_i     <= '1';
-              regs_in.sr_rx_rdy_i            <= '1';
-              rx_fifo_state <= RX_WAIT_ACK;
-
-            when RX_WAIT_ACK =>
-              
-              if( rdr_rack = '1' ) then
-                regs_in.sr_rx_fifo_valid_i     <= '0';
-                regs_in.sr_rx_rdy_i            <= '0';
-                rx_fifo_state <= IDLE;
-              end if;
-          end case;
-        end if;
-      end if;
-    end process;
-
-    rx_fifo_rd  <= '1' when rx_fifo_state = IDLE and rx_fifo_empty = '0' else '0';
-
     regs_in.sr_tx_busy_i   <= tx_fifo_full;
+    
+    -- Handling the interrupt for UART
+    s_rx_interrupt <= '1' when (rx_fifo_empty = '0' and regs_out.cr_rx_interrupt_enable_o = '1') else '0';
+    s_tx_interrupt <= '1' when (tx_fifo_full = '0' and regs_out.cr_tx_interrupt_enable_o = '1') else '0';
+    
+    int_o <= s_rx_interrupt or s_tx_interrupt;
+
   end generate gen_phys_fifos;
 
   gen_phys_nofifos : if not g_WITH_PHYSICAL_UART_FIFO generate
@@ -457,8 +412,12 @@ begin  -- arch
 
   regs_in.host_tdr_rdy_i <= not regs_in.sr_rx_rdy_i;
 
-  -- Registers to set if the Physical or Virtual UART is present 
+  -- Registers used to clarify if we use Physical or Virtual UART
   regs_in.sr_physical_uart_i <= '1' when g_WITH_PHYSICAL_UART else '0';
   regs_in.sr_virtual_uart_i  <= '1' when g_WITH_VIRTUAL_UART  else '0';
+
+  -- Register to check the endianess. Holds a default value and when user reads
+  -- it as it is, it means the endianess is big, else it is little
+  regs_in.check_endianess_i <= x"AABBCCDD";
 
 end arch;

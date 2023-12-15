@@ -98,32 +98,33 @@ peripheral {
 
 				 prefix = "RX_FIFO_BYTES";
 				 type = SLV;
-				 size = 16;
+				 size = 8;
 				 access_bus = READ_ONLY;
 				 access_dev = WRITE_ONLY;
 			};
-            
+
             field {
                  name = "Physical UART";
                  description = "Set if the Physical UART is present";
- 
+
                  prefix = "PHYSICAL_UART";
                  type = BIT;
                  size = 1;
                  access_bus = READ_ONLY;
                  access_dev = WRITE_ONLY;
              };
- 
+
             field {
                  name = "Virtual UART";
                  description = "Set if the Virtual UART is present";
- 
+
                  prefix = "VIRTUAL_UART";
                  type = BIT;
                  size = 1;
                  access_bus = READ_ONLY;
                  access_dev = WRITE_ONLY;
             };
+
 	 };
 
 
@@ -240,7 +241,39 @@ peripheral {
 				 prefix = "TX_FIFO_PURGE";
 				 type = MONOSTABLE;
 			};
+			field {
+				 name = "TX Interrupt enable";
+				 description = "TX Interrupt Enable";
 
-			
+				 prefix = "TX_INTERRUPT_ENABLE";
+				 type = BIT;
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+			};
+			field {
+				 name = "RX Interrupt enable";
+				 description = "RX Interrupt Enable";
+
+				 prefix = "RX_INTERRUPT_ENABLE";
+				 type = BIT;
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+			};	
 	 };
+     reg {
+      name = "Check Endianess";
+      description = "Register showing the endianess";
+      prefix = "CHECK_ENDIANESS";
+
+
+            field {
+                 name = "Check endianess register";
+                 description = "Register for endianess. Holds a default value based on which the user \
+                 can check anytime the endianess. Default is big endianess";
+                    type = SLV;
+                    size = 32; 
+                    access_dev= WRITE_ONLY;
+                    access_bus=READ_ONLY;
+     };  
+  }; 
 };
