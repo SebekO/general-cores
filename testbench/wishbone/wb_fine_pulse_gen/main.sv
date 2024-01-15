@@ -117,6 +117,7 @@ class FinePulseGenDriver extends CBusDevice;
     real calib_time;
     int calib_taps;
 
+
     m_serdes_ratio = 8;
     m_serdes_bit_length_ns = 2.0;
 
@@ -145,6 +146,50 @@ class FinePulseGenDriver extends CBusDevice;
 
   endtask
 
+  task automatic pulse_pattern( input int out, bit pattern[$], int fine, int cont );
+    int i,paddr,plen,mask=0,fail,rv;
+    uint32_t ocr_a, ocr_b;
+
+    for(i=0;i<pattern.size();i++)
+    begin
+      mask |= pattern[i] ? 1<<(7-(i % 8)) : 0;
+      if( i % 8 == 7 )
+      begin
+        $display("i %d mask %x paddr %x", i, mask, paddr );
+      writel(ADDR_WB_FPGEN_PGEN_CR,
+        ( mask << WB_FPGEN_PGEN_CR_DATA_OFFSET )
+        | ( paddr << WB_FPGEN_PGEN_CR_ADDR_OFFSET )
+        | ( out << WB_FPGEN_PGEN_CR_OUT_SEL_OFFSET ) );
+        mask = 0;
+        paddr++;
+      end
+
+    end
+
+    ocr_a = 
+       (fine << WB_FPGEN_OCR0A_FINE_OFFSET)
+      | (cont ? WB_FPGEN_OCR0A_CONT : 0)
+      | WB_FPGEN_OCR0A_PAT_EN;
+
+    ocr_b = (1 << WB_FPGEN_OCR0B_PPS_OFFS_OFFSET)
+	    | ( (paddr-1) << WB_FPGEN_OCR0B_LENGTH_OFFSET);
+
+    writel(ADDR_WB_FPGEN_OCR0A + 8 * out, ocr_a);
+    writel(ADDR_WB_FPGEN_OCR0B + 8 * out, ocr_b);
+    writel(ADDR_WB_FPGEN_CSR, 1 << (WB_FPGEN_CSR_TRIG0_OFFSET + out));
+
+  #100ns;
+
+    poll_bits_with_timeout(ADDR_WB_FPGEN_CSR, (1 << (WB_FPGEN_CSR_READY_OFFSET + out)),
+                           (1 << (WB_FPGEN_CSR_READY_OFFSET + out)), 20us, rv, fail);
+
+    if (fail) begin
+      m_log.fail("Timeout exceeded waiting for channel trigger ready bit.");
+    end
+
+  endtask
+
+  
 
   task automatic pulse(int out, int polarity, int cont, real delta, real length = 0,
                        int tr_force = 0);
@@ -164,16 +209,17 @@ class FinePulseGenDriver extends CBusDevice;
     if (!m_with_odelay) fine = 0;
 
     m_log.msg(1, $sformatf(
-              "Pulse: tap_size %.5f coarse_par %d coarse_ser %d fine_taps %d length %.0f len_tics %d",
+              "Pulse: tap_size %.5f coarse_par %d coarse_ser %d fine_taps %d length %.0f len_tics %d cont %d",
               m_delay_tap_size,
               coarse_par,
               coarse_ser,
               fine,
               length,
-              len_tics
+              len_tics,
+              cont
               ));
 
-  ocr_a = (coarse_ser << WB_FPGEN_OCR0A_COARSE_OFFSET)
+    ocr_a = (coarse_ser << WB_FPGEN_OCR0A_COARSE_OFFSET)
       | (fine << WB_FPGEN_OCR0A_FINE_OFFSET)
       | (cont ? WB_FPGEN_OCR0A_CONT : 0)
       | (polarity ? WB_FPGEN_OCR0A_POL : 0 );
@@ -185,7 +231,6 @@ class FinePulseGenDriver extends CBusDevice;
 
     writel(ADDR_WB_FPGEN_OCR0A + 8 * out, ocr_a);
     writel(ADDR_WB_FPGEN_OCR0B + 8 * out, ocr_b);
-
     if (tr_force)
       writel(ADDR_WB_FPGEN_CSR, 1 << (WB_FPGEN_CSR_FORCE0_OFFSET + out));
     else
@@ -250,7 +295,8 @@ module fpgen_test_wrapper;
       .g_target_platform(g_TARGET_PLATFORM),
       .g_use_external_serdes_clock(0),
       .g_num_channels(1),
-      .g_use_odelay(6'b111111)
+      .g_use_odelay(6'b111111),
+      .g_enable_pattern_mode(6'b111111)
   ) DUT (
       .rst_sys_n_i(rst_n),
 
@@ -348,12 +394,14 @@ module fpgen_test_wrapper;
 
   endtask
 
-  task run_tests();
+  task automatic run_tests();
     real t;
     real pwidths[$];
     Logger logger = Logger::get();
     CWishboneAccessor acc;
     FinePulseGenDriver drv;
+    bit pattern[$];
+    int i;
 
     @(posedge rst_n);
     @(posedge clk_62m5);
@@ -371,20 +419,30 @@ module fpgen_test_wrapper;
 
     logger.pass();
 
+    logger.startTest(
+        $sformatf("Produce a 10MHz pattern") );
+
+    for(i=0;i<200;i++)
+        pattern.push_back(i/25%2?1:0);
+
+    drv.pulse_pattern(0, pattern, 0, 1);
+
+    logger.pass();
+
+    $stop;
 
     logger.startTest(
         $sformatf("Produce some fixed-width pulses at fine PPS offsets [%s]", g_TARGET_PLATFORM));
 
     clear_timestamps();
-    for (t = 1.0; t <= 1.0; t += 5) begin
+    for (t = 1.0; t <= 100.0; t += 5.0) begin
       t_pps_valid = 0;
       while (!t_pps_valid) @(posedge clk_62m5);
-      $warning("dupa!");
-      //logger.msg(1, $sformatf("PPS absolute time = %t", t_pps));
+      logger.msg(1, $sformatf("PPS absolute time = %t", t_pps));
       logger.msg(1, $sformatf("Ts Expected = %.03f", t));
       timestamps_expected.push_back(t + 108.7);
       widths_expected.push_back(1088.0);
-      drv.pulse(0, 0, 1, t, 1088.0);
+      drv.pulse(0, 0, 0, t, 1088.0);
     end
 
     if (!compare_timestamps()) logger.pass();

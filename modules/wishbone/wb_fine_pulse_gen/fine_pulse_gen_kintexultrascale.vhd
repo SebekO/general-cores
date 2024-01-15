@@ -12,7 +12,8 @@ entity fine_pulse_gen_kintexultrascale is
   generic (
     g_sim_delay_tap_ps : integer := 30;
     g_idelayctrl_ref_clk_freq     : real    := 250.0;
-    g_use_odelay       : boolean := false
+    g_use_odelay       : boolean := false;
+    g_ENABLE_PATTERN_MODE : boolean := false
     );
   port
     (
@@ -146,9 +147,9 @@ architecture rtl of fine_pulse_gen_kintexultrascale is
  
 begin
 
+  assert not g_ENABLE_PATTERN_MODE report "g_ENABLE_PATTERN_MODE is not supported on Ultrascale platform yet." severity failure;
+  
   rst <= not rst_sys_n_i;
-
-
 
   process(clk_ref_i)
     variable rv : std_logic_vector(31 downto 0);

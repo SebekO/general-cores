@@ -4,19 +4,23 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.gencores_pkg.all;
+use work.genram_pkg.all;
 
 library unisim;
 use unisim.VCOMPONENTS.all;
 
 entity fine_pulse_gen_kintex7 is
   generic (
+    g_ID : integer;
     g_sim_delay_tap_ps : integer := 30;
     g_ref_clk_freq     : real    := 125.0;
-    g_use_odelay       : boolean := false
+    g_use_odelay       : boolean := false;
+    g_ENABLE_PATTERN_MODE : boolean := false
     );
   port
     (
       clk_par_i    : in std_logic;
+      clk_sys_i    : in std_logic;
       clk_serdes_i : in std_logic;
 
       rst_serdes_i : in std_logic;
@@ -30,6 +34,13 @@ entity fine_pulse_gen_kintex7 is
 
       pulse_o : out std_logic;
       ready_o : out std_logic;
+
+      pat_addr_i : in std_logic_vector(6 downto 0);
+      pat_data_i : in std_logic_vector(15 downto 0);
+      pat_wr_i : in std_logic;
+      pat_out_sel_i : in std_logic_vector(2 downto 0);
+      pat_mode_en_i : in std_logic;
+
 
       dly_load_i : in std_logic;
       dly_fine_i : in std_logic_vector(4 downto 0)
@@ -46,14 +57,8 @@ architecture rtl of fine_pulse_gen_kintex7 is
   signal odelay_load                              : std_logic;
   signal odelay_ntaps                             : std_logic_vector(4 downto 0);
 
-
   signal trig_d : std_logic;
 
---   function f_gen_bitmask (coarse : std_logic_vector; pol : std_logic; cont : std_logic) return std_logic_vector is
---     variable rv : std_logic_vector(15 downto 0);
---   begin
-
--- end f_gen_bitmask;
 
   signal mask_start    : std_logic_vector(15 downto 0);
   signal mask_end      : std_logic_vector(15 downto 0);
@@ -69,11 +74,41 @@ architecture rtl of fine_pulse_gen_kintex7 is
   attribute mark_debug of dly_fine_i   : signal is "TRUE";
   attribute mark_debug of odelay_ntaps : signal is "TRUE";
 
-  type t_state is (IDLE, CONT_H, CONT_L, START_PULSE_H, START_PULSE_L, MID_PULSE_H, MID_PULSE_L, END_PULSE_H, END_PULSE_L);
+  type t_state is (IDLE, CONT_H, CONT_L, START_PULSE_H, START_PULSE_L, MID_PULSE_H, MID_PULSE_L, END_PULSE_H, END_PULSE_L, PLAY_PATTERN);
 
   signal state : t_state;
 
+  signal pat_cnt, pat_len : unsigned(6 downto 0);
+  signal pat_rd_data : std_logic_vector(7 downto 0);
+  signal pat_wr : std_logic;
+  
 begin
+
+
+  
+  gen_with_pattern_mode : if g_ENABLE_PATTERN_MODE generate
+
+    pat_wr <= pat_wr_i when (g_ID = unsigned(pat_out_sel_i)) else '0';
+    -- length_i is in 16s of clock cycles in the "standard" mode
+    pat_len <= unsigned(length_i(10 downto 4));
+    
+    inst_pattern_ram : generic_dpram
+      generic map (
+        g_data_width               => 8,
+        g_size                     => 128,
+        g_with_byte_enable         => false)
+      port map (
+        rst_n_i => rst_par_n_i,
+        clka_i  => clk_sys_i,
+        wea_i   => pat_wr,
+        aa_i    => pat_addr_i,
+        da_i    => pat_data_i(7 downto 0),
+        clkb_i  => clk_par_i,
+        web_i   => '0',
+        ab_i    => std_logic_vector(pat_cnt),
+        qb_o    => pat_rd_data);
+
+  end generate gen_with_pattern_mode;
 
   process(clk_par_i, rst_par_n_i)
     variable rv, rv2 : std_logic_vector(15 downto 0);
@@ -224,7 +259,10 @@ begin
           ready_o <= '1';
 
           if trig_p_i = '1' then
-            if cont_i = '1' then
+            if pat_mode_en_i = '1' and g_ENABLE_PATTERN_MODE then
+              state <= PLAY_PATTERN;
+              pat_cnt <= pat_cnt + 1;
+            elsif cont_i = '1' then
               state <= CONT_H;
               ready_o <= '1';
             elsif length_d = 0 then
@@ -234,8 +272,24 @@ begin
               state <= START_PULSE_H;
               ready_o <= '0';
             end if;
+          else
+            pat_cnt <= (others => '0');
           end if;
 
+        when PLAY_PATTERN =>
+          if g_ENABLE_PATTERN_MODE then
+            if pat_cnt = unsigned(pat_len) then
+              ready_o <= '1';
+              pat_cnt <= (others => '0');
+              if cont_i = '0' then
+                state <= IDLE;
+              end if;
+            else
+              pat_cnt <= pat_cnt + 1;
+            end if;
+
+            par_data <= pat_rd_data(7 downto 0);            
+          end if;
         when CONT_H =>
           if cont_i = '0' then
             state <= IDLE;

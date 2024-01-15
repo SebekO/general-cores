@@ -12,10 +12,16 @@ use work.wb_fpgen_regs_pkg.all;
 
 entity xwb_fine_pulse_gen is
   generic (
-    g_num_channels: integer := 6;
-    g_use_external_serdes_clock : boolean := false;
-    g_target_platform : string := "Kintex7";
-    g_use_odelay : bit_vector(5 downto 0) := "110000"
+    -- number of output channels. From 1 to 6.
+    g_NUM_CHANNELS : integer := 6;
+    -- when true, the fast serdes clock is provided from an external source
+    -- through clk_ser_ext_i, otherwise an internal PLL is instantiated.
+    g_USE_EXTERNAL_SERDES_CLOCK : boolean := false;
+    -- target FPGA. Kintex7 and KintexUltrascale are so far supported
+    g_TARGET_PLATFORM : string := "Kintex7";
+    -- enables ODELAY primitives for fine delay adjustment on selected outputs.
+    g_USE_ODELAY : bit_vector(5 downto 0) := "110000";
+    g_ENABLE_PATTERN_MODE : bit_vector(5 downto 0) := "110000"
     );
   port (
     clk_sys_i   : in std_logic;
@@ -23,13 +29,13 @@ entity xwb_fine_pulse_gen is
     rst_sys_n_i : in std_logic;
 
     clk_ser_ext_i : in std_logic := '0';       -- external SERDES clock, used when
-                                        -- g_use_external_serdes_clock == true
+                                        -- g_USE_EXTERNAL_SERDES_CLOCK == true
 
     ext_trigger_p_i : in std_logic := '0'; -- External trigger (i.e. RF receiver)
 
     pps_p_i : in std_logic;             -- WR PPS
 
-    pulse_o : out std_logic_vector(g_num_channels-1 downto 0);
+    pulse_o : out std_logic_vector(g_NUM_CHANNELS -1 downto 0);
 
     clk_par_o : out std_logic;
 
@@ -43,7 +49,7 @@ architecture rtl of xwb_fine_pulse_gen is
 
   impure function f_global_use_odelay return boolean is
   begin
-    if g_use_odelay /= "000000" then
+    if g_USE_ODELAY /= "000000" then
       return true;
     else
       return false;
@@ -76,6 +82,7 @@ architecture rtl of xwb_fine_pulse_gen is
     trig_ready : std_logic;
     odelay_load      :  std_logic;
     odelay_value_out : std_logic_vector(8 downto 0);
+    pat_mode_en : std_logic;
   end record;
 
   type t_channel_array is array(integer range <>) of t_channel;
@@ -261,7 +268,7 @@ begin
 
 
 
-  gen_ready_flags : for i in 0 to g_num_channels-1 generate
+  gen_ready_flags : for i in 0 to g_NUM_CHANNELS -1 generate
   U_Sync : gc_sync_ffs
     port map (
       clk_i    => clk_sys_i,
@@ -329,6 +336,13 @@ begin
   ch(3).trig_sel <= regs_out.ocr3a_trig_sel;
   ch(4).trig_sel <= regs_out.ocr4a_trig_sel;
   ch(5).trig_sel <= regs_out.ocr5a_trig_sel;
+ 
+  ch(0).pat_mode_en <= regs_out.ocr0a_pat_en;
+  ch(1).pat_mode_en <= regs_out.ocr1a_pat_en;
+  ch(2).pat_mode_en <= regs_out.ocr2a_pat_en;
+  ch(3).pat_mode_en <= regs_out.ocr3a_pat_en;
+  ch(4).pat_mode_en <= regs_out.ocr4a_pat_en;
+  ch(5).pat_mode_en <= regs_out.ocr5a_pat_en;
 
   ch(0).pps_offs <= unsigned(regs_out.ocr0b_pps_offs);
   ch(1).pps_offs <= unsigned(regs_out.ocr1b_pps_offs);
@@ -337,7 +351,7 @@ begin
   ch(4).pps_offs <= unsigned(regs_out.ocr4b_pps_offs);
   ch(5).pps_offs <= unsigned(regs_out.ocr5b_pps_offs);
 
-  gen_channels : for i in 0 to g_NUM_CHANNELS-1 generate
+  gen_channels : for i in 0 to g_NUM_CHANNELS -1 generate
 
     ch(i).ready <= ch(i).trig_ready and ch(i).phy_ready;
 
@@ -411,15 +425,18 @@ begin
 
 
 
-  gen_is_kintex7_pg: if g_target_platform = "Kintex7" generate
+  gen_is_kintex7_pg: if g_TARGET_PLATFORM = "Kintex7" generate
 
     U_Pulse_Gen : entity work.fine_pulse_gen_kintex7
       generic map (
+        g_ID => i,
         g_sim_delay_tap_ps => 50,
         g_ref_clk_freq     => 200.0,
-        g_use_odelay => f_to_bool(g_use_odelay(i)) )
+        g_USE_ODELAY => f_to_bool(g_USE_ODELAY(i)),
+        g_ENABLE_PATTERN_MODE => f_to_bool(g_ENABLE_PATTERN_MODE(i)))
       port map (
         clk_par_i    => clk_par,
+        clk_sys_i => clk_sys_i,
         clk_serdes_i => clk_ser,
         rst_serdes_i => rst_serdes,
         rst_par_n_i  => rst_n_wr,
@@ -431,17 +448,26 @@ begin
         pulse_o      => pulse_o(i),
         ready_o      => ch(I).phy_ready,
         dly_load_i => ch(i).delay_load,
-        dly_fine_i   => ch(i).delay_fine(4 downto 0));
+        dly_fine_i   => ch(i).delay_fine(4 downto 0),
+
+        pat_addr_i => regs_out.PGEN_CR_ADDR,
+        pat_data_i => regs_out.PGEN_CR_DATA,
+        pat_out_sel_i => regs_out.PGEN_CR_OUT_SEL,
+        pat_wr_i => regs_out.PGEN_CR_wr,
+        pat_mode_en_i => ch(i).pat_mode_en
+        );
 
   end generate gen_is_kintex7_pg;
 
-  gen_is_kintex_us_pg: if g_target_platform = "KintexUltrascale" generate
+  gen_is_kintex_us_pg: if g_TARGET_PLATFORM = "KintexUltrascale" generate
 
     U_Pulse_Gen : entity work.fine_pulse_gen_kintexultrascale
       generic map (
         g_sim_delay_tap_ps => 50,
         g_idelayctrl_ref_clk_freq     => 250.0,
-        g_use_odelay => f_to_bool(g_use_odelay(i)) )
+        g_USE_ODELAY => f_to_bool(g_USE_ODELAY(i)),
+        g_ENABLE_PATTERN_MODE => f_to_bool(g_ENABLE_PATTERN_MODE(i))
+        )
       port map (
         clk_sys_i => clk_sys_i,
         clk_par_i    => clk_par,
@@ -476,12 +502,12 @@ begin
   regs_in.odelay_calib_taps <= ch(0).odelay_value_out;
 
 
-  gen_is_kintex7: if g_target_platform = "Kintex7" generate
+  gen_is_kintex7: if g_TARGET_PLATFORM = "Kintex7" generate
 
     U_K7_Shared: entity work.fine_pulse_gen_kintex7_shared
       generic map (
         g_global_use_odelay => f_global_use_odelay,
-        g_use_external_serdes_clock => g_use_external_serdes_clock)
+        g_USE_EXTERNAL_SERDES_CLOCK => g_USE_EXTERNAL_SERDES_CLOCK)
       port map (
         pll_rst_i    => regs_out.csr_pll_rst,
         clk_ref_i    => clk_ref_i,
@@ -504,12 +530,12 @@ begin
 
   end generate gen_is_kintex7;
 
-  gen_is_kintex_ultrascale: if g_target_platform = "KintexUltrascale" generate
+  gen_is_kintex_ultrascale: if g_TARGET_PLATFORM = "KintexUltrascale" generate
 
     U_K7U_Shared: entity work.fine_pulse_gen_kintexultrascale_shared
       generic map (
         g_global_use_odelay => f_global_use_odelay,
-        g_use_external_serdes_clock => g_use_external_serdes_clock
+        g_USE_EXTERNAL_SERDES_CLOCK => g_USE_EXTERNAL_SERDES_CLOCK
         )
       port map (
         pll_rst_i    => regs_out.csr_pll_rst,

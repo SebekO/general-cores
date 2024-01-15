@@ -155,6 +155,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR0B
       description: Output 0 Control Register B
@@ -170,10 +174,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
   - reg:
       name: OCR1A
       description: Output 0 Control Register A
@@ -202,6 +202,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR1B
       description: Output 1 Control Register B
@@ -217,10 +221,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
   - reg:
       name: OCR2A
       description: Output 2 Control Register A
@@ -249,6 +249,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR2B
       description: Output 2 Control Register B
@@ -264,10 +268,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
   - reg:
       name: OCR3A
       description: Output 3 Control Register A
@@ -296,6 +296,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR3B
       description: Output 3 Control Register B
@@ -311,10 +315,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
   - reg:
       name: OCR4A
       description: Output 4 Control Register A
@@ -343,6 +343,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR4B
       description: Output 4 Control Register B
@@ -358,10 +362,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
   - reg:
       name: OCR5A
       description: Output 5 Control Register A
@@ -390,6 +390,10 @@ memory-map:
           description: Trigger select
           comment: '1: external trigger; 0: PPS'
           range: 19
+      - field:
+          name: PAT_EN
+          description: Pattern mode enable
+          range: 20
   - reg:
       name: OCR5B
       description: Output 5 Control Register B
@@ -405,10 +409,6 @@ memory-map:
           name: LENGTH
           description: Pulse Length (target platform specific, 0 = minimum possible pulse width)
           range: 31-16
-          x-wbgen:
-            access_bus: READ_WRITE
-            access_dev: READ_ONLY
-            type: SLV
 
   - reg:
       name: odelay_calib
@@ -466,3 +466,25 @@ memory-map:
           range: 24-16
           x-hdl:
             type: wire
+  - reg:
+      name: PGEN_CR
+      description: Pattern generator control register
+      width: 32
+      access: rw
+      address: next
+      x-hdl:
+        type: wire
+        write-strobe: True
+      children:
+      - field:
+          name: ADDR
+          description: Pattern memory address
+          range: 6-0
+      - field:
+          name: OUT_SEL
+          description: Output select for pattern memory access
+          range: 9-7
+      - field:
+          name: DATA
+          description: Pattern data (device-specific)
+          range: 31-16
