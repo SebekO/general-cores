@@ -125,6 +125,9 @@ architecture arch of wb_simple_uart is
   signal tx_fifo_state : t_tx_fifo_state;
   signal rx_fifo_state : t_rx_fifo_state;
 
+  signal s_rx_interrupt: std_logic;
+  signal s_tx_interrupt: std_logic;
+
   signal rx_fifo_rdata : std_logic_vector(7 downto 0);
   signal rx_fifo_wdata : std_logic_vector(7 downto 0);
 begin  -- arch
@@ -370,7 +373,14 @@ begin  -- arch
 
     rx_fifo_rd  <= '1' when rx_fifo_state = IDLE and rx_fifo_empty = '0' else '0';
 
+    -- Handling the interrupt for UART
+    s_rx_interrupt <= '1' when (rx_fifo_empty = '0' and regs_out.cr_rx_interrupt_enable_o = '1') else '0';
+    s_tx_interrupt <= '1' when (tx_fifo_full = '0' and regs_out.cr_tx_interrupt_enable_o = '1') else '0';
+
+    int_o <= s_rx_interrupt or s_tx_interrupt;
+
     regs_in.sr_tx_busy_i   <= tx_fifo_full;
+
   end generate gen_phys_fifos;
 
   gen_phys_nofifos : if not g_WITH_PHYSICAL_UART_FIFO generate
