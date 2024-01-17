@@ -30,6 +30,9 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+library std;
+use std.textio.all;
+
 library unisim;
 use unisim.vcomponents.all;
 
@@ -72,11 +75,78 @@ entity generic_dpram_inst_7series is
 end generic_dpram_inst_7series;
 
 architecture syn of generic_dpram_inst_7series is
+  type t_bv_array is array (integer range <>) of bit_vector(g_data_width-1 downto 0);
+
+  impure function f_load_bv_from_file(
+    file_name        : in string;
+    mem_size         : in integer;
+    mem_width        : in integer;
+    fail_if_notfound : boolean)
+  return t_bv_array is
+
+    FILE f_in  : text;
+    variable l : line;
+    variable tmp_bv : bit_vector(mem_width-1 downto 0);
+    variable tmp_sv : std_logic_vector(mem_width-1 downto 0);
+    variable mem: t_bv_array(0 to mem_size-1) := (others => to_bitvector(std_logic_vector(to_unsigned(0, g_data_width))));
+    variable status   : file_open_status;
+  begin
+    if f_empty_file_name(file_name) then
+      return mem;
+    end if;
+
+    file_open(status, f_in, file_name, read_mode);
+    f_file_open_check(file_name, status, fail_if_notfound);
+
+    for I in 0 to mem_size-1 loop
+      if not endfile(f_in) then
+        readline (f_in, l);
+        -- read function gives us bit_vector
+        read (l, tmp_bv);
+      else
+        tmp_bv := (others => '0');
+      end if;
+      mem(I) := tmp_bv;
+    end loop;
+
+    if not endfile(f_in) then
+      report "f_load_mem_from_file(): file '"&file_name&"' is bigger than available memory" severity FAILURE;
+    end if;
+
+    file_close(f_in);
+    return mem;
+  end f_load_bv_from_file;
+
+  impure function f_file_to_bitvector256(
+    mem       : in t_bv_array(0 to g_size-1);
+    ram_idx   : in integer;
+    idx       : in integer)
+  return bit_vector is
+    variable vec : bit_vector(255 downto 0) := (others => '0');
+  begin
+    -- If no file was given, there is nothing to convert, just return
+    if (g_init_file = "" or g_init_file = "none") then
+      return vec;
+    end if;
+
+    if 256 mod g_data_width > 0 then
+      report "f_file_to_bitvector256(): 256 is not a multiple of g_data_width" severity FAILURE;
+    end if;
+
+    for J in 0 to (256 / g_data_width) - 1 loop
+      vec((J+1) * g_data_width - 1 downto J * g_data_width) := mem((ram_idx * 128 + idx) * 256 / g_data_width + J);
+    end loop;
+
+    return vec;
+  end f_file_to_bitvector256;
+
   constant c_num_bytes  : integer := (g_data_width+7)/8;
   constant c_ram_depth  : integer := 4096 / c_num_bytes;
   constant c_ram_count  : integer := (g_size + (c_ram_depth - 1))/c_ram_depth;
 
   type t_do is array(0 to c_ram_count-1) of std_logic_vector(g_data_width-1 downto 0);
+
+  constant mem : t_bv_array(0 to g_size-1) := f_load_bv_from_file(g_init_file, g_size, g_data_width, g_fail_if_file_not_found);
 
   signal mux_doa : t_do;
   signal mux_dob : t_do;
@@ -166,7 +236,137 @@ begin
        WRITE_MODE_A => to_upper(g_addr_conflict_resolution), -- "WRITE_FIRST", "READ_FIRST" or "NO_CHANGE"
        WRITE_MODE_B => to_upper(g_addr_conflict_resolution), -- "WRITE_FIRST", "READ_FIRST" or "NO_CHANGE"
        WRITE_WIDTH_A => g_data_width, -- Valid values are 1-36 (19-36 only valid when BRAM_SIZE="36Kb")
-       WRITE_WIDTH_B => g_data_width -- Valid values are 1-36 (19-36 only valid when BRAM_SIZE="36Kb")
+       WRITE_WIDTH_B => g_data_width, -- Valid values are 1-36 (19-36 only valid when BRAM_SIZE="36Kb")
+       INIT_00 => f_file_to_bitvector256(mem, I, 0),
+       INIT_01 => f_file_to_bitvector256(mem, I, 1),
+       INIT_02 => f_file_to_bitvector256(mem, I, 2),
+       INIT_03 => f_file_to_bitvector256(mem, I, 3),
+       INIT_04 => f_file_to_bitvector256(mem, I, 4),
+       INIT_05 => f_file_to_bitvector256(mem, I, 5),
+       INIT_06 => f_file_to_bitvector256(mem, I, 6),
+       INIT_07 => f_file_to_bitvector256(mem, I, 7),
+       INIT_08 => f_file_to_bitvector256(mem, I, 8),
+       INIT_09 => f_file_to_bitvector256(mem, I, 9),
+       INIT_0A => f_file_to_bitvector256(mem, I, 10),
+       INIT_0B => f_file_to_bitvector256(mem, I, 11),
+       INIT_0C => f_file_to_bitvector256(mem, I, 12),
+       INIT_0D => f_file_to_bitvector256(mem, I, 13),
+       INIT_0E => f_file_to_bitvector256(mem, I, 14),
+       INIT_0F => f_file_to_bitvector256(mem, I, 15),
+       INIT_10 => f_file_to_bitvector256(mem, I, 16),
+       INIT_11 => f_file_to_bitvector256(mem, I, 17),
+       INIT_12 => f_file_to_bitvector256(mem, I, 18),
+       INIT_13 => f_file_to_bitvector256(mem, I, 19),
+       INIT_14 => f_file_to_bitvector256(mem, I, 20),
+       INIT_15 => f_file_to_bitvector256(mem, I, 21),
+       INIT_16 => f_file_to_bitvector256(mem, I, 22),
+       INIT_17 => f_file_to_bitvector256(mem, I, 23),
+       INIT_18 => f_file_to_bitvector256(mem, I, 24),
+       INIT_19 => f_file_to_bitvector256(mem, I, 25),
+       INIT_1A => f_file_to_bitvector256(mem, I, 26),
+       INIT_1B => f_file_to_bitvector256(mem, I, 27),
+       INIT_1C => f_file_to_bitvector256(mem, I, 28),
+       INIT_1D => f_file_to_bitvector256(mem, I, 29),
+       INIT_1E => f_file_to_bitvector256(mem, I, 30),
+       INIT_1F => f_file_to_bitvector256(mem, I, 31),
+       INIT_20 => f_file_to_bitvector256(mem, I, 32),
+       INIT_21 => f_file_to_bitvector256(mem, I, 33),
+       INIT_22 => f_file_to_bitvector256(mem, I, 34),
+       INIT_23 => f_file_to_bitvector256(mem, I, 35),
+       INIT_24 => f_file_to_bitvector256(mem, I, 36),
+       INIT_25 => f_file_to_bitvector256(mem, I, 37),
+       INIT_26 => f_file_to_bitvector256(mem, I, 38),
+       INIT_27 => f_file_to_bitvector256(mem, I, 39),
+       INIT_28 => f_file_to_bitvector256(mem, I, 40),
+       INIT_29 => f_file_to_bitvector256(mem, I, 41),
+       INIT_2A => f_file_to_bitvector256(mem, I, 42),
+       INIT_2B => f_file_to_bitvector256(mem, I, 43),
+       INIT_2C => f_file_to_bitvector256(mem, I, 44),
+       INIT_2D => f_file_to_bitvector256(mem, I, 45),
+       INIT_2E => f_file_to_bitvector256(mem, I, 46),
+       INIT_2F => f_file_to_bitvector256(mem, I, 47),
+       INIT_30 => f_file_to_bitvector256(mem, I, 48),
+       INIT_31 => f_file_to_bitvector256(mem, I, 49),
+       INIT_32 => f_file_to_bitvector256(mem, I, 50),
+       INIT_33 => f_file_to_bitvector256(mem, I, 51),
+       INIT_34 => f_file_to_bitvector256(mem, I, 52),
+       INIT_35 => f_file_to_bitvector256(mem, I, 53),
+       INIT_36 => f_file_to_bitvector256(mem, I, 54),
+       INIT_37 => f_file_to_bitvector256(mem, I, 55),
+       INIT_38 => f_file_to_bitvector256(mem, I, 56),
+       INIT_39 => f_file_to_bitvector256(mem, I, 57),
+       INIT_3A => f_file_to_bitvector256(mem, I, 58),
+       INIT_3B => f_file_to_bitvector256(mem, I, 59),
+       INIT_3C => f_file_to_bitvector256(mem, I, 60),
+       INIT_3D => f_file_to_bitvector256(mem, I, 61),
+       INIT_3E => f_file_to_bitvector256(mem, I, 62),
+       INIT_3F => f_file_to_bitvector256(mem, I, 63),
+
+       -- The next set of INIT_xx are valid when configured as 36Kb
+       INIT_40 => f_file_to_bitvector256(mem, I, 64),
+       INIT_41 => f_file_to_bitvector256(mem, I, 65),
+       INIT_42 => f_file_to_bitvector256(mem, I, 66),
+       INIT_43 => f_file_to_bitvector256(mem, I, 67),
+       INIT_44 => f_file_to_bitvector256(mem, I, 68),
+       INIT_45 => f_file_to_bitvector256(mem, I, 69),
+       INIT_46 => f_file_to_bitvector256(mem, I, 70),
+       INIT_47 => f_file_to_bitvector256(mem, I, 71),
+       INIT_48 => f_file_to_bitvector256(mem, I, 72),
+       INIT_49 => f_file_to_bitvector256(mem, I, 73),
+       INIT_4A => f_file_to_bitvector256(mem, I, 74),
+       INIT_4B => f_file_to_bitvector256(mem, I, 75),
+       INIT_4C => f_file_to_bitvector256(mem, I, 76),
+       INIT_4D => f_file_to_bitvector256(mem, I, 77),
+       INIT_4E => f_file_to_bitvector256(mem, I, 78),
+       INIT_4F => f_file_to_bitvector256(mem, I, 79),
+       INIT_50 => f_file_to_bitvector256(mem, I, 80),
+       INIT_51 => f_file_to_bitvector256(mem, I, 81),
+       INIT_52 => f_file_to_bitvector256(mem, I, 82),
+       INIT_53 => f_file_to_bitvector256(mem, I, 83),
+       INIT_54 => f_file_to_bitvector256(mem, I, 84),
+       INIT_55 => f_file_to_bitvector256(mem, I, 85),
+       INIT_56 => f_file_to_bitvector256(mem, I, 86),
+       INIT_57 => f_file_to_bitvector256(mem, I, 87),
+       INIT_58 => f_file_to_bitvector256(mem, I, 88),
+       INIT_59 => f_file_to_bitvector256(mem, I, 89),
+       INIT_5A => f_file_to_bitvector256(mem, I, 90),
+       INIT_5B => f_file_to_bitvector256(mem, I, 91),
+       INIT_5C => f_file_to_bitvector256(mem, I, 92),
+       INIT_5D => f_file_to_bitvector256(mem, I, 93),
+       INIT_5E => f_file_to_bitvector256(mem, I, 94),
+       INIT_5F => f_file_to_bitvector256(mem, I, 95),
+       INIT_60 => f_file_to_bitvector256(mem, I, 96),
+       INIT_61 => f_file_to_bitvector256(mem, I, 97),
+       INIT_62 => f_file_to_bitvector256(mem, I, 98),
+       INIT_63 => f_file_to_bitvector256(mem, I, 99),
+       INIT_64 => f_file_to_bitvector256(mem, I, 100),
+       INIT_65 => f_file_to_bitvector256(mem, I, 101),
+       INIT_66 => f_file_to_bitvector256(mem, I, 102),
+       INIT_67 => f_file_to_bitvector256(mem, I, 103),
+       INIT_68 => f_file_to_bitvector256(mem, I, 104),
+       INIT_69 => f_file_to_bitvector256(mem, I, 105),
+       INIT_6A => f_file_to_bitvector256(mem, I, 106),
+       INIT_6B => f_file_to_bitvector256(mem, I, 107),
+       INIT_6C => f_file_to_bitvector256(mem, I, 108),
+       INIT_6D => f_file_to_bitvector256(mem, I, 109),
+       INIT_6E => f_file_to_bitvector256(mem, I, 110),
+       INIT_6F => f_file_to_bitvector256(mem, I, 111),
+       INIT_70 => f_file_to_bitvector256(mem, I, 112),
+       INIT_71 => f_file_to_bitvector256(mem, I, 113),
+       INIT_72 => f_file_to_bitvector256(mem, I, 114),
+       INIT_73 => f_file_to_bitvector256(mem, I, 115),
+       INIT_74 => f_file_to_bitvector256(mem, I, 116),
+       INIT_75 => f_file_to_bitvector256(mem, I, 117),
+       INIT_76 => f_file_to_bitvector256(mem, I, 118),
+       INIT_77 => f_file_to_bitvector256(mem, I, 119),
+       INIT_78 => f_file_to_bitvector256(mem, I, 120),
+       INIT_79 => f_file_to_bitvector256(mem, I, 121),
+       INIT_7A => f_file_to_bitvector256(mem, I, 122),
+       INIT_7B => f_file_to_bitvector256(mem, I, 123),
+       INIT_7C => f_file_to_bitvector256(mem, I, 124),
+       INIT_7D => f_file_to_bitvector256(mem, I, 125),
+       INIT_7E => f_file_to_bitvector256(mem, I, 126),
+       INIT_7F => f_file_to_bitvector256(mem, I, 127)
     )
     port map (
        DOA => mux_doa(I),         -- Output port-A data, width defined by READ_WIDTH_A parameter
