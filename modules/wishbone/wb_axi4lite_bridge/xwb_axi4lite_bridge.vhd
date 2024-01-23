@@ -68,8 +68,8 @@ begin
         case state is
           when IDLE =>
             wb_master_o.cyc      <= '0';
-            axi4_slave_o.ARREADY <= '1';
-            axi4_slave_o.AWREADY <= '1';
+            axi4_slave_o.ARREADY <= '0';
+            axi4_slave_o.AWREADY <= '0';
             axi4_slave_o.WREADY  <= '0';
             axi4_slave_o.BVALID  <= '0';
             axi4_slave_o.BRESP   <= (others => 'X');
@@ -81,14 +81,17 @@ begin
             if (axi4_slave_i.AWVALID = '1') then
               state           <= ISSUE_WRITE;
               wb_master_o.adr <= axi4_slave_i.AWADDR;
+              axi4_slave_o.AWREADY <= '1';
             elsif (axi4_slave_i.ARVALID = '1') then
               state           <= ISSUE_READ;
               wb_master_o.adr <= axi4_slave_i.ARADDR;
+              axi4_slave_o.ARREADY <= '1';
             end if;
 
           when ISSUE_WRITE =>
             wb_master_o.cyc <= '1';
             wb_master_o.we  <= '1';
+            axi4_slave_o.AWREADY <= '0';
             axi4_slave_o.WREADY <= '1';
             if (axi4_slave_i.WVALID = '1') then
               wb_master_o.stb <= '1';
@@ -101,9 +104,10 @@ begin
             wb_master_o.cyc <= '1';
             wb_master_o.stb <= '1';
             wb_master_o.we  <= '0';
-            axi4_slave_o.RVALID <= '0';
-            axi4_slave_o.RLAST <= '0';
-            state <= COMPLETE_READ;
+            axi4_slave_o.ARREADY <= '0';
+            if(axi4_slave_i.RREADY = '1') then
+                state <= COMPLETE_READ;
+            end if;            
 
           when COMPLETE_READ =>
             if (wb_master_i.stall = '0') then
@@ -122,6 +126,7 @@ begin
             end if;
 
           when COMPLETE_WRITE =>
+            axi4_slave_o.WREADY <= '0';
             if (wb_master_i.stall = '0') then
               wb_master_o.stb <= '0';
               if (wb_master_i.ack = '1') then
