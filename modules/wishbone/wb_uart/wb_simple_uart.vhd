@@ -246,15 +246,15 @@ begin  -- arch
         g_DATA_WIDTH => 8,
         g_SIZE       => g_RX_FIFO_SIZE,
         g_WITH_COUNT => true,
-        g_SHOW_AHEAD => false
+        g_SHOW_AHEAD => true
         )
       port map (
         rst_n_i => rx_fifo_reset_n,
         clk_i   => clk_sys_i,
-        d_i     => rx_fifo_wdata,
+        d_i     => phys_rx_data,
         we_i    => rx_fifo_wr,
-        q_o     => rx_fifo_rdata,
-        rd_i    => rx_fifo_rd,
+        q_o     => regs_in.rdr_rx_data_i,
+        rd_i    => rdr_rack,
         empty_o => rx_fifo_empty,
         full_o  => rx_fifo_full,
         count_o => rx_fifo_count);
@@ -351,7 +351,6 @@ begin  -- arch
 
             when RX_READ =>
 
-              regs_in.rdr_rx_data_i <= rx_fifo_rdata;
               regs_in.sr_rx_fifo_valid_i     <= '1';
               regs_in.sr_rx_rdy_i            <= '1';
               rx_fifo_state <= RX_WAIT_ACK;
