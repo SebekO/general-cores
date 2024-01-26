@@ -374,7 +374,7 @@ begin  -- arch
     rx_fifo_rd  <= '1' when rx_fifo_state = IDLE and rx_fifo_empty = '0' else '0';
 
     -- Handling the interrupt for UART
-    s_rx_interrupt <= '1' when (rx_fifo_empty = '0' and regs_out.cr_rx_interrupt_enable_o = '1') else '0';
+    s_rx_interrupt <= '1' when (regs_in.sr_rx_rdy_i = '1' and regs_out.cr_rx_interrupt_enable_o = '1') else '0';
     s_tx_interrupt <= '1' when (tx_fifo_full = '0' and regs_out.cr_tx_interrupt_enable_o = '1') else '0';
 
     int_o <= s_rx_interrupt or s_tx_interrupt;
