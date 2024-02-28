@@ -45,6 +45,11 @@ package gencores_pkg is
   function f_gray_encode(x : std_logic_vector) return std_logic_vector;
   function f_gray_decode(x : std_logic_vector; step : natural) return std_logic_vector;
 
+  --  Returns the log2 of N such that 2**f_log2(N) >= N.
+  --  The result is the minimum value.  Can return 0.
+  function f_log2(N : positive) return natural;
+
+  --  Slightly incorrect version of log2: the result is at least 1.
   function f_log2_ceil(N : natural) return positive;
   -- kept for backwards compatibility, same as f_log2_ceil()
   function log2_ceil(N : natural) return positive;
@@ -71,6 +76,9 @@ package gencores_pkg is
     return std_logic;
   function f_pick (cond : std_logic; if_1 : std_logic_vector; if_0 : std_logic_vector)
     return std_logic_vector;
+
+  --  Return the maximum of L and R.
+  function f_max (l, r : natural) return natural;
 
   -- Functions to convert characters and strings to upper/lower case
   function to_upper(c : character) return character;
@@ -885,6 +893,16 @@ package body gencores_pkg is
     end if;
   end f_gray_decode;
 
+  function f_log2(N : positive) return natural is
+  begin
+    for i in 0 to 30 loop
+      if N <= 2**i then
+        return i;
+      end if;
+    end loop;
+    report "N is too large" severity error;
+  end f_log2;
+
   ------------------------------------------------------------------------------
   -- Returns log of 2 of a natural number
   ------------------------------------------------------------------------------
@@ -1019,6 +1037,15 @@ package body gencores_pkg is
   begin
     return f_pick (f_to_std_logic(cond), if_1, if_0);
   end function f_pick;
+
+  function f_max (l, r : natural) return natural is
+  begin
+    if l >= r then
+      return l;
+    else
+      return r;
+    end if;
+  end f_max;
 
   ------------------------------------------------------------------------------
   -- Functions to convert characters and strings to upper/lower case
