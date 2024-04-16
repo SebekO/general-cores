@@ -7,7 +7,7 @@
 # with set_false_path because it has the highest priority.
 
 set clk [get_clocks -of_objects [get_ports clk_i]]
-set clk_period [get_property PERIOD $clk]
+set clk_period [get_property -min PERIOD $clk]
 
 # ATTENTION: we can't use "all_fanin" to find the source register because
 # apparently this command doesn't traverse outside of scoped reference (even with -flat switch)
