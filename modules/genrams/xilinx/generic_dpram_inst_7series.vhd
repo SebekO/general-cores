@@ -13,12 +13,12 @@
 --
 --
 --------------------------------------------------------------------------------
--- Copyright CERN 2017-2023
+-- Copyright Missing Link Electronics 2024
 --------------------------------------------------------------------------------
--- Copyright and related rights are licensed under the Solderpad Hardware
--- License, Version 2.0 (the "License"); you may not use this file except
--- in compliance with the License. You may obtain a copy of the License at
--- http://solderpad.org/licenses/SHL-2.0.
+-- Copyright and related rights are licensed under the CERN Open Hardware
+-- Licence Version 2 - Weakly Reciprocal (the "License"); you may not use this
+-- file except in compliance with the License. You may obtain a copy of the
+-- License at https://ohwr.org/cern_ohl_w_v2.txt.
 -- Unless required by applicable law or agreed to in writing, software,
 -- hardware and materials distributed under this License is distributed on an
 -- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
