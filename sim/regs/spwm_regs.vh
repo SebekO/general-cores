@@ -1,0 +1,16 @@
+`define ADDR_SPWM_CR                   6'h0
+`define SPWM_CR_PRESC_OFFSET 0
+`define SPWM_CR_PRESC 32'h0000ffff
+`define SPWM_CR_PERIOD_OFFSET 16
+`define SPWM_CR_PERIOD 32'hffff0000
+`define ADDR_SPWM_SR                   6'h4
+`define SPWM_SR_N_CHANNELS_OFFSET 0
+`define SPWM_SR_N_CHANNELS 32'h0000000f
+`define ADDR_SPWM_DR0                  6'h8
+`define ADDR_SPWM_DR1                  6'hc
+`define ADDR_SPWM_DR2                  6'h10
+`define ADDR_SPWM_DR3                  6'h14
+`define ADDR_SPWM_DR4                  6'h18
+`define ADDR_SPWM_DR5                  6'h1c
+`define ADDR_SPWM_DR6                  6'h20
+`define ADDR_SPWM_DR7                  6'h24
