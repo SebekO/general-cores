@@ -83,6 +83,8 @@ package axi4_pkg is
     RREADY  : std_logic;
     WLAST   : std_logic;
     WVALID  : std_logic;
+    ARPROT : std_logic_vector(2 downto 0);
+    AWPROT : std_logic_vector(2 downto 0);
     ARADDR  : std_logic_vector (31 downto 0);
     AWADDR  : std_logic_vector (31 downto 0);
     WDATA   : std_logic_vector (31 downto 0);
@@ -124,6 +126,8 @@ package axi4_pkg is
       RREADY  => '0',
       WLAST   => '0',
       WVALID  => '0',
+      ARPROT => (others => '0'),
+      AWPROT => (others => '0'),
       ARADDR  => (others => '0'),
       AWADDR  => (others => '0'),
       WDATA   => (others => '0'),
@@ -140,6 +144,10 @@ package axi4_pkg is
   constant c_AXI4_RESP_SLVERR : std_logic_vector(1 downto 0) := "10";
   constant c_AXI4_RESP_DECERR : std_logic_vector(1 downto 0) := "11";
 
+  constant c_AXI4_BURST_FIXED : std_logic_vector(1 downto 0) := "00";
+  constant c_AXI4_BURST_INCR : std_logic_vector(1 downto 0) := "01";
+  constant c_AXI4_BURST_WRAP : std_logic_vector(1 downto 0) := "10";  
+  
   function f_axi4_full_to_lite (
     f : t_axi4_full_master_out_32
     )  return t_axi4_lite_master_out_32;
@@ -198,7 +206,7 @@ package axi4_pkg is
       );
   end component;
 
-  -- AXI4-Full interface, master output ports, 512 bits
+  -- AXI4-Full interface, master output ports, 512 bits data / 64 bit address
   type t_axi4_full_master_out_512 is record
     ARVALID : std_logic;
     AWVALID : std_logic;
@@ -216,8 +224,8 @@ package axi4_pkg is
     AWSIZE  : std_logic_vector (2 downto 0);
     ARPROT  : std_logic_vector (2 downto 0);
     AWPROT  : std_logic_vector (2 downto 0);
-    ARADDR  : std_logic_vector (31 downto 0);
-    AWADDR  : std_logic_vector (31 downto 0);
+    ARADDR  : std_logic_vector (63 downto 0);
+    AWADDR  : std_logic_vector (63 downto 0);
     WDATA   : std_logic_vector (511 downto 0);
     ARCACHE : std_logic_vector (3 downto 0);
     ARLEN   : std_logic_vector (7 downto 0);
@@ -225,7 +233,7 @@ package axi4_pkg is
     AWCACHE : std_logic_vector (3 downto 0);
     AWLEN   : std_logic_vector (7 downto 0);
     AWQOS   : std_logic_vector (3 downto 0);
-    WSTRB   : std_logic_vector (31 downto 0);
+    WSTRB   : std_logic_vector (63 downto 0);
   end record;
 
   -- AXI4-Full interface, master input ports, 512 bits
@@ -242,6 +250,50 @@ package axi4_pkg is
     RRESP   : std_logic_vector (1 downto 0);
     RDATA   : std_logic_vector (511 downto 0);
   end record;
+
+  constant cc_axi4_full_default_master_out_512 : t_axi4_full_master_out_512 := (
+    ARVALID => '0',
+    AWVALID => '0',
+    BREADY  => '0',
+    RREADY  => '0',
+    WLAST   => '0',
+    WVALID  => '0',
+    ARID    => (others => '0'),
+    AWID    => (others => '0'),
+    ARBURST => (others => '0'),
+    ARLOCK  => '0',
+    ARSIZE   => (others => '0'),
+    AWBURST => (others => '0'),
+    AWLOCK  => '0',
+    AWSIZE  => (others => '0'),
+    ARPROT  => (others => '0'),
+    AWPROT  => (others => '0'),
+    ARADDR  => (others => '0'),
+    AWADDR  => (others => '0'),
+    WDATA   => (others => '0'),
+    ARCACHE => (others => '0'),
+    ARLEN   => (others => '0'),
+    ARQOS   => (others => '0'),
+    AWCACHE => (others => '0'),
+    AWLEN   => (others => '0'),
+    AWQOS   => (others => '0'),
+    WSTRB   => (others => '0')
+    );
+
+  constant cc_axi4_full_default_master_in_512 : t_axi4_full_master_in_512 := (
+    ARREADY => '0',
+    AWREADY => '0',
+    BVALID => '0',
+    RLAST => '0',
+    RVALID => '0',
+    WREADY => '0',
+    BID => x"000",
+    RID => x"000",
+    BRESP => "00",
+    RRESP => "00",
+    RDATA => (others => '0' ) );
+    
+  
 end package;
 
 package body axi4_pkg is
