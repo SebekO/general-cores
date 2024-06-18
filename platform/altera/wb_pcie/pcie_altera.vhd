@@ -1496,6 +1496,193 @@ architecture rtl of pcie_altera is
     );
   end component arria10gx_scu4_pcie_hip;
 
+  component arria10gx_ftm4_pcie_hip is
+    port (
+      pld_clk             : in  std_logic                     := 'X';             -- clk
+      coreclkout_hip      : out std_logic;                                        -- clk
+      refclk              : in  std_logic                     := 'X';             -- clk
+      npor                : in  std_logic                     := 'X';             -- npor
+      pin_perst           : in  std_logic                     := 'X';             -- pin_perst
+      pld_core_ready      : in  std_logic                     := 'X';             -- pld_core_ready
+      pld_clk_inuse       : out std_logic;                                        -- pld_clk_inuse
+      serdes_pll_locked   : out std_logic;                                        -- serdes_pll_locked
+      reset_status        : out std_logic;                                        -- reset_status
+      testin_zero         : out std_logic;                                        -- testin_zero
+      test_in             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- test_in
+      simu_mode_pipe      : in  std_logic                     := 'X';             -- simu_mode_pipe
+      derr_cor_ext_rcv    : out std_logic;                                        -- derr_cor_ext_rcv
+      derr_cor_ext_rpl    : out std_logic;                                        -- derr_cor_ext_rpl
+      derr_rpl            : out std_logic;                                        -- derr_rpl
+      dlup                : out std_logic;                                        -- dlup
+      dlup_exit           : out std_logic;                                        -- dlup_exit
+      ev128ns             : out std_logic;                                        -- ev128ns
+      ev1us               : out std_logic;                                        -- ev1us
+      hotrst_exit         : out std_logic;                                        -- hotrst_exit
+      int_status          : out std_logic_vector(3 downto 0);                     -- int_status
+      l2_exit             : out std_logic;                                        -- l2_exit
+      lane_act            : out std_logic_vector(3 downto 0);                     -- lane_act
+      ltssmstate          : out std_logic_vector(4 downto 0);                     -- ltssmstate
+      rx_par_err          : out std_logic;                                        -- rx_par_err
+      tx_par_err          : out std_logic_vector(1 downto 0);                     -- tx_par_err
+      cfg_par_err         : out std_logic;                                        -- cfg_par_err
+      ko_cpl_spc_header   : out std_logic_vector(7 downto 0);                     -- ko_cpl_spc_header
+      ko_cpl_spc_data     : out std_logic_vector(11 downto 0);                    -- ko_cpl_spc_data
+      currentspeed        : out std_logic_vector(1 downto 0);                     -- currentspeed
+      tx_st_sop           : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- startofpacket
+      tx_st_eop           : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- endofpacket
+      tx_st_err           : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- error
+      tx_st_valid         : in  std_logic_vector(0 downto 0)  := (others => 'X'); -- valid
+      tx_st_ready         : out std_logic;                                        -- ready
+      tx_st_data          : in  std_logic_vector(63 downto 0) := (others => 'X'); -- data
+      rx_st_sop           : out std_logic_vector(0 downto 0);                     -- startofpacket
+      rx_st_eop           : out std_logic_vector(0 downto 0);                     -- endofpacket
+      rx_st_err           : out std_logic_vector(0 downto 0);                     -- error
+      rx_st_valid         : out std_logic_vector(0 downto 0);                     -- valid
+      rx_st_ready         : in  std_logic                     := 'X';             -- ready
+      rx_st_data          : out std_logic_vector(63 downto 0);                    -- data
+      clr_st              : out std_logic;                                        -- reset
+      rx_st_bar           : out std_logic_vector(7 downto 0);                     -- rx_st_bar
+      rx_st_mask          : in  std_logic                     := 'X';             -- rx_st_mask
+      tx_cred_data_fc     : out std_logic_vector(11 downto 0);                    -- tx_cred_data_fc
+      tx_cred_fc_hip_cons : out std_logic_vector(5 downto 0);                     -- tx_cred_fc_hip_cons
+      tx_cred_fc_infinite : out std_logic_vector(5 downto 0);                     -- tx_cred_fc_infinite
+      tx_cred_hdr_fc      : out std_logic_vector(7 downto 0);                     -- tx_cred_hdr_fc
+      tx_cred_fc_sel      : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- tx_cred_fc_sel
+      sim_pipe_pclk_in    : in  std_logic                     := 'X';             -- sim_pipe_pclk_in
+      sim_pipe_rate       : out std_logic_vector(1 downto 0);                     -- sim_pipe_rate
+      sim_ltssmstate      : out std_logic_vector(4 downto 0);                     -- sim_ltssmstate
+      eidleinfersel0      : out std_logic_vector(2 downto 0);                     -- eidleinfersel0
+      eidleinfersel1      : out std_logic_vector(2 downto 0);                     -- eidleinfersel1
+      eidleinfersel2      : out std_logic_vector(2 downto 0);                     -- eidleinfersel2
+      eidleinfersel3      : out std_logic_vector(2 downto 0);                     -- eidleinfersel3
+      powerdown0          : out std_logic_vector(1 downto 0);                     -- powerdown0
+      powerdown1          : out std_logic_vector(1 downto 0);                     -- powerdown1
+      powerdown2          : out std_logic_vector(1 downto 0);                     -- powerdown2
+      powerdown3          : out std_logic_vector(1 downto 0);                     -- powerdown3
+      rxpolarity0         : out std_logic;                                        -- rxpolarity0
+      rxpolarity1         : out std_logic;                                        -- rxpolarity1
+      rxpolarity2         : out std_logic;                                        -- rxpolarity2
+      rxpolarity3         : out std_logic;                                        -- rxpolarity3
+      txcompl0            : out std_logic;                                        -- txcompl0
+      txcompl1            : out std_logic;                                        -- txcompl1
+      txcompl2            : out std_logic;                                        -- txcompl2
+      txcompl3            : out std_logic;                                        -- txcompl3
+      txdata0             : out std_logic_vector(31 downto 0);                    -- txdata0
+      txdata1             : out std_logic_vector(31 downto 0);                    -- txdata1
+      txdata2             : out std_logic_vector(31 downto 0);                    -- txdata2
+      txdata3             : out std_logic_vector(31 downto 0);                    -- txdata3
+      txdatak0            : out std_logic_vector(3 downto 0);                     -- txdatak0
+      txdatak1            : out std_logic_vector(3 downto 0);                     -- txdatak1
+      txdatak2            : out std_logic_vector(3 downto 0);                     -- txdatak2
+      txdatak3            : out std_logic_vector(3 downto 0);                     -- txdatak3
+      txdetectrx0         : out std_logic;                                        -- txdetectrx0
+      txdetectrx1         : out std_logic;                                        -- txdetectrx1
+      txdetectrx2         : out std_logic;                                        -- txdetectrx2
+      txdetectrx3         : out std_logic;                                        -- txdetectrx3
+      txelecidle0         : out std_logic;                                        -- txelecidle0
+      txelecidle1         : out std_logic;                                        -- txelecidle1
+      txelecidle2         : out std_logic;                                        -- txelecidle2
+      txelecidle3         : out std_logic;                                        -- txelecidle3
+      txdeemph0           : out std_logic;                                        -- txdeemph0
+      txdeemph1           : out std_logic;                                        -- txdeemph1
+      txdeemph2           : out std_logic;                                        -- txdeemph2
+      txdeemph3           : out std_logic;                                        -- txdeemph3
+      txmargin0           : out std_logic_vector(2 downto 0);                     -- txmargin0
+      txmargin1           : out std_logic_vector(2 downto 0);                     -- txmargin1
+      txmargin2           : out std_logic_vector(2 downto 0);                     -- txmargin2
+      txmargin3           : out std_logic_vector(2 downto 0);                     -- txmargin3
+      txswing0            : out std_logic;                                        -- txswing0
+      txswing1            : out std_logic;                                        -- txswing1
+      txswing2            : out std_logic;                                        -- txswing2
+      txswing3            : out std_logic;                                        -- txswing3
+      phystatus0          : in  std_logic                     := 'X';             -- phystatus0
+      phystatus1          : in  std_logic                     := 'X';             -- phystatus1
+      phystatus2          : in  std_logic                     := 'X';             -- phystatus2
+      phystatus3          : in  std_logic                     := 'X';             -- phystatus3
+      rxdata0             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- rxdata0
+      rxdata1             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- rxdata1
+      rxdata2             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- rxdata2
+      rxdata3             : in  std_logic_vector(31 downto 0) := (others => 'X'); -- rxdata3
+      rxdatak0            : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- rxdatak0
+      rxdatak1            : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- rxdatak1
+      rxdatak2            : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- rxdatak2
+      rxdatak3            : in  std_logic_vector(3 downto 0)  := (others => 'X'); -- rxdatak3
+      rxelecidle0         : in  std_logic                     := 'X';             -- rxelecidle0
+      rxelecidle1         : in  std_logic                     := 'X';             -- rxelecidle1
+      rxelecidle2         : in  std_logic                     := 'X';             -- rxelecidle2
+      rxelecidle3         : in  std_logic                     := 'X';             -- rxelecidle3
+      rxstatus0           : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- rxstatus0
+      rxstatus1           : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- rxstatus1
+      rxstatus2           : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- rxstatus2
+      rxstatus3           : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- rxstatus3
+      rxvalid0            : in  std_logic                     := 'X';             -- rxvalid0
+      rxvalid1            : in  std_logic                     := 'X';             -- rxvalid1
+      rxvalid2            : in  std_logic                     := 'X';             -- rxvalid2
+      rxvalid3            : in  std_logic                     := 'X';             -- rxvalid3
+      rxdataskip0         : in  std_logic                     := 'X';             -- rxdataskip0
+      rxdataskip1         : in  std_logic                     := 'X';             -- rxdataskip1
+      rxdataskip2         : in  std_logic                     := 'X';             -- rxdataskip2
+      rxdataskip3         : in  std_logic                     := 'X';             -- rxdataskip3
+      rxblkst0            : in  std_logic                     := 'X';             -- rxblkst0
+      rxblkst1            : in  std_logic                     := 'X';             -- rxblkst1
+      rxblkst2            : in  std_logic                     := 'X';             -- rxblkst2
+      rxblkst3            : in  std_logic                     := 'X';             -- rxblkst3
+      rxsynchd0           : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- rxsynchd0
+      rxsynchd1           : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- rxsynchd1
+      rxsynchd2           : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- rxsynchd2
+      rxsynchd3           : in  std_logic_vector(1 downto 0)  := (others => 'X'); -- rxsynchd3
+      currentcoeff0       : out std_logic_vector(17 downto 0);                    -- currentcoeff0
+      currentcoeff1       : out std_logic_vector(17 downto 0);                    -- currentcoeff1
+      currentcoeff2       : out std_logic_vector(17 downto 0);                    -- currentcoeff2
+      currentcoeff3       : out std_logic_vector(17 downto 0);                    -- currentcoeff3
+      currentrxpreset0    : out std_logic_vector(2 downto 0);                     -- currentrxpreset0
+      currentrxpreset1    : out std_logic_vector(2 downto 0);                     -- currentrxpreset1
+      currentrxpreset2    : out std_logic_vector(2 downto 0);                     -- currentrxpreset2
+      currentrxpreset3    : out std_logic_vector(2 downto 0);                     -- currentrxpreset3
+      txsynchd0           : out std_logic_vector(1 downto 0);                     -- txsynchd0
+      txsynchd1           : out std_logic_vector(1 downto 0);                     -- txsynchd1
+      txsynchd2           : out std_logic_vector(1 downto 0);                     -- txsynchd2
+      txsynchd3           : out std_logic_vector(1 downto 0);                     -- txsynchd3
+      txblkst0            : out std_logic;                                        -- txblkst0
+      txblkst1            : out std_logic;                                        -- txblkst1
+      txblkst2            : out std_logic;                                        -- txblkst2
+      txblkst3            : out std_logic;                                        -- txblkst3
+      txdataskip0         : out std_logic;                                        -- txdataskip0
+      txdataskip1         : out std_logic;                                        -- txdataskip1
+      txdataskip2         : out std_logic;                                        -- txdataskip2
+      txdataskip3         : out std_logic;                                        -- txdataskip3
+      rate0               : out std_logic_vector(1 downto 0);                     -- rate0
+      rate1               : out std_logic_vector(1 downto 0);                     -- rate1
+      rate2               : out std_logic_vector(1 downto 0);                     -- rate2
+      rate3               : out std_logic_vector(1 downto 0);                     -- rate3
+      rx_in0              : in  std_logic                     := 'X';             -- rx_in0
+      rx_in1              : in  std_logic                     := 'X';             -- rx_in1
+      rx_in2              : in  std_logic                     := 'X';             -- rx_in2
+      rx_in3              : in  std_logic                     := 'X';             -- rx_in3
+      tx_out0             : out std_logic;                                        -- tx_out0
+      tx_out1             : out std_logic;                                        -- tx_out1
+      tx_out2             : out std_logic;                                        -- tx_out2
+      tx_out3             : out std_logic;                                        -- tx_out3
+      app_int_sts         : in  std_logic                     := 'X';             -- app_int_sts
+      app_int_ack         : out std_logic;                                        -- app_int_ack
+      app_msi_num         : in  std_logic_vector(4 downto 0)  := (others => 'X'); -- app_msi_num
+      app_msi_req         : in  std_logic                     := 'X';             -- app_msi_req
+      app_msi_tc          : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- app_msi_tc
+      app_msi_ack         : out std_logic;                                        -- app_msi_ack
+      pm_auxpwr           : in  std_logic                     := 'X';             -- pm_auxpwr
+      pm_data             : in  std_logic_vector(9 downto 0)  := (others => 'X'); -- pm_data
+      pme_to_cr           : in  std_logic                     := 'X';             -- pme_to_cr
+      pm_event            : in  std_logic                     := 'X';             -- pm_event
+      pme_to_sr           : out std_logic;                                        -- pme_to_sr
+      hpg_ctrler          : in  std_logic_vector(4 downto 0)  := (others => 'X'); -- hpg_ctrler
+      tl_cfg_add          : out std_logic_vector(3 downto 0);                     -- tl_cfg_add
+      tl_cfg_ctl          : out std_logic_vector(31 downto 0);                    -- tl_cfg_ctl
+      tl_cfg_sts          : out std_logic_vector(52 downto 0);                    -- tl_cfg_sts
+      cpl_err             : in  std_logic_vector(6 downto 0)  := (others => 'X'); -- cpl_err
+      cpl_pending         : in  std_logic                     := 'X'             -- cpl_pending
+      --skp_os              : out std_logic                                         -- skpdetect
+    );
+  end component arria10gx_ftm4_pcie_hip;
 
   function is_zero(x : std_logic_vector) return std_logic is
     constant zero : std_logic_vector(x'length-1 downto 0) := (others => '0');
@@ -1556,9 +1743,10 @@ architecture rtl of pcie_altera is
   constant c_is_arria10gx       : boolean := g_family = "Arria 10 GX";
   constant c_is_arria10gx_e3p1  : boolean := g_family = "Arria 10 GX E3P1";
   constant c_is_arria10gx_scu4  : boolean := g_family = "Arria 10 GX SCU4";
+  constant c_is_arria10gx_ftm4  : boolean := g_family = "Arria 10 GX FTM4";
   constant c_is_arria10gx_pex10 : boolean := g_family = "Arria 10 GX PEX10";
   constant c_is_arria10gx_ftm10 : boolean := g_family = "Arria 10 GX FTM10";
-  constant c_is_arria10         : boolean := c_is_arria10gx or c_is_arria10sx or c_is_arria10gx_e3p1 or c_is_arria10gx_scu4 or c_is_arria10gx_pex10 or c_is_arria10gx_ftm10;
+  constant c_is_arria10         : boolean := c_is_arria10gx or c_is_arria10sx or c_is_arria10gx_e3p1 or c_is_arria10gx_scu4 or c_is_arria10gx_ftm4 or c_is_arria10gx_pex10 or c_is_arria10gx_ftm10;
   signal rx_st_valid0_zero_vec  : std_logic_vector(0 downto 0);
   signal tx_st_eop0_zero_vec    : std_logic_vector(0 downto 0);
   signal tx_st_sop0_zero_vec    : std_logic_vector(0 downto 0);
@@ -2665,6 +2853,240 @@ begin
 
   arria10gx_scu4 : if (g_family = "Arria 10 GX SCU4") generate
     hip : arria10gx_scu4_pcie_hip
+      port map (
+        -- Clocking
+        refclk              => pcie_refclk_i,
+        pld_clk             => core_clk_out,
+        coreclkout_hip      => core_clk,
+        pld_clk_inuse       => open,
+        pld_core_ready      => pll_locked,
+
+        -- PCIe PHY pins
+        rx_in0              => pcie_rx_i(0),
+        rx_in1              => pcie_rx_i(1),
+        rx_in2              => pcie_rx_i(2),
+        rx_in3              => pcie_rx_i(3),
+        tx_out0             => pcie_tx_o(0),
+        tx_out1             => pcie_tx_o(1),
+        tx_out2             => pcie_tx_o(2),
+        tx_out3             => pcie_tx_o(3),
+
+        -- Avalon RX
+        rx_st_mask          => '0',
+        rx_st_ready         => rx_st_ready0,
+        rx_st_bar           => rx_st_bardec0,
+        -- rx_st_be missing
+        rx_st_data          => rx_st_data0,
+        rx_st_sop           => open,
+        rx_st_eop           => open,
+        rx_st_err           => open,
+        rx_st_valid         => rx_st_valid0_zero_vec(0 downto 0),
+
+        -- Errors in RX buffer
+        derr_cor_ext_rcv    => open,
+        derr_cor_ext_rpl    => open,
+        derr_rpl            => open,
+
+        -- Avalon TX
+        tx_st_data          => tx_st_data0,
+        tx_st_eop           => tx_st_eop0_zero_vec(0 downto 0),
+        tx_st_err           => (others => '0'),
+        tx_st_sop           => tx_st_sop0_zero_vec(0 downto 0),
+        tx_st_valid         => tx_st_valid0_zero_vec(0 downto 0),
+        tx_st_ready         => tx_st_ready0,
+        -- tx_fifo_empty missing
+
+        -- Avalon TX credit management
+        tx_cred_data_fc     => open,
+        -- tx_cred_datafcnp missing
+        -- tx_cred_datafcp missing
+        tx_cred_fc_hip_cons => open,
+        -- tx_cred_fchipcons missing
+        tx_cred_fc_infinite => open,
+        tx_cred_hdr_fc      => open,
+        -- tx_cred_hdrfcnp missing
+        -- tx_cred_hdrfcp missing
+        tx_cred_fc_sel      => open,
+
+        -- Report completion error status
+        cpl_err             => (others => '0'),
+        cpl_pending         => '0',
+        -- lmi_addr missing
+        -- lmi_din missing
+        -- lmi_rden missing
+        -- lmi_wren missing
+        -- lmi_ack missing
+        -- lmi_dou missing
+        ko_cpl_spc_header   => open,
+        ko_cpl_spc_data     => open,
+
+        -- PCIe interrupts (for endpoints)
+        app_int_sts         => app_int_sts,
+        app_msi_num         => (others => '0'),
+        app_msi_req         => app_msi_req,
+        app_msi_tc          => (others => '0'),
+        app_int_ack         => open,
+        app_msi_ack         => open,
+        int_status          => open, -- only for root ports
+
+        -- PCIe configuration space
+        hpg_ctrler          => (others => '0'),
+        tl_cfg_add          => tl_cfg_add,
+        tl_cfg_ctl          => tl_cfg_ctl,
+        -- tl_cfg_ctl_wr missing
+        tl_cfg_sts         => open,
+        -- tl_cfg_sts_wr missing
+
+        -- Power management signals
+        pm_auxpwr           => '0',
+        pm_data             => (others => '0'),
+        pm_event            => '0',
+        pme_to_cr           => pme_shift(pme_shift'length-1),
+        pme_to_sr           => pme_shift(0),
+
+        -- Reset and link training
+        npor                => npor,
+        pin_perst           => pcie_rstn_i,
+        l2_exit             => l2_exit,
+        hotrst_exit         => hotrst_exit,
+        dlup_exit           => dlup_exit,
+        -- dl_ltssm missing
+        serdes_pll_locked   => pll_locked,
+        reset_status        => open,
+        ev128ns             => open,
+        ev1us               => open,
+
+        -- Debug signals
+        test_in             => (others => '0'),
+        testin_zero         => open,
+        lane_act            => open,
+        currentspeed        => open,
+
+        -- External PHY (PIPE). Not used; using altera PHY.
+        rxdata0             => (others => '0'),
+        rxdata1             => (others => '0'),
+        rxdata2             => (others => '0'),
+        rxdata3             => (others => '0'),
+        rxdatak0            => (others => '0'),
+        rxdatak1            => (others => '0'),
+        rxdatak2            => (others => '0'),
+        rxdatak3            => (others => '0'),
+        rxelecidle0         => '0',
+        rxelecidle1         => '0',
+        rxelecidle2         => '0',
+        rxelecidle3         => '0',
+        rxstatus0           => (others => '0'),
+        rxstatus1           => (others => '0'),
+        rxstatus2           => (others => '0'),
+        rxstatus3           => (others => '0'),
+        rxvalid0            => '0',
+        rxvalid1            => '0',
+        rxvalid2            => '0',
+        rxvalid3            => '0',
+        rxpolarity0         => open,
+        rxpolarity1         => open,
+        rxpolarity2         => open,
+        rxpolarity3         => open,
+        txcompl0            => open,
+        txcompl1            => open,
+        txcompl2            => open,
+        txcompl3            => open,
+        txdata0             => open,
+        txdata1             => open,
+        txdata2             => open,
+        txdata3             => open,
+        txdatak0            => open,
+        txdatak1            => open,
+        txdatak2            => open,
+        txdatak3            => open,
+        txdetectrx0         => open,
+        txdetectrx1         => open,
+        txdetectrx2         => open,
+        txdetectrx3         => open,
+        txelecidle0         => open,
+        txelecidle1         => open,
+        txelecidle2         => open,
+        txelecidle3         => open,
+        txdeemph0           => open,
+        txdeemph1           => open,
+        txdeemph2           => open,
+        txdeemph3           => open,
+        txswing0            => open,
+        txswing1            => open,
+        txswing2            => open,
+        txswing3            => open,
+        txmargin0           => open,
+        txmargin1           => open,
+        txmargin2           => open,
+        txmargin3           => open,
+        powerdown0          => open,
+        powerdown1          => open,
+        powerdown2          => open,
+        powerdown3          => open,
+        phystatus0          => '0',
+        phystatus1          => '0',
+        phystatus2          => '0',
+        phystatus3          => '0',
+        eidleinfersel0      => open,
+        eidleinfersel1      => open,
+        eidleinfersel2      => open,
+        eidleinfersel3      => open,
+
+        -- Simulation PIPE signals
+        sim_pipe_pclk_in    => '0',
+        simu_mode_pipe      => '0',
+        sim_pipe_rate       => open,
+        sim_ltssmstate      => open,
+
+        -- Misc.
+        dlup                => open,
+        ltssmstate          => open,
+        rx_par_err          => open,
+        tx_par_err          => open,
+        cfg_par_err         => open,
+        clr_st              => open,
+        rxdataskip0         => '0',
+        rxdataskip1         => '0',
+        rxdataskip2         => '0',
+        rxdataskip3         => '0',
+        rxblkst0            => '0',
+        rxblkst1            => '0',
+        rxblkst2            => '0',
+        rxblkst3            => '0',
+        rxsynchd0           => (others => '0'),
+        rxsynchd1           => (others => '0'),
+        rxsynchd2           => (others => '0'),
+        rxsynchd3           => (others => '0'),
+        currentcoeff0       => open,
+        currentcoeff1       => open,
+        currentcoeff2       => open,
+        currentcoeff3       => open,
+        currentrxpreset0    => open,
+        currentrxpreset1    => open,
+        currentrxpreset2    => open,
+        currentrxpreset3    => open,
+        txsynchd0           => open,
+        txsynchd1           => open,
+        txsynchd2           => open,
+        txsynchd3           => open,
+        txblkst0            => open,
+        txblkst1            => open,
+        txblkst2            => open,
+        txblkst3            => open,
+        txdataskip0         => open,
+        txdataskip1         => open,
+        txdataskip2         => open,
+        txdataskip3         => open,
+        rate0               => open,
+        rate1               => open,
+        rate2               => open,
+        rate3               => open
+        --skp_os              => open
+      );
+  end generate;
+
+  arria10gx_ftm4 : if (g_family = "Arria 10 GX FTM4") generate
+    hip : arria10gx_ftm4_pcie_hip
       port map (
         -- Clocking
         refclk              => pcie_refclk_i,
